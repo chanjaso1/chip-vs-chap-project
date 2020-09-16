@@ -42,6 +42,7 @@ public abstract class GUI {
         frame.setSize(1400, 850);
 
 
+
         // creates menu bar components
         JMenuBar menuBar = new JMenuBar();
 
@@ -63,20 +64,15 @@ public abstract class GUI {
 
         // creates board panel
         JPanel bodyPanel = new JPanel(new GridLayout(1, 2));
+        bodyPanel.setBorder(BorderFactory.createEmptyBorder(50, 60, 50, 60));
 
         // creates board panel
-        JComponent board = new JPanel();    //TODO: replace with standard's
-        board.setLayout(new BoxLayout(board, BoxLayout.Y_AXIS));
-        board.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
-        board.setBackground(Color.GRAY);
-        board.add(new JButton("board"));
+        JComponent board = displayBoardPanel();    //TODO: replace with standard's
 
 
         // creates game stats panel
-        JPanel gameStats = new JPanel();
-        gameStats.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
-        gameStats.setBackground(Color.darkGray);
-        gameStats.add(new JButton("game stats"));
+        JPanel gameStats = displayGameStatsPanel();
+
 
         bodyPanel.add(board);
         bodyPanel.add(gameStats);
@@ -92,7 +88,39 @@ public abstract class GUI {
 
     }
 
+
+    /**
+     * Displays the board on the LHS.
+     */
+    public JPanel displayBoardPanel() {
+        JPanel board = new JPanel();
+
+        board.setLayout(new BoxLayout(board, BoxLayout.Y_AXIS));
+        board.setBorder(BorderFactory.createEmptyBorder(100, 60, 10, 10));
+        board.setBackground(Color.GRAY);
+
+        return board;
+
+    }
+
+    /**
+     * Displays the game statistics panel on the RHS.
+     * This includes displaying the current level, time, chips left and inventory.
+     */
+    public JPanel displayGameStatsPanel() {
+
+        JPanel gameStats = new JPanel();
+        gameStats.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100));
+        gameStats.setBackground(Color.darkGray);
+        gameStats.add(new JButton("game stats"));
+
+        return gameStats;
+
+    }
+
 }
+
+
 
 class Dummy extends GUI {
 
