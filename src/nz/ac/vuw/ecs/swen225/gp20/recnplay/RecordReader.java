@@ -27,7 +27,7 @@ public class RecordReader {
 //            System.out.println(jsonMoves.get(0).getAsJsonObject().get("movement"));
 
 //            System.out.println(jsonMoves.get(1));
-
+ 
             for (JsonElement jsonMove: jsonMoves){
                 //todo switch to whatever movetype
                 moves.add(new Move(jsonMove.getAsJsonObject().get("movement").getAsString()));
