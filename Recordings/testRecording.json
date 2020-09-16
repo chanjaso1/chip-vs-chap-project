@@ -1,0 +1,11 @@
+{
+	"Actions": [
+		{
+			"movement": "left"
+		},
+		{
+			"movement": "up"
+		}
+	]
+
+}
