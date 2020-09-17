@@ -10,17 +10,29 @@ import java.util.ArrayList;
 
 public class RecordSaver {
     private ArrayList<Move> moves;
+    private String saveMessage;
 
-    public RecordSaver(ArrayList<Move> moves) {
+    public RecordSaver(ArrayList<Move> moves) {//todo name of file
         this.moves = moves;
+        saveMessage = "Please enter a name for the recording file (without extension):";
         save();//todo remove
     }
 
     public void save(){
-        System.out.println("Save:");
+//        System.out.println("Save:");
         //todo do we want this here
         //get name of new file
-        StringBuilder fileName = new StringBuilder(JOptionPane.showInputDialog("Name of file (without extension):")); //todo error checking
+        StringBuilder fileName = new StringBuilder();
+        while (fileName.toString().isEmpty() || fileName.toString().isBlank()){
+            try {
+                fileName = new StringBuilder(JOptionPane.showInputDialog(saveMessage)); //todo error checking
+            } catch (NullPointerException ignored){
+                JOptionPane.showMessageDialog(null, "File save cancelled.");
+                return;
+            }
+
+            saveMessage = "Filename is empty. Please enter a valid filename.";
+        }
         fileName.append(".json");
         StringBuilder jsonRecording = new StringBuilder();
 
@@ -32,7 +44,6 @@ public class RecordSaver {
             jsonRecording.append(i < moves.size()-1 ? "\t\t},\n":"\t\t}\n");
         }
         jsonRecording.append("\t]\n}");
-
 
         //testing
 //        System.out.println(fileName + ":");
@@ -51,6 +62,7 @@ public class RecordSaver {
             } else {
 //                System.out.println("File already exists.");
                 //file save error, try again
+                saveMessage = "That filename already exists. Please enter a different filename (without extension):";
                 newFile.close();
                 save(); //start over
             }

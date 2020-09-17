@@ -43,7 +43,7 @@ public class RecordReader {
     public void play(){
         for (Move move: moves){
             move.apply();
-            System.out.println(move);
+//            System.out.println(move);
         }
     }
 
