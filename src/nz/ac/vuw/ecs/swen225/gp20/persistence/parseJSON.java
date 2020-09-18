@@ -3,7 +3,8 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 import com.google.gson.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Player;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Tile.*;
+import nz.ac.vuw.ecs.swen225.gp20.maze.floorTile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.wallTile;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -16,41 +17,47 @@ import java.io.FileReader;
  */
 public class parseJSON{
 
-
+    private Player player;
+    private Tile[][] map;
 
     //directory= levels/level1.json
-    public void read(String directory){
-
-
+    public parseJSON(String directory){
         try {
 
-            JsonObject jobject = new Gson().fromJson(new FileReader("levels/level1.json"), JsonObject.class);   //directory: levels/level1.json
+            JsonObject jobject = new Gson().fromJson(new FileReader(directory), JsonObject.class);   //directory: levels/level1.json
             JsonArray jmap = jobject.getAsJsonArray("map");
-            String row = jmap.get(0).getAsString();
 
-            Tile[][] map = new Tile[30][30];
+            this.map = new Tile[30][30];
             int totalSize = 30;
+            int index;
 
-            for(int i = 0; i < totalSize; i++){
-                for (int j = 0; j < totalSize; j++) {
-                    if(jmap.get((i * totalSize) + j).equals("_"))  map[i][j] = new Tile(j, i); //TODO Cast to floor tile
-                    if(jmap.get((i * totalSize) + j).equals("P"))  {
-                        map[i][j] = new Tile(j, i); //TODO Cast to floor tile
-                        Player player = new Player(0,0);
+
+            //initialize the level
+            for(int row = 0; row < totalSize; row++){
+                for (int col = 0; col < totalSize; col++) {
+                    index = (row * totalSize) + col;
+
+                    if(jmap.get(index).equals("_"))  map[row][col] = new floorTile(row, col, null);   //define a floor tile
+                    else if(jmap.get(index).equals("P"))  {                                              //Define the player's position on the board
+                        map[row][col] = new floorTile(row, col, null);
+                        this.player = new Player(row, col);
+                    }else if(jmap.get(index).equals("⬛")) {
+                        map[row][col] = new wallTile(row, col);
                     }
                 }
             }
-
         }catch(FileNotFoundException e){
             System.out.println("File doesn't exist!");
         }
-
-
-
     }
 
-    public void write(){
 
+    public Player getPlayer(){
+        return this.player;
+    }
+
+    public Tile[][] getMap(){
+        return this.map;
     }
 
 }
