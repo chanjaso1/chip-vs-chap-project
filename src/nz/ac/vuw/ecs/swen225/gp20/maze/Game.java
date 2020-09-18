@@ -13,9 +13,9 @@ public class Game {
     }
 
     public void runGame(){
-        while(true){
+    }
 
+    public static void main(String[] args) {
 
-        }
     }
 }
