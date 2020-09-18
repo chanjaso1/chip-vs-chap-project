@@ -1,22 +1,19 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * Door Tile is a door that can only be unlocked with the right element to pass through the door.
- * For example, same color keys.
+ * Locked door Tile is a door that can only be unlocked with the right color key, to pass through the door.
  */
-public class doorTile implements Tile{
+public class lockedDoorTile implements Tile{
     private int row,col;
     private String color;
 
-    //@TODO should we have two types or one types of doors ????
-
     /**
-     * WallTile constructor.
+     * locked Door Tile constructor.
      * @param row -- The tile row position.
      * @param col -- The tile column position.
      * @param color -- Color of the door.
      */
-    doorTile(int row, int col, String color){
+    lockedDoorTile(int row, int col, String color){
         this.row = row;
         this.col = col;
         this.color = color;
@@ -25,7 +22,7 @@ public class doorTile implements Tile{
 
     @Override
     public boolean checkValidMove(Player player) {
-        //player can only move on to this tile if they have the correct color key or chip
+        //player can only move on to this tile if they have the correct color key
 
 
         //@TODO check valid

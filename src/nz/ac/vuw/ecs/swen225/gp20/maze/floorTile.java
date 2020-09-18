@@ -24,7 +24,15 @@ public class floorTile implements Tile{
     public boolean checkValidMove(Player player) {
         if(item != null){
             player.pickUp(item);
+
+            //unlocked the matched door
+            if(item instanceof Key){
+                ((Key) item).getMatchDoor();
+            } else {
+                //@TODO fill
+            }
         }
+
 
         //players can always move on the floor
         return true;
