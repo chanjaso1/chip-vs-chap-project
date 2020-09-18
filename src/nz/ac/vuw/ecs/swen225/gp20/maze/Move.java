@@ -12,3 +12,22 @@ public interface Move {
     public void apply(Player player);
 
 }
+
+ class MoveTesting {
+    String direction;
+
+    public MoveTesting(String direction) {
+        this.direction = direction;
+    }
+
+    public void apply(){
+
+    }
+
+    @Override
+    public String toString() {
+        return direction;
+    }
+}
+
+
