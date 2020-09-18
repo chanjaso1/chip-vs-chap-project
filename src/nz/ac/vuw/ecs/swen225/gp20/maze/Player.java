@@ -14,7 +14,7 @@ import java.util.HashSet;
  * Player class to keep track of the player's position, inventory and stages.
  */
 public class Player { //implements Actor
-    HashSet<Key> keys = new HashSet<>();
+    private HashSet<Key> keys = new HashSet<>();
     private int treasures = 0;
     private int row, col;
     private int level = 1;

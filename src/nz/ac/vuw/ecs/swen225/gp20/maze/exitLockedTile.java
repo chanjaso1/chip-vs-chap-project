@@ -18,6 +18,7 @@ public class exitLockedTile implements Tile {
     
     @Override
     public boolean checkValidMove(Player player) {
+        //@TODO check valid
         return false;
     }
 }
