@@ -369,7 +369,11 @@ public abstract class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 //TODO: ADD STEP-BY-STEP CODE
+
                 replaySpeed = Double.parseDouble((String) combobox.getSelectedItem());
+                String message = "Selected mode: STEP-BY-STEP\nSeleced replay speed: " + replaySpeed;
+                JOptionPane.showMessageDialog(replayFrame, message, "STEP-BY-STEP", JOptionPane.INFORMATION_MESSAGE);
+
             }
         });
 
@@ -380,6 +384,8 @@ public abstract class GUI {
             public void mouseClicked(MouseEvent e) {
                 //TODO: ADD AUTO-REPLAY CODE
                 replaySpeed = Double.parseDouble((String) combobox.getSelectedItem());
+                String message = "Selected replay mode: AUTO-REPLAY\nSeleced replay speed: " + replaySpeed;
+                JOptionPane.showMessageDialog(replayFrame, message, "AUTO-REPLAY", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
