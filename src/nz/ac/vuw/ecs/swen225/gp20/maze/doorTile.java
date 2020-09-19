@@ -16,7 +16,7 @@ public class doorTile implements Tile{
      * @param col -- The tile column position.
      * @param color -- Color of the door.
      */
-    doorTile(int row, int col, String color){
+    public doorTile(int row, int col, String color){
         this.row = row;
         this.col = col;
         this.color = color;

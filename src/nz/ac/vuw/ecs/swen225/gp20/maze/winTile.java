@@ -12,7 +12,7 @@ public class winTile implements Tile{
      * @param row -- the tile row position.
      * @param col -- the tile column position.
      */
-    winTile(int row, int col){
+    public winTile(int row, int col){
         this.row = row;
         this.col = col;
     }

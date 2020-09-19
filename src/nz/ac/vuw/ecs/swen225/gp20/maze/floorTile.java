@@ -19,7 +19,6 @@ public class floorTile implements Tile{
         this.item = item;
     }
 
-
     @Override
     public boolean checkValidMove(Player player) {
         if(item != null){
