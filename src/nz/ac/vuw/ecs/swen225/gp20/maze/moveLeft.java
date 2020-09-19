@@ -11,8 +11,13 @@ public class moveLeft implements Move{
     }
 
     @Override
+    public String toString() {
+        return "left";
+    }
+
+    @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        return obj.getClass() == getClass();
     }
 
     @Override

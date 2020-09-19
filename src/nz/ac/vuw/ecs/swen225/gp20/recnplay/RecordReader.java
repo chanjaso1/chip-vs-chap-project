@@ -8,7 +8,10 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class RecordReader {
@@ -17,7 +20,15 @@ public class RecordReader {
     /**
      * This class reads a JSON file.
      */
-    public RecordReader(String filePath) {
+    public RecordReader(String filePath) throws FileNotFoundException {
+        //check path exists
+        //based on https://stackoverflow.com/questions/15571496/how-to-check-if-a-folder-exists
+        File f = new File(filePath);
+        if (!f.exists()) {// || !f.isDirectory()
+            throw new FileNotFoundException();
+        }
+
+        //read path
         try {
             JsonObject jo = new Gson().fromJson(new FileReader(filePath), JsonObject.class);
             JsonArray jsonMoves = jo.getAsJsonArray("Actions");
@@ -32,7 +43,7 @@ public class RecordReader {
                 String moveType = jsonMove.getAsJsonObject().get("movement").getAsString();
                 Move move;
                 //switch to move type
-                switch (moveType){
+                switch (moveType.toLowerCase()){
                     case "left":
                         move = new moveLeft();
                         break;
@@ -48,8 +59,7 @@ public class RecordReader {
                     default:
                         //should never happen
                         //todo error
-                        move = null;
-                        break;
+                        throw new NullPointerException("Move is not recognised");
                 }
                 moves.add(move);
             }
@@ -89,6 +99,6 @@ public class RecordReader {
 //            new RecordReader(jfc.getSelectedFile());
 //        }File recordFileSystem.out.println("File:"+recordFile.getName());
 
-        new RecordReader("Recordings/testRecording.json");
+//        new RecordReader("Recordings/testRecording.json");
     }
 }
