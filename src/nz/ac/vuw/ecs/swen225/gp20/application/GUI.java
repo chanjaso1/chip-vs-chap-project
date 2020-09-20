@@ -1,8 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -36,6 +35,51 @@ public abstract class GUI {
         frame = new JFrame("Chip's Challenge");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1400, 850);
+        frame.setFocusable(true);   // allows frame to detect keystrokes
+
+        // responds to keystrokes
+        frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                int keyCode = e.getKeyCode();
+                switch (keyCode) {
+                    case KeyEvent.VK_UP:
+                        // TODO: move chap up
+                        System.out.println("up key clicked.");
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        // TODO: move chap down
+                        System.out.println("down key clicked.");
+                        break;
+                    case KeyEvent.VK_LEFT:
+                        // TODO: move chap left
+                        System.out.println("left key clicked.");
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        // TODO: move chap right
+                        System.out.println("right key clicked.");
+                        break;
+//                    case KeyEvent.VK_X:
+//                        System.out.println("exit called");
+//                        displayExitFrame();
+//                        break;
+
+
+                }
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+
 
         // creates menu bar and components
         JMenuBar menuBar = new JMenuBar();
@@ -51,7 +95,7 @@ public abstract class GUI {
             }
         });
 
-        // pause button
+        // PAUSE button
         JMenu pauseButton = new JMenu("PAUSE");
         pauseButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -62,7 +106,7 @@ public abstract class GUI {
             }
         });
 
-        // resume button
+        // RESUME button
         JMenu resumeButton = new JMenu("RESUME");
         resumeButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -73,7 +117,7 @@ public abstract class GUI {
             }
         });
 
-        // replay button
+        // REPLAY button
         JMenu replayButton = new JMenu("REPLAY");
         replayButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -83,7 +127,7 @@ public abstract class GUI {
             }
         });
 
-        // help button
+        // HELP button
         JMenu helpButton = new JMenu("HELP");
         helpButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -106,17 +150,18 @@ public abstract class GUI {
             }
         });
 
-        // exit button
+        // EXIT button
         JMenu exitButton = new JMenu("EXIT");
         exitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                String message = "If you exit the game, your progress will not be saved.\n " +
-                        "The next time the game is started, it will resume from the last unfinished level.\n" +
-                        "Are you sure you want to exit the game?";
-                if (JOptionPane.showConfirmDialog(frame, message, "EXIT GAME", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    System.exit(0);
-                }
+                displayExitFrame();
+//                String message = "If you exit the game, your progress will not be saved.\n " +
+//                        "The next time the game is started, it will resume from the last unfinished level.\n" +
+//                        "Are you sure you want to exit the game?";
+//                if (JOptionPane.showConfirmDialog(frame, message, "EXIT GAME", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+//                    System.exit(0);
+//                }
             }
         });
 
@@ -128,16 +173,13 @@ public abstract class GUI {
         menuBar.add(helpButton);
         menuBar.add(exitButton);
 
-        // creates board panel
-        JPanel bodyPanel = new JPanel(new GridLayout(1, 2));
 
-        Border border = BorderFactory.createEmptyBorder(50, 60, 50, 60);
+//        Border border = BorderFactory.createEmptyBorder(50, 60, 50, 60);
 
 
         // creates board panel
         JComponent board = displayBoardPanel();    //TODO: replace with standard's
 //        board.setBorder(border);
-
 
         // creates game stats panel
         JPanel gameStats = displayGameStatsPanel();
@@ -156,7 +198,6 @@ public abstract class GUI {
         frame.getContentPane().add(BorderLayout.CENTER, board);
         frame.getContentPane().add(BorderLayout.EAST, gameStats);
         frame.getContentPane().add(BorderLayout.SOUTH, controlsPanel);
-
         frame.setVisible(true);
 
     }
@@ -247,6 +288,7 @@ public abstract class GUI {
         inventoryPanel.add(inventory);
 
 
+        // add all components to frame
         gameStats.add(levelPanel);
         gameStats.add(timePanel);
         gameStats.add(keysLeftPanel);
@@ -341,7 +383,7 @@ public abstract class GUI {
         replayFrame = new JFrame("REPLAY CONTROLS");
         replayFrame.setSize(600, 270);
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        replayFrame.setLocation((screenSize.width / 2 - replayFrame.getWidth() / 2) + 230, (screenSize.height / 2 - replayFrame.getHeight() / 2) +170);
+        replayFrame.setLocation((screenSize.width / 2 - replayFrame.getWidth() / 2) + 230, (screenSize.height / 2 - replayFrame.getHeight() / 2) + 170);
 
         // title and text description
         JPanel descriptionPanel = new JPanel();
@@ -413,6 +455,20 @@ public abstract class GUI {
         replayFrame.getContentPane().add(BorderLayout.CENTER, actions);
         replayFrame.getContentPane().add(BorderLayout.SOUTH, exitPanel);
         replayFrame.setVisible(true);
+    }
+
+    /**
+     * Displays the exit frame which checks if user wants to exit game.
+     * If yes, the game exits without saving user's progress.
+     */
+    public void displayExitFrame() {
+        String message = "You are about to exit the the game...\n" +
+                "If you exit the game, your progress will not be saved.\n" +
+                "The next time the game is started, it will resume from the last unfinished level.\n" +
+                "Are you sure you want to exit the game?";
+        if (JOptionPane.showConfirmDialog(frame, message, "EXIT GAME", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
     }
 
 }
