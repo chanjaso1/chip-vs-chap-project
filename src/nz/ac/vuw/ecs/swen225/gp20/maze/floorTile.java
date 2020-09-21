@@ -13,12 +13,11 @@ public class floorTile implements Tile{
      * @param col -- the tile column position.
      * @param item -- some tiles hold an item such as "Key" or "Treasure"
      */
-    floorTile(int row, int col, Item item){
+    public floorTile(int row, int col, Item item){
         this.row = row;
         this.col = col;
         this.item = item;
     }
-
 
     @Override
     public boolean checkValidMove(Player player) {

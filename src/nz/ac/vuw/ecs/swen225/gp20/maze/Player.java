@@ -24,7 +24,7 @@ public class Player { //implements Actor
      * @param row -- row that the player is
      * @param col -- column that the player is
      */
-    Player(int row , int col){
+    public Player(int row, int col){
         this.row = row;
         this.col = col;
     }
