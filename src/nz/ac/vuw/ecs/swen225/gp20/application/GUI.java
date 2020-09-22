@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.security.Key;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -14,9 +15,15 @@ import javax.swing.border.Border;
  */
 public abstract class GUI {
 
+    private static final int WINDOW_FOCUS = JComponent.WHEN_FOCUSED;
+//    private static
+
     private JFrame frame;
     private JFrame replayFrame = new JFrame();     // displays replay controls
     private Dimension screenSize;
+    private InputMap inputMap;
+    private ActionMap actionMap;
+
 
     private double replaySpeed;
 
@@ -35,51 +42,10 @@ public abstract class GUI {
         frame = new JFrame("Chip's Challenge");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1400, 850);
-        frame.setFocusable(true);   // allows frame to detect keystrokes
 
-        // responds to keystrokes
-        frame.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                int keyCode = e.getKeyCode();
-                switch (keyCode) {
-                    case KeyEvent.VK_UP:
-                        // TODO: move chap up
-                        System.out.println("up key clicked.");
-                        break;
-                    case KeyEvent.VK_DOWN:
-                        // TODO: move chap down
-                        System.out.println("down key clicked.");
-                        break;
-                    case KeyEvent.VK_LEFT:
-                        // TODO: move chap left
-                        System.out.println("left key clicked.");
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        // TODO: move chap right
-                        System.out.println("right key clicked.");
-                        break;
-//                    case KeyEvent.VK_X:
-//                        System.out.println("exit called");
-//                        displayExitFrame();
-//                        break;
-
-
-                }
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
-        });
-
+        // creates, binds and responds to keystrokes
+        JLabel keystrokes = addKeyStrokes();
+        frame.add(keystrokes);
 
         // creates menu bar and components
         JMenuBar menuBar = new JMenuBar();
@@ -189,10 +155,6 @@ public abstract class GUI {
         JPanel controlsPanel = displayControlsPanel();
 
 
-//        bodyPanel.add(board);
-//        bodyPanel.add(gameStats);
-
-
         // add all components to the main frame
         frame.getContentPane().add(BorderLayout.NORTH, menuBar);
         frame.getContentPane().add(BorderLayout.CENTER, board);
@@ -200,6 +162,121 @@ public abstract class GUI {
         frame.getContentPane().add(BorderLayout.SOUTH, controlsPanel);
         frame.setVisible(true);
 
+    }
+
+    /**
+     * Helper method which adds all the keystroke functionality to the GUI.
+     * Keystrokes are CTRL-X (exit), CTRL-S (save), CTRL-R (resume), CTRL-P (new game),
+     * CTRL-1 (new game at level 1), SPACE (pause), ESC (escape pause and resume game)
+     * as well as the four arrow keys which move Chap around the board.
+     *
+     * @return JLabel containing the keystroke functionality for the game.
+     */
+    public JLabel addKeyStrokes() {
+        JLabel keystrokes = new JLabel("");
+        inputMap = keystrokes.getInputMap();
+        actionMap = keystrokes.getActionMap();
+
+        // UP
+        inputMap.put(KeyStroke.getKeyStroke("UP"), "MOVE_UP");
+        actionMap.put("MOVE_UP", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("up works");
+            }
+        });
+
+        // DOWN
+        inputMap.put(KeyStroke.getKeyStroke("DOWN"), "MOVE_DOWN");
+        actionMap.put("MOVE_DOWN", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("down works");
+            }
+        });
+
+        // LEFT
+        inputMap.put(KeyStroke.getKeyStroke("LEFT"), "MOVE_LEFT");
+        actionMap.put("MOVE_LEFT", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("left works");
+            }
+        });
+
+        // RIGHT
+        inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "MOVE_RIGHT");
+        actionMap.put("MOVE_RIGHT", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("right works");
+            }
+        });
+
+        // CTRL-X (exit)
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.META_DOWN_MASK), "EXIT");
+        actionMap.put("EXIT", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("exit works");
+            }
+        });
+
+        // CTRL-S (save)
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_DOWN_MASK), "SAVE");
+        actionMap.put("SAVE", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("save works");
+            }
+        });
+
+        // CTRL-R (resume a saved game)
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.META_DOWN_MASK), "RESUME");
+        actionMap.put("RESUME", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("RESUME works");
+            }
+        });
+
+        // CTRL-P (start new game at last unfinished level)
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.META_DOWN_MASK), "NEW_GAME");
+        actionMap.put("NEW_GAME", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("new game at unfinished");
+            }
+        });
+
+        // CTRL-1 (start new game at level 1)
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.META_DOWN_MASK), "NEW_GAME_1");
+        actionMap.put("NEW_GAME_1", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("level 1");
+            }
+        });
+
+        // SPACE (pauses game)
+        inputMap.put(KeyStroke.getKeyStroke("SPACE"), "PAUSE");
+        actionMap.put("PAUSE", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("pause works");
+            }
+        });
+
+        // ESC (escapes pause and resumes game)
+        inputMap.put(KeyStroke.getKeyStroke("ESCAPE"), "ESCAPE");
+        actionMap.put("ESCAPE", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("ESCAPE works");
+            }
+        });
+
+        return keystrokes;
     }
 
 
