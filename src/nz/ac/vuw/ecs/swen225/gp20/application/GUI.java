@@ -2,8 +2,6 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.security.Key;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -15,8 +13,10 @@ import javax.swing.border.Border;
  */
 public abstract class GUI {
 
-    private static final int WINDOW_FOCUS = JComponent.WHEN_FOCUSED;
-//    private static
+    private final Font TITLE_FONT = new Font("", Font.BOLD, 30);
+    private final GridLayout GAME_STATS_LAYOUT = new GridLayout(2, 1);
+    private final Border GAME_STATS_BORDER = BorderFactory.createEmptyBorder(20, 20, 20, 20);
+    private final double MAX_TIME = 60.0; // TODO: replace values with actual values from Jason's file
 
     private JFrame frame;
     private JFrame replayFrame = new JFrame();     // displays replay controls
@@ -26,6 +26,9 @@ public abstract class GUI {
 
 
     private double replaySpeed;
+    private double currentTime = MAX_TIME;
+    private int keysLeft = 2;
+    private boolean roundFinished;
 
 
     public GUI() {
@@ -42,6 +45,7 @@ public abstract class GUI {
         frame = new JFrame("Chip's Challenge");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1400, 850);
+        frame.setLocationRelativeTo(null);
 
         // creates, binds and responds to keystrokes
         JLabel keystrokes = addKeyStrokes();
@@ -66,9 +70,9 @@ public abstract class GUI {
         pauseButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                displayPauseFrame();
                 //TODO: ADD PAUSE CODE
-                String message = "The game is paused.";
-                JOptionPane.showMessageDialog(frame, message, "PAUSE", JOptionPane.INFORMATION_MESSAGE);
+
             }
         });
 
@@ -77,9 +81,8 @@ public abstract class GUI {
         resumeButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                displayResumeFrame();
                 //TODO: ADD RESUME CODE
-                String message = "The game will resume once you click 'OK'.";
-                JOptionPane.showMessageDialog(frame, message, "RESUME", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
@@ -122,12 +125,6 @@ public abstract class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 displayExitFrame();
-//                String message = "If you exit the game, your progress will not be saved.\n " +
-//                        "The next time the game is started, it will resume from the last unfinished level.\n" +
-//                        "Are you sure you want to exit the game?";
-//                if (JOptionPane.showConfirmDialog(frame, message, "EXIT GAME", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-//                    System.exit(0);
-//                }
             }
         });
 
@@ -140,9 +137,6 @@ public abstract class GUI {
         menuBar.add(exitButton);
 
 
-//        Border border = BorderFactory.createEmptyBorder(50, 60, 50, 60);
-
-
         // creates board panel
         JComponent board = displayBoardPanel();    //TODO: replace with standard's
 //        board.setBorder(border);
@@ -153,6 +147,9 @@ public abstract class GUI {
 
         // creates panel containing user controls
         JPanel controlsPanel = displayControlsPanel();
+
+        // timer
+        createTimer(gameStats);
 
 
         // add all components to the main frame
@@ -174,7 +171,7 @@ public abstract class GUI {
      */
     public JLabel addKeyStrokes() {
         JLabel keystrokes = new JLabel("");
-        inputMap = keystrokes.getInputMap();
+        inputMap = keystrokes.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         actionMap = keystrokes.getActionMap();
 
         // UP
@@ -218,7 +215,7 @@ public abstract class GUI {
         actionMap.put("EXIT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("exit works");
+                displayExitFrame();
             }
         });
 
@@ -287,10 +284,10 @@ public abstract class GUI {
      */
     public JPanel displayBoardPanel() {
         JPanel board = new JPanel();
-
         board.setLayout(new BoxLayout(board, BoxLayout.Y_AXIS));
         board.setBorder(BorderFactory.createEmptyBorder(100, 60, 10, 10));
-        board.setBackground(Color.GRAY);
+        board.setBackground(new Color(28, 173, 81));
+//        board.setBackground(Color.GRAY);
 
         return board;
 
@@ -307,56 +304,58 @@ public abstract class GUI {
         gameStats.setBorder(BorderFactory.createEmptyBorder(50, 100, 200, 100));
 //        gameStats.setBackground(Color.GRAY);
 
-        GridLayout layout = new GridLayout(2, 1);
-        Font font = new Font("", Font.BOLD, 30);
-        Border border = BorderFactory.createEmptyBorder(20, 20, 20, 20);
 
         // level panel
-        JPanel levelPanel = new JPanel(layout);
+        JPanel levelPanel = createGameStat("LEVEL", "1");
+      /*  JPanel levelPanel = new JPanel(layout);
         JLabel levelTitle = new JLabel("LEVEL", JLabel.CENTER);
-        levelTitle.setFont(font);
+        levelTitle.setFont(TITLE_FONT);
         levelTitle.setForeground(Color.RED);
 
         JLabel level = new JLabel("1", JLabel.CENTER);
-        displayTitle(level, border, font);
-
+        formatStat(level, border);
 
         levelPanel.add(levelTitle);
-        levelPanel.add(level);
+        levelPanel.add(level); */
+
 
         // time panel
-        JPanel timePanel = new JPanel(layout);
+        JPanel timePanel = displayTimePanel();
+
+
+      /*  JPanel timePanel = new JPanel(layout);
         JLabel timeTitle = new JLabel("TIME", JLabel.CENTER);
-        timeTitle.setFont(font);
+        timeTitle.setFont(TITLE_FONT);
         timeTitle.setForeground(Color.RED);
 
         JLabel time = new JLabel("60", JLabel.CENTER);
-        displayTitle(time, border, font);
+        formatStat(time, border);
 
         timePanel.add(timeTitle);
-        timePanel.add(time);
+        timePanel.add(time); */
 
         // keys left panel
-        JPanel keysLeftPanel = new JPanel(layout);
+        JPanel keysLeftPanel = createGameStat("CHIPS\nLEFT", "2");
+      /*  JPanel keysLeftPanel = new JPanel(layout);
         JLabel keysLeftTitle = new JLabel("CHIPS\nLEFT", JLabel.CENTER);
-        keysLeftTitle.setFont(font);
+        keysLeftTitle.setFont(TITLE_FONT);
         keysLeftTitle.setForeground(Color.RED);
 
         JLabel chips = new JLabel("2", JLabel.CENTER);
-        displayTitle(chips, border, font);
+        formatStat(chips, border);
 
         keysLeftPanel.add(keysLeftTitle);
-        keysLeftPanel.add(chips);
+        keysLeftPanel.add(chips); */
 
         // inventory (keys collected) panel
-        JPanel inventoryPanel = new JPanel(layout);
+        JPanel inventoryPanel = new JPanel(GAME_STATS_LAYOUT);
         JLabel inventoryTitle = new JLabel("INVENTORY", JLabel.CENTER);
-        inventoryTitle.setFont(font);
+        inventoryTitle.setFont(TITLE_FONT);
         inventoryTitle.setForeground(Color.RED);
 
         JLabel inventory = new JLabel("*key*", JLabel.CENTER);
-        inventory.setBorder(border);
-        inventory.setFont(font);
+        inventory.setBorder(GAME_STATS_BORDER);
+        inventory.setFont(TITLE_FONT);
         inventory.setOpaque(true);
         inventory.setBackground(Color.darkGray);
         inventory.setForeground(Color.WHITE);
@@ -371,19 +370,115 @@ public abstract class GUI {
         gameStats.add(keysLeftPanel);
         gameStats.add(inventoryPanel);
 
+
         return gameStats;
 
     }
 
     /**
-     * A helper method which displays the title for each game stat on the RHS of the GUI.
+     * Displays the current time the user has to complete the round.
+     *
+     * @return the JPanel containing a title and current time.
      */
-    public void displayTitle(JLabel title, Border border, Font font) {
-        title.setBorder(border);
-        title.setFont(font);
-        title.setOpaque(true);
-        title.setBackground(Color.darkGray);
-        title.setForeground(Color.WHITE);
+    public JPanel displayTimePanel() {
+        JPanel timePanel = new JPanel(GAME_STATS_LAYOUT);
+        JLabel timeTitle = new JLabel("TIME", JLabel.CENTER);
+        timeTitle.setFont(TITLE_FONT);
+        timeTitle.setForeground(Color.RED);
+
+        JLabel time = new JLabel(Double.toString(currentTime), JLabel.CENTER);
+        System.out.println("updated label with time: " + currentTime);
+        time.setFont(TITLE_FONT);
+        time.setOpaque(true);
+        time.setBackground(Color.darkGray);
+        time.setForeground(Color.WHITE);
+        time.setBorder(GAME_STATS_BORDER);
+
+        timePanel.add(timeTitle);
+        timePanel.add(time);
+
+
+        return timePanel;
+    }
+
+
+    /**
+     * Creates and executes the timer for each round.
+     * Player wins a round if they succeed in collecting all the keys within the time limit.
+     * Otherwise, the player has failed and loses the game.
+     *
+     * @param gameStats
+     */
+    public void createTimer(JPanel gameStats) {
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //                if (roundFinished) {
+//                    roundFinished = false;
+//                    return;
+//                }
+                currentTime--;
+
+                System.out.println("max time: " + currentTime);
+
+                // end of round (user lost)
+                if (currentTime <= 0 && keysLeft != 0) { // TODO: add condition to check if user has won/lost round
+                    System.out.println("out of time!");
+                    // TODO: add code which restars game;
+                    currentTime = 0;
+                    roundFinished = true;
+                }
+                redisplayTimer(gameStats);
+                frame.add(gameStats);   // do we need this?
+            }
+        });
+        timer.start();
+    }
+
+    /**
+     * Updates and re-displays the timer on the screen.
+     *
+     * @param gameStatsPanel -- the panel containing the timer to be updated.
+     */
+    public void redisplayTimer(JPanel gameStatsPanel) {
+        gameStatsPanel.removeAll();
+//        displayTimePanel();
+        displayGameStatsPanel();
+        gameStatsPanel.revalidate();
+//        gameStatsPanel.revalidate();
+        System.out.println("updated timer");
+
+    }
+
+
+    /**
+     * A helper method which creates and formats the JPanel containing a game statistic.
+     * Used to display the current level and keys left in the game.
+     *
+     * @param name     -- name of the statistic (eg. "LEVEL");
+     * @param gameStat -- the current value for this statistic (eg. "1").
+     * @return completed JPanel displaying game statistic.
+     */
+    public JPanel createGameStat(String name, String gameStat) {
+        // title
+        JPanel panel = new JPanel(GAME_STATS_LAYOUT);
+        JLabel title = new JLabel(name, JLabel.CENTER);
+        title.setFont(TITLE_FONT);
+        title.setForeground(Color.RED);
+
+        // game stat
+        JLabel level = new JLabel(gameStat, JLabel.CENTER);
+        level.setBorder(GAME_STATS_BORDER);
+        level.setFont(TITLE_FONT);
+        level.setOpaque(true);
+        level.setBackground(Color.darkGray);
+        level.setForeground(Color.WHITE);
+
+        panel.add(title);
+        panel.add(level);
+
+        return panel;
+
     }
 
 
@@ -409,8 +504,7 @@ public abstract class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 //TODO: ADD PAUSE CODE
-                String message = "The game is paused.";
-                JOptionPane.showMessageDialog(frame, message, "PAUSE", JOptionPane.INFORMATION_MESSAGE);
+                displayPauseFrame();
             }
         });
 
@@ -420,8 +514,7 @@ public abstract class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 //TODO: ADD RESUME CODE
-                String message = "The game will resume once you click 'OK'.";
-                JOptionPane.showMessageDialog(frame, message, "RESUME", JOptionPane.INFORMATION_MESSAGE);
+                displayResumeFrame();
             }
         });
 
@@ -430,8 +523,6 @@ public abstract class GUI {
         replayButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-//                JFrame replayControls = new JFrame("REPLAY CONTROLS");
-
                 displayReplayFrame();
             }
         });
@@ -460,7 +551,7 @@ public abstract class GUI {
         replayFrame = new JFrame("REPLAY CONTROLS");
         replayFrame.setSize(600, 270);
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        replayFrame.setLocation((screenSize.width / 2 - replayFrame.getWidth() / 2) + 230, (screenSize.height / 2 - replayFrame.getHeight() / 2) + 170);
+        replayFrame.setLocation((screenSize.width / 2 - replayFrame.getWidth() / 2) + 385, (screenSize.height / 2 - replayFrame.getHeight() / 2) + 220);
 
         // title and text description
         JPanel descriptionPanel = new JPanel();
@@ -535,6 +626,24 @@ public abstract class GUI {
     }
 
     /**
+     * Displays the pause frame which indicates to user the game is paused.
+     */
+    public void displayPauseFrame() {
+        String message = "The game is paused.";
+        JOptionPane.showMessageDialog(frame, message, "PAUSE", JOptionPane.INFORMATION_MESSAGE);
+
+    }
+
+    /**
+     * Displays the resume frame which indicates to user the game is about to resume.
+     */
+    public void displayResumeFrame() {
+        String message = "The game will resume once you click 'OK'.";
+        JOptionPane.showMessageDialog(frame, message, "RESUME", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
+    /**
      * Displays the exit frame which checks if user wants to exit game.
      * If yes, the game exits without saving user's progress.
      */
@@ -547,6 +656,17 @@ public abstract class GUI {
             System.exit(0);
         }
     }
+
+
+    /**
+     * Gets the current replay speed selected by user.
+     *
+     * @return the current replay speed.
+     */
+    public double getReplaySpeed() {
+        return replaySpeed;
+    }
+
 
 }
 
