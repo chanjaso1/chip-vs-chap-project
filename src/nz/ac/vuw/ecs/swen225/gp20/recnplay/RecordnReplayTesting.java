@@ -43,6 +43,9 @@ public class RecordnReplayTesting {
         if (!(rr.getMoves().equals(answer)))
             fail("ArrayList \"" + rr.getMoves() + "\" should be \"" + answer + "\"");
 
+        //manually check time
+        rr.playAtSpeed(2.5, new Player(0, 0));
+
         /*
         https://stackoverflow.com/questions/326390/how-do-i-create-a-java-string-from-the-contents-of-a-file
         String content = "";

@@ -15,10 +15,15 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class RecordReader {
-    private ArrayList<Move> moves = new ArrayList<>();
+    private final ArrayList<Move> moves = new ArrayList<>();
+    private static boolean playNextFrame;
 
     /**
-     * This class reads a JSON file.
+     * This class reads a JSON file from filePath and stores the moves
+     * that are read.
+     * They are read as Actions > movement > *a move*
+     *
+     * @param filePath location of file
      */
     public RecordReader(String filePath) throws FileNotFoundException {
         //check path exists
@@ -27,6 +32,8 @@ public class RecordReader {
         if (!f.exists()) {// || !f.isDirectory()
             throw new FileNotFoundException();
         }
+
+        playNextFrame = false;
 
         //read path
         try {
@@ -66,16 +73,54 @@ public class RecordReader {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-//        play();
-//        new RecordSaver(moves); //testing
     }
 
-    public void play(){
+    /**
+     * Makes a move for player every amount of seconds specified in param.
+     *
+     * @param secsToWait amount of time to wait per move
+     * @param player making the move
+     */
+    public void playAtSpeed(double secsToWait, Player player){
         for (Move move: moves){
-//            move.apply();
-//            System.out.println(move);
+//            move.apply(new Player(0, 0));
+            System.out.println("did move:" + move);
+            try {
+                Thread.sleep((long) (secsToWait*1000));
+            } catch (InterruptedException e) {
+                System.out.println("Could not wait");
+                e.printStackTrace();
+            }
         }
+    }
+
+    /**
+     * Runs one move per click. Button to be clicked is on GUI.
+     *
+     * @param player the player doing the move
+     */
+    public void playPerFrame(Player player){
+        for (Move move: moves){
+            //wait for signal
+            while (!playNextFrame){}
+
+            //do move
+//            move.apply(player);
+            System.out.println("move");
+
+            //reset playNextFrame
+            playNextFrame = false;
+        }
+    }
+
+    /**
+     * Used for playing the next frame in playPerFrame method.
+     * This is done by setting playNextFrame to TRUE.
+     *
+     * @param playNextFrame boolean value that private playPerFrame will be set to.
+     */
+    public static void setPlayNextFrame(boolean playNextFrame) {
+        RecordReader.playNextFrame = playNextFrame;
     }
 
     /*
@@ -87,6 +132,9 @@ public class RecordReader {
     }
      */
 
+    /**
+     * @return the moves read from the file initialised with
+     */
     public ArrayList<Move> getMoves() {
         return moves;
     }
