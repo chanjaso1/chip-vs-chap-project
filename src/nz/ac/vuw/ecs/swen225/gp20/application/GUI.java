@@ -16,10 +16,10 @@ public abstract class GUI {
     private final Font TITLE_FONT = new Font("", Font.BOLD, 30);
     private final GridLayout GAME_STATS_LAYOUT = new GridLayout(2, 1);
     private final Border GAME_STATS_BORDER = BorderFactory.createEmptyBorder(20, 20, 20, 20);
-    private final double MAX_TIME = 60.0; // TODO: replace values with actual values from Jason's file
+    private final double MAX_TIME = 5; // TODO: replace values with actual values from Jason's file
 
-    private JFrame frame;
-    private JFrame replayFrame = new JFrame();     // displays replay controls
+    private JFrame frame, replayFrame = new JFrame();
+    private JPanel gameStatsPanel;
     private Dimension screenSize;
     private InputMap inputMap;
     private ActionMap actionMap;
@@ -55,7 +55,7 @@ public abstract class GUI {
         JMenuBar menuBar = new JMenuBar();
 
         // SAVE button
-        JMenu saveButton = new JMenu("SAVE");
+        JMenuItem saveButton = new JMenu("SAVE");
         saveButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -66,7 +66,7 @@ public abstract class GUI {
         });
 
         // PAUSE button
-        JMenu pauseButton = new JMenu("PAUSE");
+        JMenuItem pauseButton = new JMenu("PAUSE");
         pauseButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -77,7 +77,7 @@ public abstract class GUI {
         });
 
         // RESUME button
-        JMenu resumeButton = new JMenu("RESUME");
+        JMenuItem resumeButton = new JMenu("RESUME");
         resumeButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -87,7 +87,7 @@ public abstract class GUI {
         });
 
         // REPLAY button
-        JMenu replayButton = new JMenu("REPLAY");
+        JMenuItem replayButton = new JMenu("REPLAY");
         replayButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -97,7 +97,7 @@ public abstract class GUI {
         });
 
         // HELP button
-        JMenu helpButton = new JMenu("HELP");
+        JMenuItem helpButton = new JMenu("HELP");
         helpButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -120,7 +120,7 @@ public abstract class GUI {
         });
 
         // EXIT button
-        JMenu exitButton = new JMenu("EXIT");
+        JMenuItem exitButton = new JMenu("EXIT");
         exitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -136,26 +136,24 @@ public abstract class GUI {
         menuBar.add(helpButton);
         menuBar.add(exitButton);
 
-
         // creates board panel
         JComponent board = displayBoardPanel();    //TODO: replace with standard's
 //        board.setBorder(border);
 
         // creates game stats panel
-        JPanel gameStats = displayGameStatsPanel();
-//        gameStats.setBorder(border);
+        gameStatsPanel = new JPanel(new GridLayout(5, 1, 10, 30));
+        displayGameStatsPanel(gameStatsPanel);
 
         // creates panel containing user controls
         JPanel controlsPanel = displayControlsPanel();
 
         // timer
-        createTimer(gameStats);
-
+        createTimer();
 
         // add all components to the main frame
         frame.getContentPane().add(BorderLayout.NORTH, menuBar);
         frame.getContentPane().add(BorderLayout.CENTER, board);
-        frame.getContentPane().add(BorderLayout.EAST, gameStats);
+        frame.getContentPane().add(BorderLayout.EAST, gameStatsPanel);
         frame.getContentPane().add(BorderLayout.SOUTH, controlsPanel);
         frame.setVisible(true);
 
@@ -287,7 +285,6 @@ public abstract class GUI {
         board.setLayout(new BoxLayout(board, BoxLayout.Y_AXIS));
         board.setBorder(BorderFactory.createEmptyBorder(100, 60, 10, 10));
         board.setBackground(new Color(28, 173, 81));
-//        board.setBackground(Color.GRAY);
 
         return board;
 
@@ -296,11 +293,9 @@ public abstract class GUI {
     /**
      * Displays the game statistics panel on the RHS.
      * This includes displaying the current level, time, chips left and inventory.
-     *
-     * @return RHS JPanel displaying game statistics.
      */
-    public JPanel displayGameStatsPanel() {
-        JPanel gameStats = new JPanel(new GridLayout(5, 1, 10, 30));
+    public void displayGameStatsPanel(JPanel gameStats) {
+//        gameStats = new JPanel(new GridLayout(5, 1, 10, 30));
         gameStats.setBorder(BorderFactory.createEmptyBorder(50, 100, 200, 100));
 //        gameStats.setBackground(Color.GRAY);
 
@@ -370,9 +365,6 @@ public abstract class GUI {
         gameStats.add(keysLeftPanel);
         gameStats.add(inventoryPanel);
 
-
-        return gameStats;
-
     }
 
     /**
@@ -381,106 +373,25 @@ public abstract class GUI {
      * @return the JPanel containing a title and current time.
      */
     public JPanel displayTimePanel() {
-        JPanel timePanel = new JPanel(GAME_STATS_LAYOUT);
+        JPanel newTimePanel = new JPanel(GAME_STATS_LAYOUT);
         JLabel timeTitle = new JLabel("TIME", JLabel.CENTER);
         timeTitle.setFont(TITLE_FONT);
         timeTitle.setForeground(Color.RED);
 
         JLabel time = new JLabel(Double.toString(currentTime), JLabel.CENTER);
-        System.out.println("updated label with time: " + currentTime);
         time.setFont(TITLE_FONT);
         time.setOpaque(true);
         time.setBackground(Color.darkGray);
         time.setForeground(Color.WHITE);
         time.setBorder(GAME_STATS_BORDER);
 
-        timePanel.add(timeTitle);
-        timePanel.add(time);
+        newTimePanel.add(timeTitle);
+        newTimePanel.add(time);
 
+//        JOptionPane.showMessageDialog(null, newTimePanel);
 
-        return timePanel;
+        return newTimePanel;
     }
-
-
-    /**
-     * Creates and executes the timer for each round.
-     * Player wins a round if they succeed in collecting all the keys within the time limit.
-     * Otherwise, the player has failed and loses the game.
-     *
-     * @param gameStats
-     */
-    public void createTimer(JPanel gameStats) {
-        Timer timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //                if (roundFinished) {
-//                    roundFinished = false;
-//                    return;
-//                }
-                currentTime--;
-
-                System.out.println("max time: " + currentTime);
-
-                // end of round (user lost)
-                if (currentTime <= 0 && keysLeft != 0) { // TODO: add condition to check if user has won/lost round
-                    System.out.println("out of time!");
-                    // TODO: add code which restars game;
-                    currentTime = 0;
-                    roundFinished = true;
-                }
-                redisplayTimer(gameStats);
-                frame.add(gameStats);   // do we need this?
-            }
-        });
-        timer.start();
-    }
-
-    /**
-     * Updates and re-displays the timer on the screen.
-     *
-     * @param gameStatsPanel -- the panel containing the timer to be updated.
-     */
-    public void redisplayTimer(JPanel gameStatsPanel) {
-        gameStatsPanel.removeAll();
-//        displayTimePanel();
-        displayGameStatsPanel();
-        gameStatsPanel.revalidate();
-//        gameStatsPanel.revalidate();
-        System.out.println("updated timer");
-
-    }
-
-
-    /**
-     * A helper method which creates and formats the JPanel containing a game statistic.
-     * Used to display the current level and keys left in the game.
-     *
-     * @param name     -- name of the statistic (eg. "LEVEL");
-     * @param gameStat -- the current value for this statistic (eg. "1").
-     * @return completed JPanel displaying game statistic.
-     */
-    public JPanel createGameStat(String name, String gameStat) {
-        // title
-        JPanel panel = new JPanel(GAME_STATS_LAYOUT);
-        JLabel title = new JLabel(name, JLabel.CENTER);
-        title.setFont(TITLE_FONT);
-        title.setForeground(Color.RED);
-
-        // game stat
-        JLabel level = new JLabel(gameStat, JLabel.CENTER);
-        level.setBorder(GAME_STATS_BORDER);
-        level.setFont(TITLE_FONT);
-        level.setOpaque(true);
-        level.setBackground(Color.darkGray);
-        level.setForeground(Color.WHITE);
-
-        panel.add(title);
-        panel.add(level);
-
-        return panel;
-
-    }
-
 
     /**
      * Displays the user controls panel located at the bottom of the screen.
@@ -618,7 +529,6 @@ public abstract class GUI {
         });
         exitPanel.add(exitReplay);
 
-
         replayFrame.getContentPane().add(BorderLayout.NORTH, descriptionPanel);
         replayFrame.getContentPane().add(BorderLayout.CENTER, actions);
         replayFrame.getContentPane().add(BorderLayout.SOUTH, exitPanel);
@@ -656,6 +566,80 @@ public abstract class GUI {
             System.exit(0);
         }
     }
+
+    /**
+     * A helper method which creates and formats the JPanel containing a game statistic.
+     * Used to display the current level and keys left in the game.
+     *
+     * @param name     -- name of the statistic (eg. "LEVEL");
+     * @param gameStat -- the current value for this statistic (eg. "1").
+     * @return completed JPanel displaying game statistic.
+     */
+    public JPanel createGameStat(String name, String gameStat) {
+        // title
+        JPanel panel = new JPanel(GAME_STATS_LAYOUT);
+        JLabel title = new JLabel(name, JLabel.CENTER);
+        title.setFont(TITLE_FONT);
+        title.setForeground(Color.RED);
+
+        // game stat
+        JLabel level = new JLabel(gameStat, JLabel.CENTER);
+        level.setBorder(GAME_STATS_BORDER);
+        level.setFont(TITLE_FONT);
+        level.setOpaque(true);
+        level.setBackground(Color.darkGray);
+        level.setForeground(Color.WHITE);
+
+        panel.add(title);
+        panel.add(level);
+
+        return panel;
+
+    }
+
+
+
+    /**
+     * Creates and executes the timer for each round.
+     * Player wins a round if they succeed in collecting all the keys within the time limit.
+     * Otherwise, the player has failed and loses the game.
+     */
+    public void createTimer() {
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //                if (roundFinished) {
+//                    roundFinished = false;
+//                    return;
+//                }
+                if (currentTime == 0) return;   // remove when code is added to reset level
+                currentTime--;
+                redisplayTimer();
+
+                // end of round (user lost)
+                if (currentTime <= 0 && keysLeft != 0) { // TODO: add condition to check if user has won/lost round
+                    String message = "You didn't collect the keys in time... GAME OVER!\nClick 'OK' to reset the game and restart the level";
+                    JOptionPane.showMessageDialog(frame, message, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+                    // TODO: add code which restarts level
+                    currentTime = 0;
+                    roundFinished = true;
+                }
+            }
+        });
+        timer.start();
+    }
+
+    /**
+     * Updates and re-displays the timer on the screen.
+     */
+    public void redisplayTimer() {
+        gameStatsPanel.removeAll();
+        displayGameStatsPanel(gameStatsPanel);
+        gameStatsPanel.revalidate();
+    }
+
+
+
 
 
     /**
