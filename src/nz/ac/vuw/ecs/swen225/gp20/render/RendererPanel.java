@@ -4,14 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.concurrent.ThreadLocalRandom;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Game;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
+import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 
 public class RendererPanel extends JComponent {
 
     public int[][] board = new int[100][100];
-    public RenderTile[][] tileMap = new RenderTile[100][100];
+    public RenderTile[][] tileMap = new RenderTile[30][30];
     public Tile[][] levelTiles;
     public int xPos, yPos;
     public int frameWidth, frameHeight;
@@ -34,8 +33,22 @@ public class RendererPanel extends JComponent {
         game = new Game();
         levelTiles = game.getMap();
 
-        xPos = 25;
-        yPos = 25;
+        // Print out formatted level map
+        for (int i = 0; i < levelTiles.length; i++) {
+            System.out.println();
+            for (int j = 0; j < levelTiles[0].length; j++) {
+                //System.out.print(" ");
+                //System.out.print(levelTiles[i][j]);
+                if (levelTiles[i][j] instanceof floorTile) System.out.print("▊");
+                else if (levelTiles[i][j] == null) System.out.print("0");
+                else if (levelTiles[i][j] instanceof doorTile) System.out.print("K");
+                else if (levelTiles[i][j] instanceof winTile) System.out.print("W");
+
+            }
+        }
+
+        xPos = 11;
+        yPos = 13;
 
         // Initialize character facing GIFS
         north = new ImageIcon(getClass().getResource("resource/backFacing.gif")).getImage();
@@ -56,26 +69,44 @@ public class RendererPanel extends JComponent {
         int tileType;
         RenderTile tile = null;
 
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < 100; j++) {
-                tileType = board[i][j];
-                switch (tileType) {
-                    case 0:
-                        tile = new Blue(i, j);
-                        break;
-                    case 1:
-                        tile = new Red(i, j);
-                        break;
-                    case 2:
-                        tile = new Grey(i, j);
-                        break;
-                    case 3:
-                        tile = new Yellow(i, j);
-                        break;
+        for (int i = 0; i < levelTiles.length; i++) {
+            System.out.println();
+            for (int j = 0; j < levelTiles[0].length; j++) {
+                //System.out.print(" ");
+                //System.out.print(levelTiles[i][j]);
+                if (levelTiles[i][j] instanceof floorTile) {
+                    tile = new Blue(i, j);
+                } else if (levelTiles[i][j] == null) {
+                    tile = new Red(i, j);
+                } else if (levelTiles[i][j] instanceof doorTile) {
+                    tile = new Grey(i, j);
+                } else if (levelTiles[i][j] instanceof winTile) {
+                    tile = new Yellow(i, j);
                 }
                 tileMap[i][j] = tile;
             }
         }
+
+//        for (int i = 0; i < 100; i++) {
+//            for (int j = 0; j < 100; j++) {
+//                tileType = board[i][j];
+//                switch (tileType) {
+//                    case 0:
+//                        tile = new Blue(i, j);
+//                        break;
+//                    case 1:
+//                        tile = new Red(i, j);
+//                        break;
+//                    case 2:
+//                        tile = new Grey(i, j);
+//                        break;
+//                    case 3:
+//                        tile = new Yellow(i, j);
+//                        break;
+//                }
+//                tileMap[i][j] = tile;
+//            }
+//        }
     }
 
     public void paintComponent(Graphics g) {
@@ -83,7 +114,6 @@ public class RendererPanel extends JComponent {
         g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
         renderTiles(g2d);
         drawPlayer(g2d, this);
-        // if greater than 0-24 or 0-25 don't accept.
     }
 
     public void renderTiles(Graphics2D g) {
