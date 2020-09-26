@@ -44,7 +44,7 @@ public class parseJSON{
                         this.player = new Player(row, col);
                     }else if(tileType.equals("⬛"))                       map[row][col] = new wallTile(row, col);                            //define a wall tile.
                     else if(tileType.substring(0,1).equals("D"))          map[row][col] = new doorTile(row, col, tileType.substring(1,2));  //define a coloured door.
-                    else if(tileType.substring(0,1).equals("K"))         map[row][col] = new doorTile(row, col, tileType.substring(1,2));  //define a coloured key.
+                    else if(tileType.substring(0,1).equals("K"))        map[row][col] = new floorTile(row, col, new Key(map[row][col],  tileType.substring(1,2)));  //define a coloured key
                     else if(tileType.equals("T")){
                         Treasure treasure = new Treasure(map[row][col]);
                         map[row][col] = new floorTile(row, col, treasure);
