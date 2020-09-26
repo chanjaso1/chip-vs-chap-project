@@ -25,10 +25,15 @@ public class doorTile implements Tile{
 
     @Override
     public boolean checkValidMove(Player player) {
-        //player can only move on to this tile if they have the correct color key or chip
+        //player can only move on to this tile if they have the correct color key
+        for(Key key : player.getKeys()){
+            if(key.getColor().equalsIgnoreCase(color)){
+                //remove the door
+                player.getGame().getMap()[row][col] = new floorTile(row,col,null);
 
-
-        //@TODO check valid
+                return true;
+            }
+        }
         return false;
     }
 }

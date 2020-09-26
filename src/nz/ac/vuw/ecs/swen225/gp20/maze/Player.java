@@ -18,6 +18,7 @@ public class Player { //implements Actor
     private int treasures = 0;
     private int row, col;
     private int level = 1;
+    private Game game;
 
     /**
      * Player constructor created by using row and column the player is.
@@ -93,6 +94,22 @@ public class Player { //implements Actor
     //@Override
     public void move(Move move) {
         move.apply(this);
+    }
+
+    /**
+     * Set the player's game to the given game.
+     * @param game -- the current game that the player's in.
+     */
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    /**
+     * Return the current game that player's in.
+     * @return player's current Game object
+     */
+    public Game getGame() {
+        return game;
     }
 }
 
