@@ -9,15 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Pane {
 
-    Image north, south, east, west;
-
     public Pane() {
-
-        // Initialize character facing GIFS
-        north = new ImageIcon(getClass().getResource("resource/backFacing.gif")).getImage();
-        south = new ImageIcon(getClass().getResource("resource/frontFacing.gif")).getImage();
-        east = new ImageIcon(getClass().getResource("resource/rightFacing.gif")).getImage();
-        west = new ImageIcon(getClass().getResource("resource/leftFacing.gif")).getImage();
 
         JFrame frame = new JFrame("Tile Map Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
