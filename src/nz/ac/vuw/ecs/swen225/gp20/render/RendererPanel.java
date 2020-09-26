@@ -56,16 +56,16 @@ public class RendererPanel extends JComponent {
         east = new ImageIcon(getClass().getResource("resource/rightFacing.gif")).getImage();
         west = new ImageIcon(getClass().getResource("resource/leftFacing.gif")).getImage();
 
-        int num;
-        // Initialize 2D Array with random SHIT.
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < 100; j++) {
-                num = ThreadLocalRandom.current().nextInt(0, 3 + 1);
-                board[i][j] = num;
-            }
-        }
+//        int num;
+//        // Initialize 2D Array with random SHIT.
+//        for (int i = 0; i < 100; i++) {
+//            for (int j = 0; j < 100; j++) {
+//                num = ThreadLocalRandom.current().nextInt(0, 3 + 1);
+//                board[i][j] = num;
+//            }
+//        }
 
-        // Convert int 2D array into tileMap 2D Array
+        // Make render map based on tiles obtained from Game
         int tileType;
         RenderTile tile = null;
 
@@ -76,7 +76,7 @@ public class RendererPanel extends JComponent {
                 //System.out.print(levelTiles[i][j]);
                 if (levelTiles[i][j] instanceof floorTile) {
                     tile = new Blue(i, j);
-                } else if (levelTiles[i][j] == null) {
+                } else if (levelTiles[i][j] instanceof wallTile) {
                     tile = new Red(i, j);
                 } else if (levelTiles[i][j] instanceof doorTile) {
                     tile = new Grey(i, j);
