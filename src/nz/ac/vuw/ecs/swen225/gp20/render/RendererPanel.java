@@ -4,11 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.concurrent.ThreadLocalRandom;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Game;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Tile;
+
 
 public class RendererPanel extends JComponent {
 
     public int[][] board = new int[100][100];
-    public Tile[][] tileMap = new Tile[100][100];
+    public RenderTile[][] tileMap = new RenderTile[100][100];
+    public Tile[][] levelTiles;
     public int xPos, yPos;
     public int frameWidth, frameHeight;
 
@@ -18,11 +22,17 @@ public class RendererPanel extends JComponent {
     // 3 - West
     int direction = 2;
 
+    Game game;
+
     Image north, south, east, west;
 
     public RendererPanel() {
         frameHeight = (1000 /2) - 50;
         frameWidth = (1000 /2) - 50;
+
+        // BREAKPOINT HERE - Instantiate game, and then invoking method to access map state.
+        game = new Game();
+        levelTiles = game.getMap();
 
         xPos = 25;
         yPos = 25;
@@ -44,7 +54,7 @@ public class RendererPanel extends JComponent {
 
         // Convert int 2D array into tileMap 2D Array
         int tileType;
-        Tile tile = null;
+        RenderTile tile = null;
 
         for (int i = 0; i < 100; i++) {
             for (int j = 0; j < 100; j++) {

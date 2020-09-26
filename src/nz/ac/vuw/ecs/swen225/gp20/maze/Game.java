@@ -12,7 +12,7 @@ public class Game {
     private Tile currentTile;
     private Tile[][] map;
 
-    Game() {
+    public Game() {
         //initialised
         parseJSON parser = new parseJSON("levels/level1.json");
         map = parser.getMap();
