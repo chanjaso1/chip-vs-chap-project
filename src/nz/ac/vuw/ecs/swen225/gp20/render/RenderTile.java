@@ -9,6 +9,7 @@ import java.io.IOException;
 public class RenderTile {
     BufferedImage img = null;
     private int x, y;
+    String filePrefix = System.getProperty("os.name").equalsIgnoreCase("Linux")?"chip-vs-chap-project/":"";
 
     public RenderTile(int x, int y) {
         this.x = x;
@@ -25,7 +26,7 @@ class Blue extends RenderTile {
     public Blue(int x, int y) {
         super(x, y);
         try {
-            img = ImageIO.read(new File("chip-vs-chap-project/src/nz/ac/vuw/ecs/swen225/gp20/render/data/blue.png"));
+            img = ImageIO.read(new File( filePrefix + "src/nz/ac/vuw/ecs/swen225/gp20/render/data/blue.png"));
         } catch (IOException e) {
             System.out.println("Image not found!");
         }
@@ -39,7 +40,7 @@ class Red extends RenderTile {
     public Red(int x, int y) {
         super(x, y);
         try {
-            img = ImageIO.read(new File("chip-vs-chap-project/src/nz/ac/vuw/ecs/swen225/gp20/render/data/red.png"));
+            img = ImageIO.read(new File(filePrefix + "src/nz/ac/vuw/ecs/swen225/gp20/render/data/red.png"));
         } catch (IOException e) {
             System.out.println("Image not found!");
         }
@@ -53,7 +54,7 @@ class Grey extends RenderTile {
     public Grey(int x, int y) {
         super(x, y);
         try {
-            img = ImageIO.read(new File("chip-vs-chap-project/src/nz/ac/vuw/ecs/swen225/gp20/render/data/grey.png"));
+            img = ImageIO.read(new File(filePrefix + "src/nz/ac/vuw/ecs/swen225/gp20/render/data/grey.png"));
         } catch (IOException e) {
             System.out.println("Image not found!");
         }
@@ -67,7 +68,7 @@ class Yellow extends RenderTile {
     public Yellow(int x, int y) {
         super(x, y);
         try {
-            img = ImageIO.read(new File("chip-vs-chap-project/src/nz/ac/vuw/ecs/swen225/gp20/render/data/yellow.png"));
+            img = ImageIO.read(new File(filePrefix + "src/nz/ac/vuw/ecs/swen225/gp20/render/data/yellow.png"));
         } catch (IOException e) {
             System.out.println("Image not found!");
 

@@ -40,7 +40,7 @@ public class RendererPanel extends JComponent {
                 //System.out.print(" ");
                 //System.out.print(levelTiles[i][j]);
                 if (levelTiles[i][j] instanceof floorTile) System.out.print("▊");
-                else if (levelTiles[i][j] == null) System.out.print("0");
+                else if (levelTiles[i][j] instanceof wallTile) System.out.print("0");
                 else if (levelTiles[i][j] instanceof doorTile) System.out.print("K");
                 else if (levelTiles[i][j] instanceof winTile) System.out.print("W");
 
