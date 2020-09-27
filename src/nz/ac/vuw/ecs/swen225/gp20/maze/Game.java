@@ -2,6 +2,11 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 /**
@@ -12,13 +17,18 @@ public class Game {
     private Tile currentTile;
     private Tile[][] map;
 
-    Game() {
-        //initialised
-        parseJSON parser = new parseJSON("levels/level1.json");
+    public Game()  {
+
+        parseJSON parser = new parseJSON(System.getProperty("os.name").equalsIgnoreCase("Linux")?"chip-vs-chap-project/levels/level1.json":"levels/level1.json");
+
         map = parser.getMap();
         player = parser.getPlayer();
         player.setGame(this);
-        System.out.println(Arrays.deepToString(map));
+        for(int i = 0; i < map.length; i++){
+            for(int j = 0; j < map[0].length; j++){
+                //System.out.println(map[i][j]);
+            }
+        }
 
     }
 
@@ -33,7 +43,7 @@ public class Game {
         return map;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
         new Game().runGame();
     }
 }
