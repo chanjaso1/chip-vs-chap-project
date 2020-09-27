@@ -3,7 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 /**
  * This class is created to move the player up
  */
-class moveUp implements Move{
+public class moveUp implements Move {
 
     @Override
     public void apply(Player player) {
