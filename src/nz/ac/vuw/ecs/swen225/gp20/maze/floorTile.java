@@ -17,6 +17,7 @@ public class floorTile implements Tile{
         this.row = row;
         this.col = col;
         this.item = item;
+
     }
 
     @Override
