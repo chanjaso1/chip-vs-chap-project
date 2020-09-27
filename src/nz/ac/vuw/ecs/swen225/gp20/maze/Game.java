@@ -33,6 +33,7 @@ public class Game {
     }
 
     public void runGame(){
+        
     }
 
     /**
@@ -41,6 +42,14 @@ public class Game {
      */
     public Tile[][] getMap() {
         return map;
+    }
+
+    /**
+     * Return the game object
+     * @return -- current game object
+     */
+    public  Game getGame(){
+        return this;
     }
 
     public static void main(String[] args){
