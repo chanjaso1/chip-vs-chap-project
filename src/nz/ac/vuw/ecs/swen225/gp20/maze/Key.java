@@ -13,7 +13,7 @@ public class Key extends Item{
      * @param tile -- tile that the key is on.
      * @param color -- color of the key.
      */
-    Key(Tile tile, String color){
+    public Key(Tile tile, String color){
         super(tile);
         this.color = color;
     }

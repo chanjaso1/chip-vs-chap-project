@@ -30,7 +30,7 @@ public class RecordReader {
  
             for (JsonElement jsonMove: jsonMoves){
                 //todo switch to whatever movetype
-                moves.add(new Move(jsonMove.getAsJsonObject().get("movement").getAsString()));
+                //moves.add(new Move(jsonMove.getAsJsonObject().get("movement").getAsString()));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,7 +42,7 @@ public class RecordReader {
 
     public void play(){
         for (Move move: moves){
-            move.apply();
+            //move.apply();
 //            System.out.println(move);
         }
     }
