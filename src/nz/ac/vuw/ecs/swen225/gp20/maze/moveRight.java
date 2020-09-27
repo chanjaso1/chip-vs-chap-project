@@ -7,6 +7,7 @@ class moveRight implements Move{
 
     @Override
     public void apply(Player player) {
+
         player.setPosition(player.getRow(),Math.min(player.getCol()+1,30));
     }
 }
