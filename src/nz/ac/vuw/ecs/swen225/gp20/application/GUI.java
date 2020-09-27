@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import nz.ac.vuw.ecs.swen225.gp20.render.RendererPanel;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -137,7 +139,10 @@ public abstract class GUI {
         menuBar.add(exitButton);
 
         // creates board panel
-        JComponent board = displayBoardPanel();    //TODO: replace with standard's
+//        JComponent board = displayBoardPanel();    //TODO: replace with standard's
+        JComponent board = new RendererPanel();
+
+
 //        board.setBorder(border);
 
         // creates game stats panel
@@ -598,7 +603,6 @@ public abstract class GUI {
     }
 
 
-
     /**
      * Creates and executes the timer for each round.
      * Player wins a round if they succeed in collecting all the keys within the time limit.
@@ -639,9 +643,6 @@ public abstract class GUI {
     }
 
 
-
-
-
     /**
      * Gets the current replay speed selected by user.
      *
@@ -655,11 +656,11 @@ public abstract class GUI {
 }
 
 
-class Dummy extends GUI {
-
-
-    public static void main(String... args) {
-        new Dummy();
-    }
-}
+//class Dummy extends GUI {
+//
+//
+//    public static void main(String... args) {
+//        new Dummy();
+//    }
+//}
 
