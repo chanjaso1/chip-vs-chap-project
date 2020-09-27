@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
 
 import java.io.File;
@@ -12,7 +13,7 @@ import java.util.Arrays;
 /**
  * Game class is the main class that run the game.
  */
-public class Game {
+public class Game extends GUI {
     private Player player;
     private Tile currentTile;
     private Tile[][] map;
@@ -24,15 +25,10 @@ public class Game {
         map = parser.getMap();
         player = parser.getPlayer();
         player.setGame(this);
-        for(int i = 0; i < map.length; i++){
-            for(int j = 0; j < map[0].length; j++){
-                //System.out.println(map[i][j]);
-            }
-        }
-
     }
 
     public void runGame(){
+
         
     }
 
