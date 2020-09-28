@@ -2,10 +2,13 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Move;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordReader;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordSaver;
 import nz.ac.vuw.ecs.swen225.gp20.render.RendererPanel;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileNotFoundException;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -30,6 +33,7 @@ public abstract class GUI {
     private ActionMap actionMap;
 
 
+    private RecordReader recordReader;
     private double replaySpeed;
     private double currentTime = MAX_TIME;
     private int keysLeft = 2;
@@ -460,6 +464,9 @@ public abstract class GUI {
             public void mouseClicked(MouseEvent e) {
                 pauseGame(true);
                 displayReplayFrame();
+
+                System.out.println("RECORDREADER CALLED");
+                recordReader = new RecordReader();
             }
         });
 
@@ -560,6 +567,8 @@ public abstract class GUI {
                 // TODO: make sure replay mode is exited correctly and game is resumed
                 replayFrame.setVisible(false);
                 pauseGame = false;
+
+                recordReader.playAtSpeed(replaySpeed, null); //todo give null player the player value
             }
         });
         exitPanel.add(exitReplay);
