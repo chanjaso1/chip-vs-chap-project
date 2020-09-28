@@ -26,6 +26,9 @@ public class Game extends GUI {
         map = parser.getMap();
         player = parser.getPlayer();
         player.setGame(this);
+
+        this.setRendererPanel(this);
+        this.initialise();
     }
 
     public void runGame(){
@@ -48,6 +51,8 @@ public class Game extends GUI {
     public  Game getGame(){
         return this;
     }
+
+    public
 
     public static void main(String[] args){
         new Game().runGame();
