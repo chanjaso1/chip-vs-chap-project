@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.Game;
+import nz.ac.vuw.ecs.swen225.gp20.maze.*;
+import nz.ac.vuw.ecs.swen225.gp20.maze.Move;
 import nz.ac.vuw.ecs.swen225.gp20.render.RendererPanel;
 
 import java.awt.*;
@@ -185,6 +186,7 @@ public abstract class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 board.renderMove(0);
+                movePlayer(new moveUp());
             }
         });
 
@@ -194,6 +196,7 @@ public abstract class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 board.renderMove(2);
+                movePlayer(new moveDown());
             }
         });
 
@@ -203,6 +206,7 @@ public abstract class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 board.renderMove(3);
+                movePlayer(new moveLeft());
             }
         });
 
@@ -212,6 +216,7 @@ public abstract class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 board.renderMove(1);
+                movePlayer(new moveRight());
             }
         });
 
@@ -656,13 +661,19 @@ public abstract class GUI {
 
 
     /**
-     * Passes the Game object to the Rendererpanel.
+     * Initialises the RendererPanel, passing in the Game object.
      * @param game
      */
     public void setRendererPanel(Game game) {
         board = new RendererPanel(game);
     }
 
+    /**
+     * Abstract method that moves the player in the specified direction.
+     */
+    public void movePlayer(Move move) {
+
+    }
 }
 
 
