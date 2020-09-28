@@ -458,6 +458,7 @@ public abstract class GUI {
         replayButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                pauseGame(true);
                 displayReplayFrame();
             }
         });
