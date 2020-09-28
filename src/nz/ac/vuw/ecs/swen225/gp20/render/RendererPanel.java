@@ -74,7 +74,7 @@ public class RendererPanel extends JComponent {
         for (int i = 0; i < levelTiles.length; i++) {
             for (int j = 0; j < levelTiles[0].length; j++) {
                 if (levelTiles[i][j] instanceof floorTile) {
-                    tile = new Blue(i, j);
+                    tile = new Floor(i, j);
                     floorTile f = (floorTile)levelTiles[i][j];
                     if (f.getItem() instanceof Key) {
                         if (((Key) f.getItem()).getColor().equals("R")) {
@@ -88,7 +88,7 @@ public class RendererPanel extends JComponent {
                         itemMap[i][j] = item;
                     }
                 } else if (levelTiles[i][j] instanceof wallTile) {
-                    tile = new Red(i, j);
+                    tile = new Wall(i, j);
                 } else if (levelTiles[i][j] instanceof doorTile) {
                     tile = new Grey(i, j);
                 } else if (levelTiles[i][j] instanceof winTile) {

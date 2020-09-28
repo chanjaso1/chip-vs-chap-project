@@ -29,6 +29,30 @@ public class RenderTile {
     }
 }
 
+class Wall extends RenderTile {
+
+    public Wall(int x, int y) {
+        super(x, y);
+        try {
+            img = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/wall.png"));
+        } catch (IOException e) {
+            System.out.println("Image not found!");
+        }
+    }
+}
+
+class Floor extends RenderTile {
+
+    public Floor(int x, int y) {
+        super(x, y);
+        try {
+            img = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/floor.png"));
+        } catch (IOException e) {
+            System.out.println("Image not found!");
+        }
+    }
+}
+
 class Blue extends RenderTile {
 
     public Blue(int x, int y) {
