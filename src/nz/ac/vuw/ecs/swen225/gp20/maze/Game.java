@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordReader;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordSaver;
 
 import java.io.File;
