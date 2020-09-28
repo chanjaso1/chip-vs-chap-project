@@ -10,7 +10,7 @@ public class moveDown implements Move {
         //the next tile that player is moving to
         Tile nextTile = player.getGame().getMap()[Math.min(24, player.getRow() + 1)][player.getCol()];
         if (nextTile.checkValidMove(player)) {
-            player.setPosition(Math.min(0, player.getRow() + 1), player.getCol());
+            player.setPosition(Math.min(24, player.getRow() + 1), player.getCol());
         }
     }
 

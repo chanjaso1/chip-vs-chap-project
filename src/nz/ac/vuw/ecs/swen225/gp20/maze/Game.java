@@ -30,6 +30,7 @@ public class Game extends GUI {
 
         map = parser.getMap();
         player = parser.getPlayer();
+
         player.setGame(this);
         moveSequence = new ArrayList<>();
 
