@@ -38,4 +38,8 @@ public class floorTile implements Tile{
         //players can always move on the floor
         return true;
     }
+
+    public Item getItem() {
+        return item;
+    }
 }

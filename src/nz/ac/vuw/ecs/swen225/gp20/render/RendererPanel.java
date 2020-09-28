@@ -84,6 +84,7 @@ public class RendererPanel extends JComponent {
         Graphics2D g2d = (Graphics2D) g;
         g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
         renderTiles(g2d);
+        drawKeys(g2d);
         drawPlayer(g2d, this);
     }
 
@@ -106,12 +107,32 @@ public class RendererPanel extends JComponent {
      */
     public void drawRow(Graphics2D g, int y) {
         // Centre Tile
-
         tileMap[y + yPos][xPos].drawTile(g, frameWidth, frameHeight + (y * 100));
 
         for (int i = 1; i < 5; i++) {
             tileMap[y + yPos][xPos - i].drawTile(g, frameWidth - (i * 100), frameHeight + (y * 100));
             tileMap[y + yPos][xPos + i].drawTile(g, frameWidth + (i * 100), frameHeight + (y * 100));
+        }
+    }
+
+    /**
+     * Draws all keys/ Treasures visible on the rendering clip
+     * @param g the graphics object that draws on the RenderPanel
+     */
+    public void drawKeys(Graphics2D g) {
+        for(int i = -4; i < 5; i++) {
+            for(int j = -4; j < 5; j++) {
+                if (levelTiles[yPos + i][xPos + j] instanceof floorTile) {
+                    floorTile f = (floorTile)levelTiles[yPos + i][xPos + j];
+                    if (f.getItem() instanceof Key) {
+                        g.setColor(new Color(255, 162, 10));
+                        g.fillOval(frameWidth + (j * 100), frameHeight + (i * 100), 100, 100);
+                    } else if (f.getItem() instanceof Treasure) {
+                        g.setColor(new Color(105, 242, 255));
+                        g.fillOval(frameWidth + (j * 100), frameHeight + (i * 100), 100, 100);
+                    }
+                }
+            }
         }
     }
 
