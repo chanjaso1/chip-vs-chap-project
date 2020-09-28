@@ -12,6 +12,7 @@ import java.io.IOException;
 public class RenderTile {
     BufferedImage img = null;
     private int x, y;
+    boolean open = false;
 
     public RenderTile(int x, int y) {
         this.x = x;
@@ -26,6 +27,10 @@ public class RenderTile {
      */
     public void drawTile(Graphics2D g, int x, int y) {
         g.drawImage(img, null, x, y);
+    }
+
+    public void setOpen() {
+        this.open = true;
     }
 }
 
@@ -50,6 +55,46 @@ class Floor extends RenderTile {
         } catch (IOException e) {
             System.out.println("Image not found!");
         }
+    }
+}
+
+class RedDoor extends RenderTile {
+    BufferedImage unlocked;
+
+    public RedDoor(int x, int y) {
+        super(x, y);
+        try {
+            img = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/redDoor.png"));
+            unlocked = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/unlocked.png"));
+        } catch (IOException e) {
+            System.out.println("Image not found!");
+        }
+    }
+
+    @Override
+    public void drawTile(Graphics2D g, int x, int y) {
+        if (!open) g.drawImage(img, null, x, y);
+        else g.drawImage(unlocked, null, x, y);
+    }
+}
+
+class GreenDoor extends RenderTile {
+    BufferedImage unlocked;
+
+    public GreenDoor(int x, int y) {
+        super(x, y);
+        try {
+            img = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/greenDoor.png"));
+            unlocked = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/unlocked.png"));
+        } catch (IOException e) {
+            System.out.println("Image not found!");
+        }
+    }
+
+    @Override
+    public void drawTile(Graphics2D g, int x, int y) {
+        if (!open) g.drawImage(img, null, x, y);
+        else g.drawImage(unlocked, null, x, y);
     }
 }
 
