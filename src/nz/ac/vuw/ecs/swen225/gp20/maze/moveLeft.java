@@ -12,4 +12,19 @@ public class moveLeft implements Move {
             player.setPosition(player.getRow(), Math.max(player.getCol() - 1, 0));
         }
     }
+
+    @Override
+    public String toString() {
+        return "left";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj.getClass() == getClass();
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

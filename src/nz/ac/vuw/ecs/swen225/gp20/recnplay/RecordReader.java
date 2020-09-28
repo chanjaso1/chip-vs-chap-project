@@ -4,22 +4,40 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import nz.ac.vuw.ecs.swen225.gp20.maze.Move;
+import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class RecordReader {
-    private ArrayList<Move> moves = new ArrayList<>();
+    private final ArrayList<Move> moves = new ArrayList<>();
+    private static boolean playNextFrame;
 
     /**
-     * This class reads a JSON file.
+     * This class reads a JSON file from filePath and stores the moves
+     * that are read.
+     * They are read as Actions > movement > *a move*
+     *
+     * @param filePath location of file
      */
-    public RecordReader() {
+    public RecordReader(String filePath) throws FileNotFoundException {
+        //check path exists
+        //based on https://stackoverflow.com/questions/15571496/how-to-check-if-a-folder-exists
+        File f = new File(filePath);
+        if (!f.exists()) {// || !f.isDirectory()
+            throw new FileNotFoundException();
+        }
+
+        playNextFrame = false;
+
+        //read path
         try {
-            JsonObject jo = new Gson().fromJson(new FileReader("Recordings/testRecording.json"), JsonObject.class);
+            JsonObject jo = new Gson().fromJson(new FileReader(filePath), JsonObject.class);
             JsonArray jsonMoves = jo.getAsJsonArray("Actions");
 
 //            System.out.println(jsonMoves);
@@ -27,24 +45,98 @@ public class RecordReader {
 //            System.out.println(jsonMoves.get(0).getAsJsonObject().get("movement"));
 
 //            System.out.println(jsonMoves.get(1));
- 
+
             for (JsonElement jsonMove: jsonMoves){
-                //todo switch to whatever movetype
-                //moves.add(new Move(jsonMove.getAsJsonObject().get("movement").getAsString()));
+                String moveType = jsonMove.getAsJsonObject().get("movement").getAsString();
+                Move move;
+                //switch to move type
+                switch (moveType.toLowerCase()){
+                    case "left":
+                        move = new moveLeft();
+                        break;
+                    case "right":
+                        move = new moveRight();
+                        break;
+                    case "up":
+                        move = new moveUp();
+                        break;
+                    case "down":
+                        move = new moveDown();
+                        break;
+                    default:
+                        //should never happen
+                        //todo error
+                        throw new NullPointerException("Move is not recognised");
+                }
+                moves.add(move);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        play();
-        new RecordSaver(moves);
     }
 
-    public void play(){
+    /**
+     * Makes a move for player every amount of seconds specified in param.
+     *
+     * @param secsToWait amount of time to wait per move
+     * @param player making the move
+     */
+    public void playAtSpeed(double secsToWait, Player player){
         for (Move move: moves){
-            //move.apply();
-//            System.out.println(move);
+//            move.apply(new Player(0, 0));
+            System.out.println("did move:" + move);
+            try {
+                Thread.sleep((long) (secsToWait*1000));
+            } catch (InterruptedException e) {
+                System.out.println("Could not wait");
+                e.printStackTrace();
+            }
         }
+    }
+
+    /**
+     * Runs one move per click. Button to be clicked is on GUI.
+     *
+     * @param player the player doing the move
+     */
+    public void playPerFrame(Player player){
+        for (Move move: moves){
+            //wait for signal
+            while (!playNextFrame){}
+
+            //do move
+//            move.apply(player);
+            System.out.println("move");
+
+            //reset playNextFrame
+            playNextFrame = false;
+        }
+    }
+
+    /**
+     * Used for playing the next frame in playPerFrame method.
+     * This is done by setting playNextFrame to TRUE.
+     *
+     * @param playNextFrame boolean value that private playPerFrame will be set to.
+     */
+    public static void setPlayNextFrame(boolean playNextFrame) {
+        RecordReader.playNextFrame = playNextFrame;
+    }
+
+    /*
+    public StringBuilder getMovesAsString(){
+        StringBuilder movesString = new StringBuilder();
+        for (Move m: moves)
+            movesString.append(m).append(",");
+        return movesString;
+    }
+     */
+
+    /**
+     * @return the moves read from the file initialised with
+     */
+    public ArrayList<Move> getMoves() {
+        return moves;
     }
 
     public static void main(String[] args) {
@@ -54,6 +146,7 @@ public class RecordReader {
 //        if (returnValue == JFileChooser.APPROVE_OPTION){
 //            new RecordReader(jfc.getSelectedFile());
 //        }File recordFileSystem.out.println("File:"+recordFile.getName());
-        new RecordReader();
+
+//        new RecordReader("Recordings/testRecording.json");
     }
 }
