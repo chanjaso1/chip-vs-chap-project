@@ -16,6 +16,14 @@ public class wallTile implements Tile {
         this.col = col;
     }
 
+    /**
+     * Return the name of the tile.
+     * @return the string of the tile.
+     */
+    @Override
+    public String toString() {
+        return "▊";
+    }
 
     @Override
     public boolean checkValidMove(Player player) {

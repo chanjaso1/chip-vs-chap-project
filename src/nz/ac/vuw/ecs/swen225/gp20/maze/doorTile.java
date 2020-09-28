@@ -22,6 +22,14 @@ public class doorTile implements Tile{
         this.color = color;
     }
 
+    /**
+     * Return the name of the tile.
+     * @return the string of the tile.
+     */
+    @Override
+    public String toString() {
+        return "D" + color;
+    }
 
     @Override
     public boolean checkValidMove(Player player) {

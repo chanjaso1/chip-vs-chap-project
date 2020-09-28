@@ -20,6 +20,15 @@ public class floorTile implements Tile{
 
     }
 
+    /**
+     * Return the name of the tile.
+     * @return the string of the tile.
+     */
+    @Override
+    public String toString() {
+        return item != null ? item.toString() : "_";
+    }
+
     @Override
     public boolean checkValidMove(Player player) {
         if(item != null){
