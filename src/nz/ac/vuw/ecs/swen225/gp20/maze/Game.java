@@ -22,10 +22,11 @@ public class Game extends GUI {
     private Tile currentTile;
     private Tile[][] map;
     private ArrayList<Move> moveSequence;
+    private parseJSON parser;
 
     public Game()  {
 
-        parseJSON parser = new parseJSON(System.getProperty("os.name").equalsIgnoreCase("Linux")?"chip-vs-chap-project/levels/level1.json":"levels/level1.json");
+        parser = new parseJSON(System.getProperty("os.name").equalsIgnoreCase("Linux")?"chip-vs-chap-project/levels/level1.json":"levels/level1.json");
 
         map = parser.getMap();
         player = parser.getPlayer();
