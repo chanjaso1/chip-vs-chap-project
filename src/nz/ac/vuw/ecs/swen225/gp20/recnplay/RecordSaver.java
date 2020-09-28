@@ -13,14 +13,13 @@ public class RecordSaver {
     public RecordSaver(ArrayList<Move> moves) {//todo name of file
         this.moves = moves;
         saveMessage = "Please enter a name for the recording file (without extension):";
+        save(null);
     }
 
     public void save(String fileName){
-//        System.out.println("Save:");
-        //todo do we want this here
         //get name of new file if not provided
         if (fileName == null || fileName.isBlank() || fileName.isEmpty()){
-            fileName = getFileName();
+            fileName = getFileName(saveMessage);
             if (fileName == null) return; //cancel
         }
         fileName += ".json";
@@ -43,7 +42,7 @@ public class RecordSaver {
             int wantTo = JOptionPane.showConfirmDialog(null, "Are you sure you want to override "+fileName+"?");
             if (wantTo != JOptionPane.YES_OPTION){
                 //try again
-                save(null);
+                save(saveMessage);
                 return;
             }
         }
@@ -61,11 +60,11 @@ public class RecordSaver {
         JOptionPane.showMessageDialog(null, "File saved to Recordings folder.");
     }
 
-    public static String getFileName(){
+    public static String getFileName(String message){
         String fileName = "";
         while (fileName.isEmpty() || fileName.isBlank()){
             try {
-                fileName = JOptionPane.showInputDialog(saveMessage); //todo error checking
+                fileName = JOptionPane.showInputDialog(message); //todo error checking
             } catch (NullPointerException ignored){
                 JOptionPane.showMessageDialog(null, "File save cancelled.");
                 return null;

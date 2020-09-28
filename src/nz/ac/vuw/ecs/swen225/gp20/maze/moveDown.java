@@ -12,6 +12,7 @@ public class moveDown implements Move {
         if (nextTile.checkValidMove(player)) {
             player.setPosition(Math.min(0, player.getRow() + 1), player.getCol());
         }
+    }
 
     @Override
     public String toString() {
