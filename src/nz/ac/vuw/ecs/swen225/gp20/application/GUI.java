@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.application;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Game;
 import nz.ac.vuw.ecs.swen225.gp20.render.RendererPanel;
 
 import java.awt.*;
@@ -18,10 +19,11 @@ public abstract class GUI {
     private final Font TITLE_FONT = new Font("", Font.BOLD, 30);
     private final GridLayout GAME_STATS_LAYOUT = new GridLayout(2, 1);
     private final Border GAME_STATS_BORDER = BorderFactory.createEmptyBorder(20, 20, 20, 20);
-    private final double MAX_TIME = 5; // TODO: replace values with actual values from Jason's file
+    private final double MAX_TIME = 60; // TODO: replace values with actual values from Jason's file
 
     private JFrame frame, replayFrame = new JFrame();
     private JPanel gameStatsPanel;
+    private RendererPanel board;
     private Dimension screenSize;
     private InputMap inputMap;
     private ActionMap actionMap;
@@ -34,7 +36,7 @@ public abstract class GUI {
 
 
     public GUI() {
-        initialise();
+//        initialise();
     }
 
 
@@ -46,7 +48,7 @@ public abstract class GUI {
         // creates main frame
         frame = new JFrame("Chip's Challenge");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1400, 850);
+        frame.setSize(1400, 1040);
         frame.setLocationRelativeTo(null);
 
         // creates, binds and responds to keystrokes
@@ -140,7 +142,7 @@ public abstract class GUI {
 
         // creates board panel
 //        JComponent board = displayBoardPanel();    //TODO: replace with standard's
-        JComponent board = new RendererPanel();
+//        JComponent board = new RendererPanel();
 
 
 //        board.setBorder(border);
@@ -182,7 +184,7 @@ public abstract class GUI {
         actionMap.put("MOVE_UP", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("up works");
+                board.renderMove(0);
             }
         });
 
@@ -191,7 +193,7 @@ public abstract class GUI {
         actionMap.put("MOVE_DOWN", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("down works");
+                board.renderMove(2);
             }
         });
 
@@ -200,7 +202,7 @@ public abstract class GUI {
         actionMap.put("MOVE_LEFT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("left works");
+                board.renderMove(3);
             }
         });
 
@@ -209,7 +211,7 @@ public abstract class GUI {
         actionMap.put("MOVE_RIGHT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("right works");
+                board.renderMove(1);
             }
         });
 
@@ -652,6 +654,14 @@ public abstract class GUI {
         return replaySpeed;
     }
 
+
+    /**
+     * Passes the Game object to the Rendererpanel.
+     * @param game
+     */
+    public void setRendererPanel(Game game) {
+        board = new RendererPanel(game);
+    }
 
 }
 
