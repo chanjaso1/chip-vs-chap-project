@@ -67,6 +67,7 @@ public abstract class GUI {
                 //TODO: ADD TIAN'S SAVING CODE
                 String message = "Your game has successfully been saved.";
                 JOptionPane.showMessageDialog(frame, message, "SAVE", JOptionPane.INFORMATION_MESSAGE);
+                saveMovements();
             }
         });
 
@@ -672,6 +673,13 @@ public abstract class GUI {
      * Abstract method that moves the player in the specified direction.
      */
     public void movePlayer(Move move) {
+
+    }
+
+    /**
+     * Abstract method that saves the movements.
+     */
+    public void saveMovements() {
 
     }
 }
