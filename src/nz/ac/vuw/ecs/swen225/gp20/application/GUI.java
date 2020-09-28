@@ -32,20 +32,19 @@ public abstract class GUI {
 
     private double replaySpeed;
     private double currentTime = MAX_TIME;
-    private int keysLeft = 2, treasures;
+    private int keysCollected, treasures;
     private boolean pauseGame;
 
 
     public GUI() {
-//        initialise();
     }
-
 
     /**
      * Initialises and displays the GUI on the screen.
      */
-    public void initialise(int numOfTreasures) {
+    public void initialise(int numOfTreasures, int numOfKeys) {
         treasures = numOfTreasures;
+        keysCollected = numOfKeys;
 
         // creates main frame
         frame = new JFrame("Chip's Challenge");
@@ -148,11 +147,6 @@ public abstract class GUI {
         menuBar.add(exitButton);
 
         // creates board panel
-//        JComponent board = displayBoardPanel();    //TODO: replace with standard's
-//        JComponent board = new RendererPanel();
-
-
-//        board.setBorder(border);
 
         // creates game stats panel
         gameStatsPanel = new JPanel(new GridLayout(5, 1, 10, 30));
@@ -280,7 +274,6 @@ public abstract class GUI {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("pause");
                 pauseGame(true);
-//                setPause(true);
                 displayPauseFrame();
             }
         });
@@ -298,21 +291,6 @@ public abstract class GUI {
         return keystrokes;
     }
 
-
-    /**
-     * Displays the board on the LHS.
-     *
-     * @return Center JPanel displaying board game.
-     */
-    public JPanel displayBoardPanel() {
-        JPanel board = new JPanel();
-        board.setLayout(new BoxLayout(board, BoxLayout.Y_AXIS));
-        board.setBorder(BorderFactory.createEmptyBorder(100, 60, 10, 10));
-        board.setBackground(new Color(28, 173, 81));
-
-        return board;
-
-    }
 
     /**
      * Displays the game statistics panel on the RHS.
@@ -367,20 +345,23 @@ public abstract class GUI {
         keysLeftPanel.add(chips); */
 
         // inventory (keys collected) panel
-        JPanel inventoryPanel = new JPanel(GAME_STATS_LAYOUT);
-        JLabel inventoryTitle = new JLabel("KEYS COLLECTED", JLabel.CENTER);
-        inventoryTitle.setFont(TITLE_FONT);
-        inventoryTitle.setForeground(Color.RED);
-
-        JLabel inventory = new JLabel("*key*", JLabel.CENTER);
-        inventory.setBorder(GAME_STATS_BORDER);
-        inventory.setFont(TITLE_FONT);
-        inventory.setOpaque(true);
-        inventory.setBackground(Color.darkGray);
-        inventory.setForeground(Color.WHITE);
-
-        inventoryPanel.add(inventoryTitle);
-        inventoryPanel.add(inventory);
+        JPanel inventoryPanel = createGameStat("KEYS COLLECTED", keysCollected);
+//        JPanel inventoryPanel = new JPanel(GAME_STATS_LAYOUT);
+//        JLabel inventoryTitle = new JLabel("KEYS COLLECTED", JLabel.CENTER);
+//        inventoryTitle.setFont(TITLE_FONT);
+//        inventoryTitle.setForeground(Color.RED);
+//
+//        JLabel inventory = new JLabel(String.valueOf(keys), JLabel.CENTER);
+//        inventory.setBorder(GAME_STATS_BORDER);
+//        inventory.setFont(TITLE_FONT);
+//        inventory.setOpaque(true);
+//        inventory.setBackground(Color.darkGray);
+//        inventory.setForeground(Color.WHITE);
+//
+//        //TODO: draw the actual keys
+//
+//        inventoryPanel.add(inventoryTitle);
+//        inventoryPanel.add(inventory);
 
 
         // add all components to frame
@@ -411,8 +392,6 @@ public abstract class GUI {
 
         newTimePanel.add(timeTitle);
         newTimePanel.add(time);
-
-//        JOptionPane.showMessageDialog(null, newTimePanel);
 
         return newTimePanel;
     }
@@ -473,7 +452,6 @@ public abstract class GUI {
         controlPanel.add(replayButton);
         for (int i = 0; i <= 4; i++)        // formats buttons
             controlPanel.add(new JLabel(""));
-
 
         return controlPanel;
 
@@ -632,7 +610,6 @@ public abstract class GUI {
         panel.add(level);
 
         return panel;
-
     }
 
     /**
@@ -656,7 +633,7 @@ public abstract class GUI {
                 redisplayTimer();
 
                 // end of round (user lost)
-                if (currentTime <= 0 && keysLeft != 0) { // TODO: add condition to check if user has won/lost round
+                if (currentTime <= 0 && keysCollected != 0) { // TODO: add condition to check if user has won/lost round
                     String message = "You didn't collect the keys in time... GAME OVER!\nClick 'OK' to reset the game and restart the level";
                     JOptionPane.showMessageDialog(frame, message, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
                     // TODO: add code which restarts level
@@ -737,6 +714,14 @@ public abstract class GUI {
     public void decreaseTreasures() {
         treasures--;
     }
+
+    /**
+     * Increases the number of keys player has collected.
+     */
+    public void increaseKeys() {
+        keysCollected++;
+    }
+    
 }
 
 
