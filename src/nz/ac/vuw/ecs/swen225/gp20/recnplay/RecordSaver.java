@@ -35,7 +35,10 @@ public class RecordSaver {
         jsonRecording.append("\t]\n}");
 
         //save to file
-        File savingFile = new File("Recordings/"+fileName);
+        String prefix = System.getProperty("os.name").equalsIgnoreCase("Linux")?
+                "chip-vs-chap-project/":"";
+
+        File savingFile = new File(prefix+"Recordings/"+fileName);
         if (savingFile.exists()){
             //check if file exists and ask user if they want
             //to override existing file based on https://stackoverflow.com/questions/1816673/how-do-i-check-if-a-file-exists-in-java
