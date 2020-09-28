@@ -60,14 +60,10 @@ public class RendererPanel extends JComponent {
         west = new ImageIcon(getClass().getResource("resource/leftFacing.gif")).getImage();
 
         // Make render map based on tiles obtained from Game
-        int tileType;
         RenderTile tile = null;
 
         for (int i = 0; i < levelTiles.length; i++) {
-            System.out.println();
             for (int j = 0; j < levelTiles[0].length; j++) {
-                //System.out.print(" ");
-                //System.out.print(levelTiles[i][j]);
                 if (levelTiles[i][j] instanceof floorTile) {
                     tile = new Blue(i, j);
                 } else if (levelTiles[i][j] instanceof wallTile) {
