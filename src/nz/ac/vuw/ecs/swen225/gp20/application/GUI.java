@@ -33,7 +33,7 @@ public abstract class GUI {
     private double replaySpeed;
     private double currentTime = MAX_TIME;
     private int keysLeft = 2;
-    private boolean roundFinished;
+    private boolean pauseGame;
 
 
     public GUI() {
@@ -76,6 +76,7 @@ public abstract class GUI {
         pauseButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                setPause(true);
                 displayPauseFrame();
                 //TODO: ADD PAUSE CODE
 
@@ -88,6 +89,7 @@ public abstract class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 displayResumeFrame();
+                setPause(false);
                 //TODO: ADD RESUME CODE
             }
         });
@@ -97,6 +99,7 @@ public abstract class GUI {
         replayButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                setPause(true);
                 System.out.println("calling from menu");
                 displayReplayFrame();
             }
@@ -244,7 +247,8 @@ public abstract class GUI {
         actionMap.put("RESUME", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("RESUME works");
+                displayResumeFrame();
+                setPause(false);
             }
         });
 
@@ -271,7 +275,9 @@ public abstract class GUI {
         actionMap.put("PAUSE", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("pause works");
+                System.out.println("pause");
+//                setPause(true);
+//                displayPauseFrame();
             }
         });
 
@@ -280,7 +286,8 @@ public abstract class GUI {
         actionMap.put("ESCAPE", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("ESCAPE works");
+                displayResumeFrame();
+                setPause(false);
             }
         });
 
@@ -413,7 +420,6 @@ public abstract class GUI {
      * @return bottom JPanel displaying user controls.
      */
     public JPanel displayControlsPanel() {
-
         JPanel controlPanel = new JPanel(new GridLayout(1, 7));
         controlPanel.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
         controlPanel.setBackground(Color.WHITE);
@@ -427,7 +433,8 @@ public abstract class GUI {
         pauseButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //TODO: ADD PAUSE CODE
+                System.out.println("pausing in controls");
+                setPause(true);
                 displayPauseFrame();
             }
         });
@@ -437,8 +444,8 @@ public abstract class GUI {
         resumeButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //TODO: ADD RESUME CODE
                 displayResumeFrame();
+                setPause(false);
             }
         });
 
@@ -547,6 +554,7 @@ public abstract class GUI {
                 JOptionPane.showMessageDialog(frame, message, "BACK TO GAME", JOptionPane.INFORMATION_MESSAGE);
                 // TODO: make sure replay mode is exited correctly and game is resumed
                 replayFrame.setVisible(false);
+                pauseGame = false;
             }
         });
         exitPanel.add(exitReplay);
@@ -633,7 +641,10 @@ public abstract class GUI {
 //                    roundFinished = false;
 //                    return;
 //                }
-                if (currentTime == 0) return;   // remove when code is added to reset level
+                if (pauseGame || currentTime == 0) {
+                    System.out.println("game paused");
+                    return;
+                }   // remove when code is added to reset level
                 currentTime--;
                 redisplayTimer();
 
@@ -643,7 +654,7 @@ public abstract class GUI {
                     JOptionPane.showMessageDialog(frame, message, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
                     // TODO: add code which restarts level
                     currentTime = 0;
-                    roundFinished = true;
+
                 }
             }
         });
@@ -691,6 +702,15 @@ public abstract class GUI {
      */
     public void saveMovements() {
 
+    }
+
+    /**
+     * Sets the state of the game between pause and live game.
+     *
+     * @param state -- true if game is paused. Otherwise, false.
+     */
+    public void setPause(boolean state) {
+        pauseGame = state;
     }
 }
 
