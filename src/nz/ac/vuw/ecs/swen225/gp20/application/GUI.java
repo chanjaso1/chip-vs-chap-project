@@ -111,19 +111,18 @@ public abstract class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String message = "HOW TO PLAY\n\n" +
-                        "LEFT PANEL\n" +
-                        "- Buttons are used to perform actions in the game.\n" +
-                        "- The current player's name is displayed with a GREEN border. Eliminated players are displayed with a RED border.\n\n" +
-                        "BOTTOM PANEL\n" +
-                        "- Cards with GREEN borders indicate the player's deck of cards as well as cards other players have refuted to them throughout the game.\n- Refuted cards will be displayed on player's next turn.\n\n" +
-                        "GAME ORDER\n\n" + "1. Dice is rolled and shown next to the current player's name (in the bottom panel).\n" +
-                        "Green tiles on the board show the tiles/rooms you can reach. Reachable rooms will have a green centre tile.\n" +
-                        "You must move your character token before you perform any action.\n\n" +
-                        "2. If you moved into a room you have to suggest. You cannot suggest outside a room.\n" +
-                        "You can accuse anywhere on the board. You can only either suggest or accuse once in your turn (ie. cannot make multiple suggestions/accusations).\n" +
-                        "However, if you suggest and no card is refuted you can then accuse.\n\n" +
-                        "3. If your accusation is wrong you will be eliminated from the game but you can still refute cards to other players.\n\n" +
-                        "4. The END TURN button MUST be pressed in order to end your turn.\n";
+                        "AIM OF THE GAME\n" +
+                        "- Collect all the treasures in the level and reach the finish tile before time runs out!\n\n" +
+                        "MOVEMENT\n" +
+                        "- Use the arrow keys to move Chap around the maze.\n\n" +
+                        "SPECIAL KEYS\n" +
+                        "CTRL-X:\t Exit the game. The current game state will be lost, the next time the game is started, it will resume from the last unfinished level.\n" +
+                        "CTRL-S:\t Exit the game, saves the game state, game will resume next time application is started.\n" +
+                        "CTRL R:\t Resume a saved game.\n" +
+                        "CTRL-P:\t Start a new game a the last unfinished level.\n" +
+                        "CTRL-1:\t Start a new game at level 1.\n" +
+                        "SPACE:\t\t Pause the game and displays a 'game is paused' dialog.\n" +
+                        "ESC:\t\tClose the 'game is paused' dialog and resume the game.";
                 JOptionPane.showMessageDialog(frame, message, "HELP", JOptionPane.PLAIN_MESSAGE);
             }
         });
