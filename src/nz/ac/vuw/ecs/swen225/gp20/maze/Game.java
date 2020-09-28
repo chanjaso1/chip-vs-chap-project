@@ -2,12 +2,14 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
+import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordSaver;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -18,6 +20,7 @@ public class Game extends GUI {
     private Player player;
     private Tile currentTile;
     private Tile[][] map;
+    private ArrayList<Move> moveSequence;
 
     public Game()  {
 
@@ -26,6 +29,7 @@ public class Game extends GUI {
         map = parser.getMap();
         player = parser.getPlayer();
         player.setGame(this);
+        moveSequence = new ArrayList<>();
 
         this.setRendererPanel(this);
         this.initialise();
@@ -52,7 +56,16 @@ public class Game extends GUI {
         return this;
     }
 
-    public
+    @Override
+    public void movePlayer(Move move) {
+        moveSequence.add(move);
+        move.apply(player);
+    }
+
+    @Override
+    public void saveMovements(){
+        new RecordSaver(moveSequence);
+    }
 
     public static void main(String[] args){
         new Game().runGame();
