@@ -33,7 +33,10 @@ public class floorTile implements Tile{
     public boolean checkValidMove(Player player) {
         if(item != null){
             player.pickUp(item);
+
+            //removed the object from the map
             item = null;
+            player.getGame().getBoard().removeItem(col,row);
         }
 
         //players can always move on the floor

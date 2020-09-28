@@ -686,6 +686,9 @@ public abstract class GUI {
         return replaySpeed;
     }
 
+    public RendererPanel getBoard() {
+        return board;
+    }
 
     /**
      * Initialises the RendererPanel, passing in the Game object.
