@@ -19,25 +19,19 @@ public class RecordReader {
     private static boolean playNextFrame;
 
     /**
-     * This class reads a JSON file from filePath and stores the moves
+     * This class reads a JSON file from file's path and stores the moves
      * that are read.
      * They are read as Actions > movement > *a move*
-     *
-     * @param filePath location of file
      */
-    public RecordReader(String filePath) throws FileNotFoundException {
+    public RecordReader() {
         //check path exists
         //based on https://stackoverflow.com/questions/15571496/how-to-check-if-a-folder-exists
-        File f = new File(filePath);
-        if (!f.exists()) {// || !f.isDirectory()
-            throw new FileNotFoundException();
-        }
-
+        File replayFile = getFile();
         playNextFrame = false;
 
         //read path
         try {
-            JsonObject jo = new Gson().fromJson(new FileReader(filePath), JsonObject.class);
+            JsonObject jo = new Gson().fromJson(new FileReader(replayFile), JsonObject.class);
             JsonArray jsonMoves = jo.getAsJsonArray("Actions");
 
 //            System.out.println(jsonMoves);
@@ -139,14 +133,10 @@ public class RecordReader {
         return moves;
     }
 
-    public static void main(String[] args) {
-//        JFileChooser jfc = new JFileChooser(); //based off https://stackoverflow.com/questions/8402889/working-with-jfilechooser-getting-access-to-the-selected-file
-//        int returnValue = jfc.showOpenDialog(new JFrame("Select a file"));
-//
-//        if (returnValue == JFileChooser.APPROVE_OPTION){
-//            new RecordReader(jfc.getSelectedFile());
-//        }File recordFileSystem.out.println("File:"+recordFile.getName());
-
-//        new RecordReader("Recordings/testRecording.json");
+    public static File getFile(){
+        JFileChooser fileChooser = new JFileChooser("Recordings/");
+        if (fileChooser.showOpenDialog(new JButton("Open")) == JFileChooser.APPROVE_OPTION)
+            return fileChooser.getSelectedFile();
+        return getFile();
     }
 }

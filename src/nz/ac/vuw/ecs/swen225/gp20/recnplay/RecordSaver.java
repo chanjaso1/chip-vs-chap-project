@@ -8,18 +8,16 @@ import java.util.ArrayList;
 
 public class RecordSaver {
     private ArrayList<Move> moves;
-    private static String saveMessage;
 
-    public RecordSaver(ArrayList<Move> moves) {//todo name of file
+    public RecordSaver(ArrayList<Move> moves) {
         this.moves = moves;
-        saveMessage = "Please enter a name for the recording file (without extension):";
         save(null);
     }
 
     public void save(String fileName){
         //get name of new file if not provided
         if (fileName == null || fileName.isBlank() || fileName.isEmpty()){
-            fileName = getFileName(saveMessage);
+            fileName = getFileName("Please enter a name for the recording file (without extension):");
             if (fileName == null) return; //cancel
         }
         fileName += ".json";
@@ -43,7 +41,7 @@ public class RecordSaver {
             int wantTo = JOptionPane.showConfirmDialog(null, "Are you sure you want to override "+fileName+"?");
             if (wantTo != JOptionPane.YES_OPTION){
                 //try again
-                save(saveMessage);
+                save("Please enter a name for the recording file (without extension):");
                 return;
             }
         }
@@ -71,7 +69,7 @@ public class RecordSaver {
                 return null;
             }
 
-            saveMessage = "Filename is empty. Please enter a valid filename.";
+            message = "Filename is empty. Please enter a valid filename.";
         }
 
         return fileName;
