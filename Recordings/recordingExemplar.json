@@ -7,10 +7,10 @@
 			"movement": "right"
 		},
 		{
-			"movement": "down"
+			"movement": "up"
 		},
 		{
-			"movement": "up"
+			"movement": "down"
 		}
 	]
 }

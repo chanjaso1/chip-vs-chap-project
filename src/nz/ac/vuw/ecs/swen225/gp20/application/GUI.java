@@ -65,8 +65,8 @@ public abstract class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 //TODO: ADD TIAN'S SAVING CODE
-                String message = "Your game has successfully been saved.";
-                JOptionPane.showMessageDialog(frame, message, "SAVE", JOptionPane.INFORMATION_MESSAGE);
+//                String message = "Your game has successfully been saved.";
+//                JOptionPane.showMessageDialog(frame, message, "SAVE", JOptionPane.INFORMATION_MESSAGE);
                 saveMovements();
             }
         });
@@ -189,8 +189,8 @@ public abstract class GUI {
         actionMap.put("MOVE_UP", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                board.renderMove(0);
                 movePlayer(new moveUp());
+                board.renderMove(0);
             }
         });
 
@@ -199,8 +199,8 @@ public abstract class GUI {
         actionMap.put("MOVE_DOWN", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                board.renderMove(2);
                 movePlayer(new moveDown());
+                board.renderMove(2);
             }
         });
 
@@ -209,8 +209,9 @@ public abstract class GUI {
         actionMap.put("MOVE_LEFT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                board.renderMove(3);
                 movePlayer(new moveLeft());
+                board.renderMove(3);
+
             }
         });
 
@@ -219,8 +220,8 @@ public abstract class GUI {
         actionMap.put("MOVE_RIGHT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                board.renderMove(1);
                 movePlayer(new moveRight());
+                board.renderMove(1);
             }
         });
 
@@ -685,6 +686,9 @@ public abstract class GUI {
         return replaySpeed;
     }
 
+    public RendererPanel getBoard() {
+        return board;
+    }
 
     /**
      * Initialises the RendererPanel, passing in the Game object.

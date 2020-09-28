@@ -1,16 +1,24 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
-
+/**
+ * RendererPanel is a class that extends JComponent, so that it may be added ot the GUI JFrame.
+ * This class acts as the view display for the game scene, and renders the visuals and sounds of the game.
+ */
 public class RendererPanel extends JComponent {
 
     public int[][] board = new int[100][100];
     public RenderTile[][] tileMap = new RenderTile[30][30];
+    public RenderItem[][] itemMap = new RenderItem[30][30];
     public Tile[][] levelTiles;
     public int xPos, yPos;
     public int frameWidth, frameHeight;
@@ -24,9 +32,10 @@ public class RendererPanel extends JComponent {
     Game game;
 
     Image north, south, east, west;
+    BufferedImage key;
 
     public RendererPanel(Game g) {
-        frameHeight = (1000 /2) - 50;
+        frameHeight = (906 /2) - 50;
         frameWidth = (1000 /2) - 50;
 
         // BREAKPOINT HERE - Instantiate game, and then invoking method to access map state.
@@ -47,8 +56,8 @@ public class RendererPanel extends JComponent {
             }
         }
 
-        xPos = 11;
-        yPos = 13;
+        xPos = game.getPlayer().getCol();
+        yPos = game.getPlayer().getRow();
 
         // Initialize character facing GIFS
         north = new ImageIcon(getClass().getResource("resource/backFacing.gif")).getImage();
@@ -56,28 +65,30 @@ public class RendererPanel extends JComponent {
         east = new ImageIcon(getClass().getResource("resource/rightFacing.gif")).getImage();
         west = new ImageIcon(getClass().getResource("resource/leftFacing.gif")).getImage();
 
-//        int num;
-//        // Initialize 2D Array with random SHIT.
-//        for (int i = 0; i < 100; i++) {
-//            for (int j = 0; j < 100; j++) {
-//                num = ThreadLocalRandom.current().nextInt(0, 3 + 1);
-//                board[i][j] = num;
-//            }
-//        }
 
         // Make render map based on tiles obtained from Game
-        int tileType;
+        // Make item render map based on floorTiles that  contain items
         RenderTile tile = null;
+        RenderItem item = null;
 
         for (int i = 0; i < levelTiles.length; i++) {
-            System.out.println();
             for (int j = 0; j < levelTiles[0].length; j++) {
-                //System.out.print(" ");
-                //System.out.print(levelTiles[i][j]);
                 if (levelTiles[i][j] instanceof floorTile) {
-                    tile = new Blue(i, j);
+                    tile = new Floor(i, j);
+                    floorTile f = (floorTile)levelTiles[i][j];
+                    if (f.getItem() instanceof Key) {
+                        if (((Key) f.getItem()).getColor().equals("R")) {
+                            item = new redKey(i, j);
+                        } else if (((Key) f.getItem()).getColor().equals("G")) {
+                            item = new greenKey(i, j);
+                        }
+                        itemMap[i][j] = item;
+                    } else if (f.getItem() instanceof Treasure) {
+                        item = new chip(i, j);
+                        itemMap[i][j] = item;
+                    }
                 } else if (levelTiles[i][j] instanceof wallTile) {
-                    tile = new Red(i, j);
+                    tile = new Wall(i, j);
                 } else if (levelTiles[i][j] instanceof doorTile) {
                     tile = new Grey(i, j);
                 } else if (levelTiles[i][j] instanceof winTile) {
@@ -87,35 +98,21 @@ public class RendererPanel extends JComponent {
             }
         }
 
-//        for (int i = 0; i < 100; i++) {
-//            for (int j = 0; j < 100; j++) {
-//                tileType = board[i][j];
-//                switch (tileType) {
-//                    case 0:
-//                        tile = new Blue(i, j);
-//                        break;
-//                    case 1:
-//                        tile = new Red(i, j);
-//                        break;
-//                    case 2:
-//                        tile = new Grey(i, j);
-//                        break;
-//                    case 3:
-//                        tile = new Yellow(i, j);
-//                        break;
-//                }
-//                tileMap[i][j] = tile;
-//            }
-//        }
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
         renderTiles(g2d);
+        drawKeys(g2d);
         drawPlayer(g2d, this);
     }
 
+    /**
+     * Draws all the tiles onto the RenderPanel
+     * @param g the graphics object that draws on the RenderPanel
+     */
     public void renderTiles(Graphics2D g) {
         for (int i = 0; i < 5; i++) {
             int invert = i*-1;
@@ -124,9 +121,13 @@ public class RendererPanel extends JComponent {
         }
     }
 
+    /**
+     * Draws an entire line of squares.
+     * @param g the graphics object that draws on the RenderPanel
+     * @param y the row to draw at
+     */
     public void drawRow(Graphics2D g, int y) {
         // Centre Tile
-
         tileMap[y + yPos][xPos].drawTile(g, frameWidth, frameHeight + (y * 100));
 
         for (int i = 1; i < 5; i++) {
@@ -135,6 +136,26 @@ public class RendererPanel extends JComponent {
         }
     }
 
+    /**
+     * Draws all keys/ Treasures visible on the rendering clip
+     * @param g the graphics object that draws on the RenderPanel
+     */
+    public void drawKeys(Graphics2D g) {
+        for(int i = -4; i < 5; i++) {
+            for(int j = -4; j < 5; j++) {
+                if (itemMap[yPos + i][xPos + j] != null) {
+                    itemMap[yPos + i][xPos + j].drawItem(g,frameWidth + (j * 100), frameHeight + (i * 100));
+                }
+            }
+        }
+    }
+
+    /**
+     * Draws the player gif onto the centre of the display panel, facing the direction
+     * of the last movement key press.
+     * @param g the graphics object that draws on the RenderPanel
+     * @param display the RenderPanel to show the animation
+     */
     public void drawPlayer(Graphics2D g, JComponent display) {
         switch (direction) {
             case 0: // North
@@ -152,44 +173,51 @@ public class RendererPanel extends JComponent {
         }
     }
 
+    /**
+     * Called when a movement key press event occurs, this updates the display to shift along
+     * in the direction of the key press.
+     * @param dir the direction of key-press to appropriately update player facing direction
+     */
     public void renderMove(int dir) {
         if(dir == 1) {
-            if (xPos > 40) System.out.println("Boundary Reached");
-            else {
-                System.out.println("Right");
-                xPos++;
-                System.out.println(xPos + " " + yPos);
-                direction = 1;
-            }
+            System.out.println("Right");
+            xPos = game.getPlayer().getCol();
+            yPos = game.getPlayer().getRow();
+            System.out.println(xPos + " " + yPos);
+            direction = 1;
         }
         else if(dir == 3) {
-            if (xPos < 10) System.out.println("Boundary Reached");
-            else {
-                System.out.println("Left");
-                xPos--;
-                System.out.println(xPos + " " + yPos);
-                direction = 3;
-            }
+            System.out.println("Left");
+            xPos = game.getPlayer().getCol();
+            yPos = game.getPlayer().getRow();
+            System.out.println(xPos + " " + yPos);
+            direction = 3;
         }
         else if(dir == 2) {
-            if (yPos > 40) System.out.println("Boundary Reached");
-            else {
-                System.out.println("Down");
-                yPos++;
-                System.out.println(xPos + " " + yPos);
-                direction = 2;
-            }
+            System.out.println("Down");
+            xPos = game.getPlayer().getCol();
+            yPos = game.getPlayer().getRow();
+            System.out.println(xPos + " " + yPos);
+            direction = 2;
         }
         else if(dir == 0) {
-            if (yPos < 10) System.out.println("Boundary Reached");
-            else {
-                System.out.println("Up");
-                yPos--;
-                System.out.println(xPos + " " + yPos);
-                direction = 0;
-            }
+            System.out.println("Up");
+            xPos = game.getPlayer().getCol();
+            yPos = game.getPlayer().getRow();
+            System.out.println(xPos + " " + yPos);
+            direction = 0;
         }
 
+        this.repaint();
+    }
+
+    /**
+     * Removes item from itemMap so that it is no longer rendered once picked up
+     * @param x x position of item
+     * @param y y position of item
+     */
+    public void removeItem(int x, int y) {
+        itemMap[y][x] = null;
         this.repaint();
     }
 }

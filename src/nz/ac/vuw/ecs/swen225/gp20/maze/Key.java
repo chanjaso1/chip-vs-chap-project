@@ -18,7 +18,12 @@ public class Key extends Item{
         this.color = color;
     }
 
-    /**
+     @Override
+     public String toString() {
+         return "K" + color;
+     }
+
+     /**
      * Return the color of the Key.
      * @return -- color of the key.
      */

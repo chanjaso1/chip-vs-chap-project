@@ -30,6 +30,11 @@ public class Player { //implements Actor
         this.col = col;
     }
 
+    @Override
+    public String toString() {
+        return "P";
+    }
+
     /**
      * Set the player position to the given row and column.
      * @param row -- new row that the player is

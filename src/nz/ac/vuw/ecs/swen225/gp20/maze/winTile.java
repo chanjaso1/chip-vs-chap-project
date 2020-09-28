@@ -17,6 +17,14 @@ public class winTile implements Tile{
         this.col = col;
     }
 
+    /**
+     * Return the name of the tile.
+     * @return the string of the tile.
+     */
+    @Override
+    public String toString() {
+        return "W";
+    }
 
     @Override
     public boolean checkValidMove(Player player) {

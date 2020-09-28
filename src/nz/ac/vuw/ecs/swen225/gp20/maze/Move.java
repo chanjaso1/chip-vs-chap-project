@@ -11,6 +11,9 @@ public interface Move {
      */
     public void apply(Player player);
 
+//    public default boolean equals(){
+//        return true;
+//    }
 }
 
  class MoveTesting {

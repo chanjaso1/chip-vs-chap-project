@@ -20,13 +20,29 @@ public class floorTile implements Tile{
 
     }
 
+    /**
+     * Return the name of the tile.
+     * @return the string of the tile.
+     */
+    @Override
+    public String toString() {
+        return item != null ? item.toString() : "_";
+    }
+
     @Override
     public boolean checkValidMove(Player player) {
         if(item != null){
             player.pickUp(item);
+
+            //removed the object from the door
+            item = null;
         }
 
         //players can always move on the floor
         return true;
+    }
+
+    public Item getItem() {
+        return item;
     }
 }
