@@ -494,20 +494,29 @@ public abstract class GUI {
         JComboBox<String> combobox = new JComboBox<>(options);
         combobox.setAlignmentX(Component.CENTER_ALIGNMENT);
         JPanel speed = new JPanel();
-        speed.add(new JLabel("Replay speed:"));
+        speed.add(new JLabel("Select a replay speed:"));
         speed.add(combobox);
+
+        // STEP-BY-STEP Panel
+        JPanel stepPanel = new JPanel();
+        stepPanel.setLayout(new BoxLayout(stepPanel, BoxLayout.Y_AXIS));
+        JButton nextButton = new JButton("NEXT");
+        stepPanel.add(new JLabel("Click the 'NEXT' button to step through the replay."), SwingConstants.CENTER);
+        stepPanel.add(nextButton);
+        nextButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("next step");
+                //TODO: add tian's next step code
+            }
+        });
 
         // STEP-BY-STEP button
         JButton stepButton = new JButton("STEP-BY-STEP REPLAY");
         stepButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //TODO: ADD STEP-BY-STEP CODE
-
-                replaySpeed = Double.parseDouble((String) combobox.getSelectedItem());
-                String message = "Selected mode: STEP-BY-STEP\nSeleced replay speed: " + replaySpeed;
-                JOptionPane.showMessageDialog(replayFrame, message, "STEP-BY-STEP REPLAY", JOptionPane.INFORMATION_MESSAGE);
-
+                JOptionPane.showMessageDialog(replayFrame, stepPanel, "STEP-BY-STEP REPLAY", JOptionPane.INFORMATION_MESSAGE);
             }
         });
 
@@ -517,14 +526,14 @@ public abstract class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 //TODO: ADD AUTO-REPLAY CODE
+                JOptionPane.showMessageDialog(replayFrame, speed, "AUTO-REPLAY", JOptionPane.INFORMATION_MESSAGE);
                 replaySpeed = Double.parseDouble((String) combobox.getSelectedItem());
-                String message = "Selected replay mode: AUTO-REPLAY\nSeleced replay speed: " + replaySpeed;
-                JOptionPane.showMessageDialog(replayFrame, message, "AUTO-REPLAY", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println("speed: " + replaySpeed);
             }
         });
 
 
-        actions.add(speed);
+//        actions.add(speed);
         actions.add(stepButton);
         actions.add(autoButton);
 
@@ -663,6 +672,7 @@ public abstract class GUI {
 
     /**
      * Initialises the RendererPanel, passing in the Game object.
+     *
      * @param game
      */
     public void setRendererPanel(Game game) {
