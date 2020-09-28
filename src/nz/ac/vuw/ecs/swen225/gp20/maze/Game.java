@@ -14,6 +14,7 @@ import java.util.Arrays;
  * Game class is the main class that run the game.
  */
 public class Game extends GUI {
+    private int num;
     private Player player;
     private Tile currentTile;
     private Tile[][] map;
