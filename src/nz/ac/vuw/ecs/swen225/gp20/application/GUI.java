@@ -65,8 +65,8 @@ public abstract class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 //TODO: ADD TIAN'S SAVING CODE
-                String message = "Your game has successfully been saved.";
-                JOptionPane.showMessageDialog(frame, message, "SAVE", JOptionPane.INFORMATION_MESSAGE);
+//                String message = "Your game has successfully been saved.";
+//                JOptionPane.showMessageDialog(frame, message, "SAVE", JOptionPane.INFORMATION_MESSAGE);
                 saveMovements();
             }
         });
