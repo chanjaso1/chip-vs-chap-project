@@ -26,7 +26,7 @@ public class Game extends GUI {
 
     public Game()  {
 
-        parser = new parseJSON(System.getProperty("os.name").equalsIgnoreCase("Linux")?"chip-vs-chap-project/levels/level1.json":"levels/level1.json");
+        parser = new parseJSON("levels/level1.json");
 
         map = parser.getMap();
         player = parser.getPlayer();
@@ -64,6 +64,10 @@ public class Game extends GUI {
         moveSequence.add(move);
         move.apply(player);
 
+    }
+
+    public Player getPlayer() {
+        return this.player;
     }
 
     @Override

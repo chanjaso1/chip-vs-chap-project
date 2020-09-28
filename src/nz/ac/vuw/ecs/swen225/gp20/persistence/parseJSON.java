@@ -91,8 +91,7 @@ public class parseJSON{
                 "}");
 
         //Create a new save
-        String filePrefix = System.getProperty("os.name").equalsIgnoreCase("Linux")?"chip-vs-chap-project/":"";
-        File file = new File(filePrefix +"saves/" + fileName);
+        File file = new File("saves/" + fileName);
 
         try {
             BufferedWriter newFile = new BufferedWriter(new FileWriter(file));
