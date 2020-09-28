@@ -33,6 +33,7 @@ public class floorTile implements Tile{
     public boolean checkValidMove(Player player) {
         if(item != null){
             player.pickUp(item);
+            item = null;
         }
 
         //players can always move on the floor

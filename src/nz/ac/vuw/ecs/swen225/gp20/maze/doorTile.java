@@ -7,6 +7,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 public class doorTile implements Tile{
     private int row,col;
     private String color;
+    private boolean open;
 
     //@TODO should we have two types or one types of doors ????
 
@@ -20,6 +21,7 @@ public class doorTile implements Tile{
         this.row = row;
         this.col = col;
         this.color = color;
+        open = false;
     }
 
     /**
@@ -33,12 +35,12 @@ public class doorTile implements Tile{
 
     @Override
     public boolean checkValidMove(Player player) {
+        if(open) return true;
+
         //player can only move on to this tile if they have the correct color key
         for(Key key : player.getKeys()){
             if(key.getColor().equalsIgnoreCase(color)){
-                //remove the door
-                player.getGame().getMap()[row][col] = new floorTile(row,col,null);
-
+                open = true;
                 return true;
             }
         }
