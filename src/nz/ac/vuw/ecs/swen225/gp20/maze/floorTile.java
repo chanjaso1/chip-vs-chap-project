@@ -34,7 +34,7 @@ public class floorTile implements Tile{
         if(item != null){
             player.pickUp(item);
 
-            //removed the object from the map
+            //removed the object from the door
             item = null;
             player.getGame().getBoard().removeItem(col,row);
         }
