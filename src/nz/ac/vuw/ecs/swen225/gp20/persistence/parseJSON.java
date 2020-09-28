@@ -3,8 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 import com.google.gson.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 
 
 /**
@@ -14,15 +13,16 @@ import java.io.FileReader;
  */
 public class parseJSON{
 
+    private static int currentGameSave = 1;
+
     private Player player;
     private Tile[][] map;
     private int treasures = 0;
-
-
+    public int totalSize = 30;
 
     /**
      * This constructor reads a JSON file from a given directory. This object is able to return the map, player and the number of treasures the map has.
-     * @param directory
+     * @param directory - The file directory.
      */
     public parseJSON(String directory){
         try {
@@ -30,7 +30,6 @@ public class parseJSON{
             JsonObject jobject = new Gson().fromJson(new FileReader(directory), JsonObject.class);   //directory: levels/level1.json
             JsonArray jmap = jobject.getAsJsonArray("map");
 
-            int totalSize = 30;
             this.map = new Tile[totalSize][totalSize];
 
             //initialize the level
@@ -57,6 +56,49 @@ public class parseJSON{
 
         }catch(FileNotFoundException e){
             System.out.println("This file doesn't exist!");
+        }
+    }
+
+
+    /**
+     * Save the current state of the game to a JSON file
+     * @param board - The current state of the board.
+     */
+    public void saveGame(Tile[][] board, Player player){
+        String fileName = "save" + currentGameSave++ + ".json";
+        StringBuilder stringFile = new StringBuilder();
+
+        //Read the current state of the board into a string.
+        stringFile.append("{\n" +
+                "  \"map\" : [\n");
+        for(int row = 0; row < totalSize; row++){
+            stringFile.append("   ");
+            for (int col = 0; col < totalSize; col++) {
+                    if(row == player.getRow() && col == player.getCol())    stringFile.append("\""+player.toString()+"\",");
+                    else if(row == totalSize - 1 && col == totalSize - 1)   {
+                        stringFile.append("\""+board[row][col].toString()+"\"");
+                        break;
+                    } else
+                        stringFile.append("\""+board[row][col].toString()+"\",");
+                }
+            stringFile.append("  \n");
+            }
+
+
+
+
+        stringFile.append("  ]\n" +
+                "}");
+
+        //Create a new save
+        File file = new File("saves/" + fileName);
+
+        try {
+            BufferedWriter newFile = new BufferedWriter(new FileWriter(file));
+            newFile.write(stringFile.toString());
+            newFile.close();
+        } catch (IOException e) {
+            System.out.println("File cannot be saved!");
         }
     }
 

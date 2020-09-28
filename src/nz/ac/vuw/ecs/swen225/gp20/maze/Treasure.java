@@ -12,4 +12,12 @@ public class Treasure extends Item {
     public Treasure(Tile tile) {
         super(tile);
     }
+
+    /**
+     * The string of the treasure.
+     * @return the string name of the treasure.
+     */
+    public String toString() {
+        return "T";
+    }
 }
