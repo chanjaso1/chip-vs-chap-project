@@ -62,11 +62,13 @@ public class Game extends GUI {
     public void movePlayer(Move move) {
         moveSequence.add(move);
         move.apply(player);
+
     }
 
     @Override
     public void saveMovements(){
         new RecordSaver(moveSequence);
+        parser.saveGame(map,player);
     }
 
     public static void main(String[] args){
