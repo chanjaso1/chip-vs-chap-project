@@ -46,4 +46,8 @@ public class doorTile implements Tile{
         }
         return false;
     }
+
+    public String getColor() {
+        return this.color;
+    }
 }

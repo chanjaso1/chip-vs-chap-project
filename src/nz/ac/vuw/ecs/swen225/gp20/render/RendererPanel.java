@@ -90,7 +90,9 @@ public class RendererPanel extends JComponent {
                 } else if (levelTiles[i][j] instanceof wallTile) {
                     tile = new Wall(i, j);
                 } else if (levelTiles[i][j] instanceof doorTile) {
-                    tile = new Grey(i, j);
+                    doorTile d = (doorTile)levelTiles[i][j];
+                    if (d.getColor().equals("R")) tile = new RedDoor(i, j);
+                    else if (d.getColor().equals("G")) tile = new GreenDoor(i, j);
                 } else if (levelTiles[i][j] instanceof winTile) {
                     tile = new Yellow(i, j);
                 }
@@ -208,16 +210,16 @@ public class RendererPanel extends JComponent {
             direction = 0;
         }
 
-        this.repaint();
-    }
+        // Picked up item.
+        if (itemMap[yPos][xPos] != null) {
+            itemMap[yPos][xPos] = null;
+        }
 
-    /**
-     * Removes item from itemMap so that it is no longer rendered once picked up
-     * @param x x position of item
-     * @param y y position of item
-     */
-    public void removeItem(int x, int y) {
-        itemMap[y][x] = null;
+        // Unlocked door.
+        if (tileMap[yPos][xPos] instanceof GreenDoor || tileMap[yPos][xPos] instanceof RedDoor) {
+            tileMap[yPos][xPos].setOpen();
+        }
+
         this.repaint();
     }
 }
