@@ -76,7 +76,7 @@ public abstract class GUI {
         pauseButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                setPause(true);
+                pauseGame(true);
                 displayPauseFrame();
                 //TODO: ADD PAUSE CODE
 
@@ -89,7 +89,7 @@ public abstract class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 displayResumeFrame();
-                setPause(false);
+                pauseGame(false);
                 //TODO: ADD RESUME CODE
             }
         });
@@ -99,7 +99,7 @@ public abstract class GUI {
         replayButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                setPause(true);
+                pauseGame(true);
                 System.out.println("calling from menu");
                 displayReplayFrame();
             }
@@ -248,7 +248,7 @@ public abstract class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 displayResumeFrame();
-                setPause(false);
+                pauseGame(false);
             }
         });
 
@@ -276,8 +276,9 @@ public abstract class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("pause");
+                pauseGame(true);
 //                setPause(true);
-//                displayPauseFrame();
+                displayPauseFrame();
             }
         });
 
@@ -287,7 +288,7 @@ public abstract class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 displayResumeFrame();
-                setPause(false);
+                pauseGame(false);
             }
         });
 
@@ -430,27 +431,30 @@ public abstract class GUI {
 
         // PAUSE button
         JButton pauseButton = new JButton("PAUSE");
+        pauseButton.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none"); // ignores space key
         pauseButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("pausing in controls");
-                setPause(true);
+                pauseGame(true);
                 displayPauseFrame();
             }
         });
 
         // RESUME button
         JButton resumeButton = new JButton("RESUME");
+        resumeButton.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none"); // ignores space key
         resumeButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 displayResumeFrame();
-                setPause(false);
+                pauseGame(false);
             }
         });
 
         // REPLAY button
         JButton replayButton = new JButton("REPLAY");
+        replayButton.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none"); // ignores space key
         replayButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -707,10 +711,10 @@ public abstract class GUI {
     /**
      * Sets the state of the game between pause and live game.
      *
-     * @param state -- true if game is paused. Otherwise, false.
+     * @param pause -- true if game is paused. Otherwise, false.
      */
-    public void setPause(boolean state) {
-        pauseGame = state;
+    public void pauseGame(boolean pause) {
+        pauseGame = pause;
     }
 }
 
