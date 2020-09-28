@@ -63,7 +63,6 @@ public class Game extends GUI {
     public void movePlayer(Move move) {
         moveSequence.add(move);
         move.apply(player);
-
     }
 
     public Player getPlayer() {

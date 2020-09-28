@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class RecordReader {
     private final ArrayList<Move> moves = new ArrayList<>();
-    private static boolean playNextFrame;
+    private int lastMovePos;
 
     /**
      * This class reads a JSON file from file's path and stores the moves
@@ -27,7 +27,6 @@ public class RecordReader {
         //check path exists
         //based on https://stackoverflow.com/questions/15571496/how-to-check-if-a-folder-exists
         File replayFile = getFile();
-        playNextFrame = false;
 
         //read path
         try {
@@ -67,6 +66,13 @@ public class RecordReader {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        if (moves.isEmpty())
+            //let user know file is empty
+            //based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
+            JOptionPane.showMessageDialog(null, "Please try again and select a different file. ", "Your file was empty", JOptionPane.ERROR_MESSAGE);
+
+        lastMovePos = 0;
     }
 
     /**
@@ -94,27 +100,19 @@ public class RecordReader {
      * @param player the player doing the move
      */
     public void playPerFrame(Player player){
-        for (Move move: moves){
-            //wait for signal
-            while (!playNextFrame){}
-
-            //do move
+        //do move
 //            move.apply(player);
-            System.out.println("move");
+        System.out.println("move: "+moves.get(lastMovePos++));
 
-            //reset playNextFrame
-            playNextFrame = false;
+        //last move
+        if (moves.size() == lastMovePos){
+            JOptionPane.showMessageDialog(null, "That was the last move, starting over!");
+            lastMovePos = 0;
         }
-    }
 
-    /**
-     * Used for playing the next frame in playPerFrame method.
-     * This is done by setting playNextFrame to TRUE.
-     *
-     * @param playNextFrame boolean value that private playPerFrame will be set to.
-     */
-    public static void setPlayNextFrame(boolean playNextFrame) {
-        RecordReader.playNextFrame = playNextFrame;
+        // todo need to call move.apply() but it needs a player
+        //  and this method is called from gui which does not have
+        //  a player object
     }
 
     /*

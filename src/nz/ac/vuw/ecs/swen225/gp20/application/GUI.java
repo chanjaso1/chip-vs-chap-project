@@ -507,7 +507,9 @@ public abstract class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("next step");
-                //TODO: add tian's next step code
+
+                //play next step
+                recordReader.playPerFrame(null); //todo give player an object not null
             }
         });
 
@@ -529,6 +531,7 @@ public abstract class GUI {
                 JOptionPane.showMessageDialog(replayFrame, speed, "AUTO-REPLAY", JOptionPane.INFORMATION_MESSAGE);
                 replaySpeed = Double.parseDouble((String) combobox.getSelectedItem());
                 System.out.println("speed: " + replaySpeed);
+                recordReader.playAtSpeed(replaySpeed, null); //todo give null player the player value
             }
         });
 
@@ -548,8 +551,6 @@ public abstract class GUI {
                 // TODO: make sure replay mode is exited correctly and game is resumed
                 replayFrame.setVisible(false);
                 pauseGame = false;
-
-                recordReader.playAtSpeed(replaySpeed, null); //todo give null player the player value
             }
         });
         exitPanel.add(exitReplay);
