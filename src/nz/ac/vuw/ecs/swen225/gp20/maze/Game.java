@@ -35,7 +35,7 @@ public class Game extends GUI {
         moveSequence = new ArrayList<>();
 
         this.setRendererPanel(this);
-        this.initialise();
+        this.initialise(parser.getTreasures());
     }
 
     public void runGame(){

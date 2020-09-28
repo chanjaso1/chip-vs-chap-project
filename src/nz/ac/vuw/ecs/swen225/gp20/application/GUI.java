@@ -22,7 +22,7 @@ public abstract class GUI {
 
     private final Font TITLE_FONT = new Font("", Font.BOLD, 30);
     private final GridLayout GAME_STATS_LAYOUT = new GridLayout(2, 1);
-    private final Border GAME_STATS_BORDER = BorderFactory.createEmptyBorder(20, 20, 20, 20);
+    private final Border GAME_STATS_BORDER = BorderFactory.createEmptyBorder(10, 10, 10, 10);
     private final double MAX_TIME = 60; // TODO: replace values with actual values from Jason's file
 
     private JFrame frame, replayFrame = new JFrame();
@@ -36,7 +36,7 @@ public abstract class GUI {
     private RecordReader recordReader;
     private double replaySpeed;
     private double currentTime = MAX_TIME;
-    private int keysLeft = 2;
+    private int keysLeft = 2, treasures;
     private boolean pauseGame;
 
 
@@ -48,7 +48,8 @@ public abstract class GUI {
     /**
      * Initialises and displays the GUI on the screen.
      */
-    public void initialise() {
+    public void initialise(int numOfTreasures) {
+        treasures = numOfTreasures;
 
         // creates main frame
         frame = new JFrame("Chip's Challenge");
@@ -114,6 +115,7 @@ public abstract class GUI {
         helpButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                pauseGame(true);
                 String message = "HOW TO PLAY\n\n" +
                         "AIM OF THE GAME\n" +
                         "- Collect all the treasures in the level and reach the finish tile before time runs out!\n\n" +
@@ -126,8 +128,9 @@ public abstract class GUI {
                         "CTRL-P:\t Start a new game a the last unfinished level.\n" +
                         "CTRL-1:\t Start a new game at level 1.\n" +
                         "SPACE:\t\t Pause the game and displays a 'game is paused' dialog.\n" +
-                        "ESC:\t\tClose the 'game is paused' dialog and resume the game.";
+                        "ESC:\t\t\tClose the 'game is paused' dialog and resume the game.";
                 JOptionPane.showMessageDialog(frame, message, "HELP", JOptionPane.PLAIN_MESSAGE);
+                pauseGame(false);
             }
         });
 
@@ -321,12 +324,12 @@ public abstract class GUI {
      */
     public void displayGameStatsPanel(JPanel gameStats) {
 //        gameStats = new JPanel(new GridLayout(5, 1, 10, 30));
-        gameStats.setBorder(BorderFactory.createEmptyBorder(50, 100, 200, 100));
+        gameStats.setBorder(BorderFactory.createEmptyBorder(50, 90, 50, 90));
 //        gameStats.setBackground(Color.GRAY);
 
 
         // level panel
-        JPanel levelPanel = createGameStat("LEVEL", "1");
+        JPanel levelPanel = createGameStat("LEVEL", 1);
       /*  JPanel levelPanel = new JPanel(layout);
         JLabel levelTitle = new JLabel("LEVEL", JLabel.CENTER);
         levelTitle.setFont(TITLE_FONT);
@@ -354,8 +357,8 @@ public abstract class GUI {
         timePanel.add(timeTitle);
         timePanel.add(time); */
 
-        // keys left panel
-        JPanel keysLeftPanel = createGameStat("CHIPS\nLEFT", "2");
+        // treasures left panel
+        JPanel keysLeftPanel = createGameStat("TREASURES\nLEFT", treasures);
       /*  JPanel keysLeftPanel = new JPanel(layout);
         JLabel keysLeftTitle = new JLabel("CHIPS\nLEFT", JLabel.CENTER);
         keysLeftTitle.setFont(TITLE_FONT);
@@ -369,7 +372,7 @@ public abstract class GUI {
 
         // inventory (keys collected) panel
         JPanel inventoryPanel = new JPanel(GAME_STATS_LAYOUT);
-        JLabel inventoryTitle = new JLabel("INVENTORY", JLabel.CENTER);
+        JLabel inventoryTitle = new JLabel("KEYS COLLECTED", JLabel.CENTER);
         inventoryTitle.setFont(TITLE_FONT);
         inventoryTitle.setForeground(Color.RED);
 
@@ -619,7 +622,7 @@ public abstract class GUI {
      * @param gameStat -- the current value for this statistic (eg. "1").
      * @return completed JPanel displaying game statistic.
      */
-    public JPanel createGameStat(String name, String gameStat) {
+    public JPanel createGameStat(String name, int gameStat) {
         // title
         JPanel panel = new JPanel(GAME_STATS_LAYOUT);
         JLabel title = new JLabel(name, JLabel.CENTER);
@@ -627,7 +630,7 @@ public abstract class GUI {
         title.setForeground(Color.RED);
 
         // game stat
-        JLabel level = new JLabel(gameStat, JLabel.CENTER);
+        JLabel level = new JLabel(String.valueOf(gameStat), JLabel.CENTER);
         level.setBorder(GAME_STATS_BORDER);
         level.setFont(TITLE_FONT);
         level.setOpaque(true);
@@ -640,7 +643,6 @@ public abstract class GUI {
         return panel;
 
     }
-
 
     /**
      * Creates and executes the timer for each round.
@@ -656,7 +658,7 @@ public abstract class GUI {
 //                    return;
 //                }
                 if (pauseGame || currentTime == 0) {
-                    System.out.println("game paused");
+//                    System.out.println("game paused");
                     return;
                 }   // remove when code is added to reset level
                 currentTime--;
@@ -694,6 +696,11 @@ public abstract class GUI {
         return replaySpeed;
     }
 
+    /**
+     * Returns the board object.
+     *
+     * @return the board object.
+     */
     public RendererPanel getBoard() {
         return board;
     }
@@ -701,7 +708,7 @@ public abstract class GUI {
     /**
      * Initialises the RendererPanel, passing in the Game object.
      *
-     * @param game
+     * @param game -- the current game.
      */
     public void setRendererPanel(Game game) {
         board = new RendererPanel(game);
@@ -709,6 +716,8 @@ public abstract class GUI {
 
     /**
      * Abstract method that moves the player in the specified direction.
+     *
+     * @param move -- the player's most recent move.
      */
     public void movePlayer(Move move) {
 
@@ -729,14 +738,14 @@ public abstract class GUI {
     public void pauseGame(boolean pause) {
         pauseGame = pause;
     }
+
+    /**
+     * Decreases the amount of treasures left in the level.
+     * This method is called whenever the player picks up a treasure.
+     */
+    public void decreaseTreasures() {
+        treasures--;
+    }
 }
 
-
-//class Dummy extends GUI {
-//
-//
-//    public static void main(String... args) {
-//        new Dummy();
-//    }
-//}
 
