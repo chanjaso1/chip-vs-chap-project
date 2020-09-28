@@ -25,12 +25,12 @@ public class RendererPanel extends JComponent {
 
     Image north, south, east, west;
 
-    public RendererPanel() {
+    public RendererPanel(Game g) {
         frameHeight = (1000 /2) - 50;
         frameWidth = (1000 /2) - 50;
 
         // BREAKPOINT HERE - Instantiate game, and then invoking method to access map state.
-        game = new Game();
+        game = g;
         levelTiles = game.getMap();
 
         // Print out formatted level map
