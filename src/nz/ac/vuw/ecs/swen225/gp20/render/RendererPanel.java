@@ -1,8 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
@@ -14,6 +18,7 @@ public class RendererPanel extends JComponent {
 
     public int[][] board = new int[100][100];
     public RenderTile[][] tileMap = new RenderTile[30][30];
+    public RenderItem[][] itemMap = new RenderItem[30][30];
     public Tile[][] levelTiles;
     public int xPos, yPos;
     public int frameWidth, frameHeight;
@@ -27,6 +32,7 @@ public class RendererPanel extends JComponent {
     Game game;
 
     Image north, south, east, west;
+    BufferedImage key;
 
     public RendererPanel(Game g) {
         frameHeight = (906 /2) - 50;
@@ -59,13 +65,28 @@ public class RendererPanel extends JComponent {
         east = new ImageIcon(getClass().getResource("resource/rightFacing.gif")).getImage();
         west = new ImageIcon(getClass().getResource("resource/leftFacing.gif")).getImage();
 
+
         // Make render map based on tiles obtained from Game
+        // Make item render map based on floorTiles that  contain items
         RenderTile tile = null;
+        RenderItem item = null;
 
         for (int i = 0; i < levelTiles.length; i++) {
             for (int j = 0; j < levelTiles[0].length; j++) {
                 if (levelTiles[i][j] instanceof floorTile) {
                     tile = new Blue(i, j);
+                    floorTile f = (floorTile)levelTiles[i][j];
+                    if (f.getItem() instanceof Key) {
+                        if (((Key) f.getItem()).getColor().equals("R")) {
+                            item = new redKey(i, j);
+                        } else if (((Key) f.getItem()).getColor().equals("G")) {
+                            item = new greenKey(i, j);
+                        }
+                        itemMap[i][j] = item;
+                    } else if (f.getItem() instanceof Treasure) {
+                        item = new chip(i, j);
+                        itemMap[i][j] = item;
+                    }
                 } else if (levelTiles[i][j] instanceof wallTile) {
                     tile = new Red(i, j);
                 } else if (levelTiles[i][j] instanceof doorTile) {
@@ -122,15 +143,8 @@ public class RendererPanel extends JComponent {
     public void drawKeys(Graphics2D g) {
         for(int i = -4; i < 5; i++) {
             for(int j = -4; j < 5; j++) {
-                if (levelTiles[yPos + i][xPos + j] instanceof floorTile) {
-                    floorTile f = (floorTile)levelTiles[yPos + i][xPos + j];
-                    if (f.getItem() instanceof Key) {
-                        g.setColor(new Color(255, 162, 10));
-                        g.fillOval(frameWidth + (j * 100), frameHeight + (i * 100), 100, 100);
-                    } else if (f.getItem() instanceof Treasure) {
-                        g.setColor(new Color(105, 242, 255));
-                        g.fillOval(frameWidth + (j * 100), frameHeight + (i * 100), 100, 100);
-                    }
+                if (itemMap[yPos + i][xPos + j] != null) {
+                    itemMap[yPos + i][xPos + j].drawItem(g,frameWidth + (j * 100), frameHeight + (i * 100));
                 }
             }
         }
@@ -194,6 +208,16 @@ public class RendererPanel extends JComponent {
             direction = 0;
         }
 
+        this.repaint();
+    }
+
+    /**
+     * Removes item from itemMap so that it is no longer rendered once picked up
+     * @param x x position of item
+     * @param y y position of item
+     */
+    public void removeItem(int x, int y) {
+        itemMap[y][x] = null;
         this.repaint();
     }
 }
