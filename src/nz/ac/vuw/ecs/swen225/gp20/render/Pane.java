@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Game;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -15,7 +17,7 @@ public class Pane {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 1000);
 
-       RendererPanel drawBoard = new RendererPanel();
+       RendererPanel drawBoard = new RendererPanel(new Game());
 
         frame.addKeyListener(new KeyListener() {
             @Override
