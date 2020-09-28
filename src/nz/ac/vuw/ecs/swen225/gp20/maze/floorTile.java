@@ -36,7 +36,6 @@ public class floorTile implements Tile{
 
             //removed the object from the door
             item = null;
-            player.getGame().getBoard().removeItem(col,row);
         }
 
         //players can always move on the floor
