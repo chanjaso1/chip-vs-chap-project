@@ -23,6 +23,9 @@ public class RendererPanel extends JComponent {
     public int xPos, yPos;
     public int frameWidth, frameHeight;
 
+    public BufferedImage chip = null, redKey = null, greenKey = null;
+    public BufferedImage wall = null, gDoor = null, rDoor = null, win = null, floor = null;
+
     // 0 - North
     // 1 - East
     // 2 - South
@@ -35,8 +38,29 @@ public class RendererPanel extends JComponent {
     BufferedImage key;
 
     public RendererPanel(Game g) {
+
+        // Load in all item images one time during construction.
+        try {
+            chip = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/chip.png"));
+            greenKey = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/greenKey.png"));
+            redKey = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/redKey.png"));
+        } catch (IOException e) {
+            System.out.println("Item image not found!");
+        }
+
+        // Load in all tile images one time during construction.
+        try {
+            wall = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/wall.png"));
+            gDoor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/greenDoor.png"));
+            rDoor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/redDoor.png"));
+            win = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/yellow.png"));
+            floor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/floor.png"));
+        } catch (IOException e) {
+            System.out.println("Tile image not found!");
+        }
+
         frameHeight = (906 /2) - 50;
-        frameWidth = (1000 /2) - 50;
+        frameWidth = (940 /2) - 50;
 
         // BREAKPOINT HERE - Instantiate game, and then invoking method to access map state.
         game = g;
@@ -74,27 +98,27 @@ public class RendererPanel extends JComponent {
         for (int i = 0; i < levelTiles.length; i++) {
             for (int j = 0; j < levelTiles[0].length; j++) {
                 if (levelTiles[i][j] instanceof floorTile) {
-                    tile = new Floor(i, j);
+                    tile = new Floor(i, j, floor);
                     floorTile f = (floorTile)levelTiles[i][j];
                     if (f.getItem() instanceof Key) {
                         if (((Key) f.getItem()).getColor().equals("R")) {
-                            item = new redKey(i, j);
+                            item = new redKey(i, j, redKey);
                         } else if (((Key) f.getItem()).getColor().equals("G")) {
-                            item = new greenKey(i, j);
+                            item = new greenKey(i, j, greenKey);
                         }
                         itemMap[i][j] = item;
                     } else if (f.getItem() instanceof Treasure) {
-                        item = new chip(i, j);
+                        item = new chip(i, j, chip);
                         itemMap[i][j] = item;
                     }
                 } else if (levelTiles[i][j] instanceof wallTile) {
-                    tile = new Wall(i, j);
+                    tile = new Wall(i, j, wall);
                 } else if (levelTiles[i][j] instanceof doorTile) {
                     doorTile d = (doorTile)levelTiles[i][j];
-                    if (d.getColor().equals("R")) tile = new RedDoor(i, j);
-                    else if (d.getColor().equals("G")) tile = new GreenDoor(i, j);
+                    if (d.getColor().equals("R")) tile = new RedDoor(i, j, rDoor);
+                    else if (d.getColor().equals("G")) tile = new GreenDoor(i, j, gDoor);
                 } else if (levelTiles[i][j] instanceof winTile) {
-                    tile = new Yellow(i, j);
+                    tile = new Yellow(i, j, win);
                 }
                 tileMap[i][j] = tile;
             }

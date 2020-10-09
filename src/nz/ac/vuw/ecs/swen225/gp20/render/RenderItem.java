@@ -12,9 +12,10 @@ public class RenderItem {
     BufferedImage img = null;
     private int x, y;
 
-    public RenderItem(int x, int y) {
+    public RenderItem(int x, int y, BufferedImage i) {
         this.x = x;
         this.y = y;
+        this.img = i;
     }
 
     /**
@@ -30,36 +31,21 @@ public class RenderItem {
 
 class redKey extends RenderItem {
 
-    public redKey(int x, int y) {
-        super(x, y);
-        try {
-            img = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/redKey.png"));
-        } catch (IOException e) {
-            System.out.println("Image not found!");
-        }
+    public redKey(int x, int y, BufferedImage i) {
+        super(x, y, i);
     }
 }
 
 class greenKey extends RenderItem {
 
-    public greenKey(int x, int y) {
-        super(x, y);
-        try {
-            img = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/greenKey.png"));
-        } catch (IOException e) {
-            System.out.println("Image not found!");
-        }
+    public greenKey(int x, int y, BufferedImage i) {
+        super(x, y, i);
     }
 }
 
 class chip extends RenderItem {
 
-    public chip(int x, int y) {
-        super(x, y);
-        try {
-            img = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/chip.png"));
-        } catch (IOException e) {
-            System.out.println("Image not found!");
-        }
+    public chip(int x, int y, BufferedImage i) {
+        super(x, y, i);
     }
 }
