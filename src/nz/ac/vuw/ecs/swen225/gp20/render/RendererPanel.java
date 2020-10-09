@@ -24,7 +24,8 @@ public class RendererPanel extends JComponent {
     public int frameWidth, frameHeight;
 
     public BufferedImage chip = null, redKey = null, greenKey = null;
-    public BufferedImage wall = null, gDoor = null, rDoor = null, win = null, floor = null;
+    public BufferedImage wall = null, gDoor = null, rDoor = null, floor = null;
+    Image win;
 
     // 0 - North
     // 1 - East
@@ -53,8 +54,9 @@ public class RendererPanel extends JComponent {
             wall = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/wall.png"));
             gDoor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/greenDoor.png"));
             rDoor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/redDoor.png"));
-            win = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/yellow.png"));
             floor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/floor.png"));
+            // winTile different because it's a gif
+            win = new ImageIcon(getClass().getResource("data/winTile.gif")).getImage();
         } catch (IOException e) {
             System.out.println("Tile image not found!");
         }
@@ -118,7 +120,7 @@ public class RendererPanel extends JComponent {
                     if (d.getColor().equals("R")) tile = new RedDoor(i, j, rDoor);
                     else if (d.getColor().equals("G")) tile = new GreenDoor(i, j, gDoor);
                 } else if (levelTiles[i][j] instanceof winTile) {
-                    tile = new Yellow(i, j, win);
+                    tile = new exitTile(i, j, win, this);
                 }
                 tileMap[i][j] = tile;
             }

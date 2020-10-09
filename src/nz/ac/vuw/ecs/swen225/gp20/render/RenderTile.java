@@ -1,6 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -81,5 +82,21 @@ class Yellow extends RenderTile {
 
     public Yellow(int x, int y, BufferedImage i) {
         super(x, y, i);
+    }
+}
+
+class exitTile extends RenderTile {
+    Image gif = null;
+    JComponent display = null;
+
+    public exitTile(int x, int y, Image g, JComponent display) {
+        super(x, y, null);
+        this.display = display;
+        this.gif = g;
+    }
+
+    @Override
+    public void drawTile(Graphics2D g, int x, int y) {
+        g.drawImage(gif, x, y, display);
     }
 }
