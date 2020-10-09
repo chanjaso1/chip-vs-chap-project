@@ -8,6 +8,7 @@ import nz.ac.vuw.ecs.swen225.gp20.render.RendererPanel;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -730,6 +731,23 @@ public abstract class GUI {
      */
     public void increaseKeys() {
         keysCollected++;
+    }
+
+    /**
+     * Gets a file from user via a {@link JFileChooser}
+     *
+     * @return the selected file
+     */
+    public static File getFile(){
+        JFileChooser fileChooser = new JFileChooser("Recordings/");
+        if (fileChooser.showOpenDialog(new JButton("Open")) == JFileChooser.APPROVE_OPTION)
+            return fileChooser.getSelectedFile();
+        return getFile();
+    }
+
+    public static void notifyError(String message){
+        // based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
     
 }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 import javax.swing.*;
@@ -24,9 +25,8 @@ public class RecordReader {
      * They are read as Actions > movement > *a move*
      */
     public RecordReader() {
-        //check path exists
         //based on https://stackoverflow.com/questions/15571496/how-to-check-if-a-folder-exists
-        File replayFile = getFile();
+        File replayFile = GUI.getFile();
 
         //read path
         try {
@@ -40,7 +40,17 @@ public class RecordReader {
 //            System.out.println(jsonMoves.get(1));
 
             for (JsonElement jsonMove: jsonMoves){
-                String moveType = jsonMove.getAsJsonObject().get("movement").getAsString();
+                String moveType;
+                //player
+                //change "movement" to "player"
+                moveType = jsonMove.getAsJsonObject().get("movement").getAsString();
+//                moveType = jsonMove.getAsJsonObject().get("player").getAsString();
+
+                //todo deal with bug moves as well
+                //bug
+                //use "bug"
+                //moveType = jsonMove.getAsJsonObject().get("bug").getAsString();
+
                 Move move;
                 //switch to move type
                 switch (moveType.toLowerCase()){
@@ -64,7 +74,9 @@ public class RecordReader {
                 moves.add(move);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            GUI.notifyError("Unsupported file format.");
+            System.out.println(e.toString()); //todo remove?
+            return;
         }
 
         if (moves.isEmpty())
@@ -131,10 +143,4 @@ public class RecordReader {
         return moves;
     }
 
-    public static File getFile(){
-        JFileChooser fileChooser = new JFileChooser("Recordings/");
-        if (fileChooser.showOpenDialog(new JButton("Open")) == JFileChooser.APPROVE_OPTION)
-            return fileChooser.getSelectedFile();
-        return getFile();
-    }
 }
