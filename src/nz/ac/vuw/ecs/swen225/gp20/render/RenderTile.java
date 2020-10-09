@@ -53,8 +53,9 @@ class Floor extends RenderTile {
 class RedDoor extends RenderTile {
     BufferedImage unlocked;
 
-    public RedDoor(int x, int y, BufferedImage i) {
+    public RedDoor(int x, int y, BufferedImage i, BufferedImage u) {
         super(x, y, i);
+        this.unlocked = u;
     }
 
     @Override
@@ -67,8 +68,9 @@ class RedDoor extends RenderTile {
 class GreenDoor extends RenderTile {
     BufferedImage unlocked;
 
-    public GreenDoor(int x, int y, BufferedImage i) {
+    public GreenDoor(int x, int y, BufferedImage i, BufferedImage u) {
         super(x, y, i);
+        this.unlocked = u;
     }
 
     @Override
@@ -78,18 +80,11 @@ class GreenDoor extends RenderTile {
     }
 }
 
-class Yellow extends RenderTile {
-
-    public Yellow(int x, int y, BufferedImage i) {
-        super(x, y, i);
-    }
-}
-
-class exitTile extends RenderTile {
+class ExitTile extends RenderTile {
     Image gif = null;
     JComponent display = null;
 
-    public exitTile(int x, int y, Image g, JComponent display) {
+    public ExitTile(int x, int y, Image g, JComponent display) {
         super(x, y, null);
         this.display = display;
         this.gif = g;

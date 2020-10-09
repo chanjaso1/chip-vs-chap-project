@@ -24,7 +24,7 @@ public class RendererPanel extends JComponent {
     public int frameWidth, frameHeight;
 
     public BufferedImage chip = null, redKey = null, greenKey = null;
-    public BufferedImage wall = null, gDoor = null, rDoor = null, floor = null;
+    public BufferedImage wall = null, gDoor = null, rDoor = null, floor = null, unlocked = null;
     Image win;
 
     // 0 - North
@@ -55,6 +55,7 @@ public class RendererPanel extends JComponent {
             gDoor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/greenDoor.png"));
             rDoor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/redDoor.png"));
             floor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/floor.png"));
+            unlocked = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/unlocked.png"));
             // winTile different because it's a gif
             win = new ImageIcon(getClass().getResource("data/winTile.gif")).getImage();
         } catch (IOException e) {
@@ -64,7 +65,6 @@ public class RendererPanel extends JComponent {
         frameHeight = (906 /2) - 50;
         frameWidth = (940 /2) - 50;
 
-        // BREAKPOINT HERE - Instantiate game, and then invoking method to access map state.
         game = g;
         levelTiles = game.getMap();
 
@@ -78,7 +78,6 @@ public class RendererPanel extends JComponent {
                 else if (levelTiles[i][j] instanceof wallTile) System.out.print("0");
                 else if (levelTiles[i][j] instanceof doorTile) System.out.print("K");
                 else if (levelTiles[i][j] instanceof winTile) System.out.print("W");
-
             }
         }
 
@@ -91,9 +90,23 @@ public class RendererPanel extends JComponent {
         east = new ImageIcon(getClass().getResource("resource/rightFacing.gif")).getImage();
         west = new ImageIcon(getClass().getResource("resource/leftFacing.gif")).getImage();
 
+        updateRenderMaps();
+    }
 
-        // Make render map based on tiles obtained from Game
-        // Make item render map based on floorTiles that  contain items
+    /**
+     * method to call when loading in new level, to update the level data
+     * @param t The 2D Array to update level data loaded
+     */
+    public void updateLevel(Tile[][] t) {
+        levelTiles = t;
+    }
+
+    /**
+     * This method converts the obtained level data from Game, into appropriate 2D arrays of the render objects.
+     * Make render map based on tiles obtained from Game
+     * Make item render map based on floorTiles that  contain items
+     */
+    public void updateRenderMaps() {
         RenderTile tile = null;
         RenderItem item = null;
 
@@ -117,15 +130,14 @@ public class RendererPanel extends JComponent {
                     tile = new Wall(i, j, wall);
                 } else if (levelTiles[i][j] instanceof doorTile) {
                     doorTile d = (doorTile)levelTiles[i][j];
-                    if (d.getColor().equals("R")) tile = new RedDoor(i, j, rDoor);
-                    else if (d.getColor().equals("G")) tile = new GreenDoor(i, j, gDoor);
+                    if (d.getColor().equals("R")) tile = new RedDoor(i, j, rDoor, unlocked);
+                    else if (d.getColor().equals("G")) tile = new GreenDoor(i, j, gDoor, unlocked);
                 } else if (levelTiles[i][j] instanceof winTile) {
-                    tile = new exitTile(i, j, win, this);
+                    tile = new ExitTile(i, j, win, this);
                 }
                 tileMap[i][j] = tile;
             }
         }
-
     }
 
     @Override
