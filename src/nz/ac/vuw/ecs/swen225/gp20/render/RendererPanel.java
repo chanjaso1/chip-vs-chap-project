@@ -27,7 +27,9 @@ public class RendererPanel extends JComponent {
     public BufferedImage wall = null, gDoor = null, rDoor = null, floor = null, unlocked = null;
     Image win;
 
-    SoundEffect moveSound, blockedSound, pickupSound, doorSound;
+    // ALL SOUND EFFECTS GENERATED/ EDITED/ PRODUCED USING THE WEBSITE:
+    // https://jfxr.frozenfractal.com/
+    SoundEffect moveSound, blockedSound, pickupSound, doorSound, winSound;
 
     // 0 - North
     // 1 - East
@@ -103,6 +105,8 @@ public class RendererPanel extends JComponent {
         blockedSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/stuck.wav");
         doorSound = new SoundEffect();
         doorSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/openDoor.wav");
+        winSound = new SoundEffect();
+        winSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/endTeleport.wav");
     }
 
     /**
@@ -274,7 +278,18 @@ public class RendererPanel extends JComponent {
             moveSound.playSound();
         }
 
+        // Todo: Temporary placeholder for executing set up for next level
+        if (tileMap[yPos][xPos] instanceof ExitTile) {
+            this.winLevel();
+        }
 
+        this.repaint();
+    }
+
+    public void winLevel() {
+        winSound.playSound();
+        //updateLevel(game.getMap()); // Todo: need to do actual next level loading
+        //updateRenderMaps();
         this.repaint();
     }
 }
