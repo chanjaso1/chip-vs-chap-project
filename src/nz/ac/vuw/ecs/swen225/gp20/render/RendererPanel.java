@@ -27,6 +27,8 @@ public class RendererPanel extends JComponent {
     public BufferedImage wall = null, gDoor = null, rDoor = null, floor = null, unlocked = null;
     Image win;
 
+    SoundEffect moveSound, blockedSound, pickupSound;
+
     // 0 - North
     // 1 - East
     // 2 - South
@@ -91,6 +93,13 @@ public class RendererPanel extends JComponent {
         west = new ImageIcon(getClass().getResource("resource/leftFacing.gif")).getImage();
 
         updateRenderMaps();
+
+        moveSound = new SoundEffect();
+        moveSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/movesound.wav");
+        pickupSound = new SoundEffect();
+        pickupSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/pickup.wav");
+        blockedSound = new SoundEffect();
+        blockedSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/stuck.wav");
     }
 
     /**
@@ -251,6 +260,9 @@ public class RendererPanel extends JComponent {
         // Picked up item.
         if (itemMap[yPos][xPos] != null) {
             itemMap[yPos][xPos] = null;
+            pickupSound.playSound();
+        } else {
+            moveSound.playSound();
         }
 
         // Unlocked door.
