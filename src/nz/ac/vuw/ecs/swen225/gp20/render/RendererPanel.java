@@ -27,7 +27,7 @@ public class RendererPanel extends JComponent {
     public BufferedImage wall = null, gDoor = null, rDoor = null, floor = null, unlocked = null;
     Image win;
 
-    SoundEffect moveSound, blockedSound, pickupSound;
+    SoundEffect moveSound, blockedSound, pickupSound, doorSound;
 
     // 0 - North
     // 1 - East
@@ -94,12 +94,15 @@ public class RendererPanel extends JComponent {
 
         updateRenderMaps();
 
+        // Initialise sound effects
         moveSound = new SoundEffect();
         moveSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/movesound.wav");
         pickupSound = new SoundEffect();
         pickupSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/pickup.wav");
         blockedSound = new SoundEffect();
         blockedSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/stuck.wav");
+        doorSound = new SoundEffect();
+        doorSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/openDoor.wav");
     }
 
     /**
@@ -257,18 +260,20 @@ public class RendererPanel extends JComponent {
             direction = 0;
         }
 
-        // Picked up item.
+        // Various events occurring after movement
         if (itemMap[yPos][xPos] != null) {
+            // Picked up item
             itemMap[yPos][xPos] = null;
             pickupSound.playSound();
+        } else if ((tileMap[yPos][xPos] instanceof GreenDoor || tileMap[yPos][xPos] instanceof RedDoor) && !tileMap[yPos][xPos].open) {
+            // Unlocked door
+            tileMap[yPos][xPos].setOpen();
+            doorSound.playSound();
         } else {
+            // No event (Normal movement)
             moveSound.playSound();
         }
 
-        // Unlocked door.
-        if (tileMap[yPos][xPos] instanceof GreenDoor || tileMap[yPos][xPos] instanceof RedDoor) {
-            tileMap[yPos][xPos].setOpen();
-        }
 
         this.repaint();
     }
