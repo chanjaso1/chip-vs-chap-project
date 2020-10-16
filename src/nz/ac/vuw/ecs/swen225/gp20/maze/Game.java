@@ -21,7 +21,7 @@ public class Game extends GUI {
     private Player player;
     private Tile currentTile;
     private Tile[][] map;
-    private ArrayList<Move> moveSequence;
+    private final ArrayList<Move> moveSequence;
     private parseJSON parser;
 
     public Game()  {

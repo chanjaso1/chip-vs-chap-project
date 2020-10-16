@@ -20,9 +20,16 @@ public abstract class Move {
         return mover;
     }
 
-    //    public default boolean equals(){
-//        return true;
-//    }
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    //todo object does not have fields to check hence the weird equals and hashcode
+    @Override
+    public boolean equals(Object obj) {
+        return obj.getClass() == getClass() && mover.getClass() == ((Move)obj).getMover().getClass();
+    }
 }
 
  class MoveTesting {
