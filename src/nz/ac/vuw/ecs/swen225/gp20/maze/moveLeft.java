@@ -3,7 +3,11 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 /**
  * This class is created to move the player in the left direction
  */
-public class moveLeft implements Move {
+public class moveLeft extends Move {
+
+    public moveLeft(Actor actor) {
+        super(actor);
+    }
 
     @Override
     public void apply(Player player) {
@@ -16,15 +20,5 @@ public class moveLeft implements Move {
     @Override
     public String toString() {
         return "left";
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj.getClass() == getClass();
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
     }
 }
