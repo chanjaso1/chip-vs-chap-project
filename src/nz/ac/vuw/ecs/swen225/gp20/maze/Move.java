@@ -3,15 +3,24 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 /**
  * This interface represent the movement being done in the game.
  */
-public interface Move {
+public abstract class Move {
+    protected Actor mover;
+
+    public Move(Actor actor){
+        mover = actor;
+    }
 
     /**
      * Apply the movement to the player.
      * @param player -- the current player in the game.
      */
-    public void apply(Player player);
+    public abstract void apply(Player player);
 
-//    public default boolean equals(){
+    public Actor getMover() {
+        return mover;
+    }
+
+    //    public default boolean equals(){
 //        return true;
 //    }
 }

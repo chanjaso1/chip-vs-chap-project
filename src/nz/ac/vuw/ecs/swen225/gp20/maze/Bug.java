@@ -5,4 +5,9 @@ public class Bug implements Actor {
     public void move(Move move) {
         System.out.println("moving bug");
     }
+
+    @Override
+    public String toString() {
+        return "B";
+    }
 }
