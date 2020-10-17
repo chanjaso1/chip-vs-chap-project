@@ -3,11 +3,10 @@ package nz.ac.vuw.ecs.swen225.gp20.render;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.ThreadLocalRandom;
+
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 /**
@@ -133,13 +132,13 @@ public class RendererPanel extends JComponent {
                     floorTile f = (floorTile)levelTiles[i][j];
                     if (f.getItem() instanceof Key) {
                         if (((Key) f.getItem()).getColor().equals("R")) {
-                            item = new redKey(i, j, redKey);
+                            item = new RedKey(i, j, redKey);
                         } else if (((Key) f.getItem()).getColor().equals("G")) {
-                            item = new greenKey(i, j, greenKey);
+                            item = new GreenKey(i, j, greenKey);
                         }
                         itemMap[i][j] = item;
                     } else if (f.getItem() instanceof Treasure) {
-                        item = new chip(i, j, chip);
+                        item = new Chip(i, j, chip);
                         itemMap[i][j] = item;
                     }
                 } else if (levelTiles[i][j] instanceof wallTile) {

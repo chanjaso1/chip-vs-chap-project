@@ -3,6 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.render;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -29,23 +30,39 @@ public class RenderItem {
     }
 }
 
-class redKey extends RenderItem {
+class RedKey extends RenderItem {
 
-    public redKey(int x, int y, BufferedImage i) {
+    public RedKey(int x, int y, BufferedImage i) {
         super(x, y, i);
     }
 }
 
-class greenKey extends RenderItem {
+class GreenKey extends RenderItem {
 
-    public greenKey(int x, int y, BufferedImage i) {
+    public GreenKey(int x, int y, BufferedImage i) {
         super(x, y, i);
     }
 }
 
-class chip extends RenderItem {
+class Chip extends RenderItem {
 
-    public chip(int x, int y, BufferedImage i) {
+    public Chip(int x, int y, BufferedImage i) {
         super(x, y, i);
     }
+}
+
+class Enemy extends RenderItem {
+    Image gif = null;
+    JComponent display = null;
+
+    public Enemy(int x, int y, Image i,JComponent d) {
+        super(x, y, null);
+        this.gif = i;
+        this.display = d;
+    }
+
+    public void drawEnemy(Graphics2D g, int x, int y) {
+        g.drawImage(gif, x, y, display);
+    }
+
 }
