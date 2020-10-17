@@ -169,7 +169,7 @@ public class RecordReader {
     public static void main(String[] args) {
         RecordReader rr = new RecordReader();
         for (Move move : rr.moves) {
-            System.out.println(move.getMover() + " moved " + move);
+            System.out.println(move.getMover() + " moved " + move); //testing
         }
     }
 }

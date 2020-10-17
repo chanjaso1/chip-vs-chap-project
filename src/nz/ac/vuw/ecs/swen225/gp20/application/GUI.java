@@ -472,6 +472,9 @@ public abstract class GUI {
      * The replay speed is displayed as a JComboBox so users can select a speed within the specified range.
      */
     public void displayReplayFrame() {
+        //get replay file
+        recordReader = new RecordReader();
+
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
         replayFrame.setSize(600, 270);
