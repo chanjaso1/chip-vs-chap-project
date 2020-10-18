@@ -190,3 +190,5 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/intellij,linux,macos,windows,vim
 
 *.class
+
+.metadata/

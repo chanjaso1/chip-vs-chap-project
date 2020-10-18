@@ -1,0 +1,35 @@
+﻿1. Maze Module Break points
+* Game.java - line 29, 75 Persistence (get the parser object, call function to save the map)
+              - line 37,38 Application (called the initialised function)
+              - line  74 Record and Replay (call function to save the movements)
+      
+2. Persistence
+* parseJSON.java
+   * line 40, 42, 43, 44, 45, 46, 48, 49, 51, 67, 77, 79, 82 - Maze  
+
+
+
+
+3. recnplay(Record and Replay):
+
+
+* RecordReader         48, 51, 54, 57 Maze (creating Move objects) 
+                                87, 105 Maze (running moves - for now just using toString) 
+* RecordSaver                 13 Maze (saved Moves from Game) 
+* RecordnReplayTesting 33-36, 64-68 Maze (Move objects)
+                                39, 77 Maze (Move equals based on class name)
+                                43 Maze (Dummy Player)
+                                
+
+
+4. application(Application):
+* GUI.java        line 49, 74, 707 Game (initialises the GUI, saves recording)
+                        line 192, 202, 212, 223 Move/Game (moves the player)
+                        line 512, 534 RecordReader (executes replay modes)
+                        line 30, 682, 691 RendererPanel (sets and gets the board)
+
+
+
+
+5. Render Module Breakpoint
+* RendererPanel.java - line 42 (initialize game reference)

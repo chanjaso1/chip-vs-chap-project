@@ -1,76 +1,110 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
-import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
+/**
+ * The RenderTile is the superclass of all Tiles that are Rendered onto the RenderPanel display.
+ * @author John Eleigio Cecilio (cecilijohn - 300485264)
+ */
 public class RenderTile {
     BufferedImage img = null;
     private int x, y;
+    boolean open = false;
 
-    public RenderTile(int x, int y) {
+    public RenderTile(int x, int y, BufferedImage i) {
         this.x = x;
         this.y = y;
+        this.img = i;
     }
 
+    /**
+     * Draws the tile image onto a specific position on the render display.
+     * @param g the graphics object that draws on the RenderPanel
+     * @param x x Position on RenderPanel
+     * @param y y Position on RenderPanel
+     */
     public void drawTile(Graphics2D g, int x, int y) {
         g.drawImage(img, null, x, y);
     }
+
+    public void setOpen() {
+        this.open = true;
+    }
 }
 
-class Blue extends RenderTile {
+/**
+ * The wall tile to render in
+ */
+class Wall extends RenderTile {
 
-    public Blue(int x, int y) {
-        super(x, y);
-        try {
-            img = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/blue.png"));
-        } catch (IOException e) {
-            System.out.println("Image not found!");
-        }
+    public Wall(int x, int y, BufferedImage i) {
+        super(x, y, i);
+    }
+}
+
+/**
+ * The floor tile to render in
+ */
+class Floor extends RenderTile {
+
+    public Floor(int x, int y, BufferedImage i) {
+        super(x, y, i);
+    }
+}
+
+/**
+ * The red door tile to render in
+ */
+class RedDoor extends RenderTile {
+    BufferedImage unlocked;
+
+    public RedDoor(int x, int y, BufferedImage i, BufferedImage u) {
+        super(x, y, i);
+        this.unlocked = u;
     }
 
-    public void drawTile(Graphics2D g) {}
+    @Override
+    public void drawTile(Graphics2D g, int x, int y) {
+        if (!open) g.drawImage(img, null, x, y);
+        else g.drawImage(unlocked, null, x, y);
+    }
 }
 
-class Red extends RenderTile {
+/**
+ * The green door tile to render in
+ */
+class GreenDoor extends RenderTile {
+    BufferedImage unlocked;
 
-    public Red(int x, int y) {
-        super(x, y);
-        try {
-            img = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/red.png"));
-        } catch (IOException e) {
-            System.out.println("Image not found!");
-        }
+    public GreenDoor(int x, int y, BufferedImage i, BufferedImage u) {
+        super(x, y, i);
+        this.unlocked = u;
     }
 
-    public void drawTile(Graphics2D g) {}
+    @Override
+    public void drawTile(Graphics2D g, int x, int y) {
+        if (!open) g.drawImage(img, null, x, y);
+        else g.drawImage(unlocked, null, x, y);
+    }
 }
 
-class Grey extends RenderTile {
+/**
+ * The exit tile to render in
+ */
+class ExitTile extends RenderTile {
+    Image gif = null;
+    JComponent display = null;
 
-    public Grey(int x, int y) {
-        super(x, y);
-        try {
-            img = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/grey.png"));
-        } catch (IOException e) {
-            System.out.println("Image not found!");
-        }
+    public ExitTile(int x, int y, Image g, JComponent display) {
+        super(x, y, null);
+        this.display = display;
+        this.gif = g;
     }
 
-    public void drawTile(Graphics2D g) {}
-}
-
-class Yellow extends RenderTile {
-
-    public Yellow(int x, int y) {
-        super(x, y);
-        try {
-            img = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/yellow.png"));
-        } catch (IOException e) {
-            System.out.println("Image not found!");
-
-        }
+    @Override
+    public void drawTile(Graphics2D g, int x, int y) {
+        g.drawImage(gif, x, y, display);
     }
 }

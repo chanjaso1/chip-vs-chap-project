@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
+import nz.ac.vuw.ecs.swen225.gp20.maze.Game;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -9,21 +11,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Pane {
 
-    Image north, south, east, west;
-
     public Pane() {
-
-        // Initialize character facing GIFS
-        north = new ImageIcon(getClass().getResource("resource/backFacing.gif")).getImage();
-        south = new ImageIcon(getClass().getResource("resource/frontFacing.gif")).getImage();
-        east = new ImageIcon(getClass().getResource("resource/rightFacing.gif")).getImage();
-        west = new ImageIcon(getClass().getResource("resource/leftFacing.gif")).getImage();
 
         JFrame frame = new JFrame("Tile Map Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 1000);
 
-       RendererPanel drawBoard = new RendererPanel();
+       RendererPanel drawBoard = new RendererPanel(new Game());
 
         frame.addKeyListener(new KeyListener() {
             @Override

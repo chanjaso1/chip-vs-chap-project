@@ -17,6 +17,7 @@ public class floorTile implements Tile{
         this.row = row;
         this.col = col;
         this.item = item;
+
     }
 
     /**
@@ -32,9 +33,16 @@ public class floorTile implements Tile{
     public boolean checkValidMove(Player player) {
         if(item != null){
             player.pickUp(item);
+
+            //removed the object from the door
+            item = null;
         }
 
         //players can always move on the floor
         return true;
+    }
+
+    public Item getItem() {
+        return item;
     }
 }
