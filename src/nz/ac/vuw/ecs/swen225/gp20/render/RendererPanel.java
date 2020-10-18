@@ -234,6 +234,8 @@ public class RendererPanel extends JComponent {
      * @param dir the direction of key-press to appropriately update player facing direction
      */
     public void renderMove(int dir) {
+        int xTemp = xPos;
+        int yTemp = yPos;
         if(dir == 1) {
             System.out.println("Right");
             xPos = game.getPlayer().getCol();
@@ -272,6 +274,9 @@ public class RendererPanel extends JComponent {
             // Unlocked door
             tileMap[yPos][xPos].setOpen();
             doorSound.playSound();
+        } else if (yTemp == yPos && xTemp == xPos) {
+            // Player did not move due to invalid movement
+            blockedSound.playSound();
         } else {
             // No event (Normal movement)
             moveSound.playSound();
