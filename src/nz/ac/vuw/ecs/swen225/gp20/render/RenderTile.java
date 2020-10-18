@@ -1,14 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * The RenderTile is the superclass of all Tiles that are Rendered onto the RenderPanel display.
+ * @author John Eleigio Cecilio (cecilijohn - 300485264)
  */
 public class RenderTile {
     BufferedImage img = null;
@@ -36,6 +34,9 @@ public class RenderTile {
     }
 }
 
+/**
+ * The wall tile to render in
+ */
 class Wall extends RenderTile {
 
     public Wall(int x, int y, BufferedImage i) {
@@ -43,6 +44,9 @@ class Wall extends RenderTile {
     }
 }
 
+/**
+ * The floor tile to render in
+ */
 class Floor extends RenderTile {
 
     public Floor(int x, int y, BufferedImage i) {
@@ -50,6 +54,9 @@ class Floor extends RenderTile {
     }
 }
 
+/**
+ * The red door tile to render in
+ */
 class RedDoor extends RenderTile {
     BufferedImage unlocked;
 
@@ -65,6 +72,9 @@ class RedDoor extends RenderTile {
     }
 }
 
+/**
+ * The green door tile to render in
+ */
 class GreenDoor extends RenderTile {
     BufferedImage unlocked;
 
@@ -80,6 +90,9 @@ class GreenDoor extends RenderTile {
     }
 }
 
+/**
+ * The exit tile to render in
+ */
 class ExitTile extends RenderTile {
     Image gif = null;
     JComponent display = null;

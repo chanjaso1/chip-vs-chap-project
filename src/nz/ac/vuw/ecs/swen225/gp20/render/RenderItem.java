@@ -1,14 +1,13 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
-import nz.ac.vuw.ecs.swen225.gp20.maze.Item;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
+/**
+ * RenderItem is a class that allows for the drawing of objects onto the canvas
+ * @author John Eleigio Cecilio (cecilijohn - 300485264)
+ */
 public class RenderItem {
     BufferedImage img = null;
     private int x, y;
@@ -30,6 +29,9 @@ public class RenderItem {
     }
 }
 
+/**
+ * The red key item to render in
+ */
 class RedKey extends RenderItem {
 
     public RedKey(int x, int y, BufferedImage i) {
@@ -37,6 +39,9 @@ class RedKey extends RenderItem {
     }
 }
 
+/**
+ * The green key item to render in
+ */
 class GreenKey extends RenderItem {
 
     public GreenKey(int x, int y, BufferedImage i) {
@@ -44,6 +49,9 @@ class GreenKey extends RenderItem {
     }
 }
 
+/**
+ * The chip (treasure) item to render in
+ */
 class Chip extends RenderItem {
 
     public Chip(int x, int y, BufferedImage i) {
@@ -51,6 +59,9 @@ class Chip extends RenderItem {
     }
 }
 
+/**
+ * The enemy to render in
+ */
 class Enemy extends RenderItem {
     Image gif = null;
     JComponent display = null;

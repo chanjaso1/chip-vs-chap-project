@@ -12,6 +12,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 /**
  * RendererPanel is a class that extends JComponent, so that it may be added ot the GUI JFrame.
  * This class acts as the view display for the game scene, and renders the visuals and sounds of the game.
+ * @author John Eleigio Cecilio (cecilijohn - 300485264)
  */
 public class RendererPanel extends JComponent {
 
@@ -84,9 +85,6 @@ public class RendererPanel extends JComponent {
             }
         }
 
-        xPos = game.getPlayer().getCol();
-        yPos = game.getPlayer().getRow();
-
         // Initialize character facing GIFS
         north = new ImageIcon(getClass().getResource("resource/backFacing.gif")).getImage();
         south = new ImageIcon(getClass().getResource("resource/frontFacing.gif")).getImage();
@@ -124,6 +122,9 @@ public class RendererPanel extends JComponent {
     public void updateRenderMaps() {
         RenderTile tile = null;
         RenderItem item = null;
+
+        xPos = game.getPlayer().getCol();
+        yPos = game.getPlayer().getRow();
 
         for (int i = 0; i < levelTiles.length; i++) {
             for (int j = 0; j < levelTiles[0].length; j++) {
@@ -234,8 +235,11 @@ public class RendererPanel extends JComponent {
      * @param dir the direction of key-press to appropriately update player facing direction
      */
     public void renderMove(int dir) {
+        // Establish temporary position variables to check for lack of movement
+        // (In event of invalid movement)
         int xTemp = xPos;
         int yTemp = yPos;
+
         if(dir == 1) {
             System.out.println("Right");
             xPos = game.getPlayer().getCol();
@@ -283,6 +287,7 @@ public class RendererPanel extends JComponent {
         }
 
         // Todo: Temporary placeholder for executing set up for next level
+        // Todo: STANDARD MIGHT DO THIS METHOD CALL HERSELF, FROM APPLICATION
         if (tileMap[yPos][xPos] instanceof ExitTile) {
             this.winLevel();
         }
@@ -290,6 +295,10 @@ public class RendererPanel extends JComponent {
         this.repaint();
     }
 
+    /**
+     * The process of when the player reaches the winTile
+     * This method will set up and load in the next level
+     */
     public void winLevel() {
         winSound.playSound();
         //updateLevel(game.getMap()); // Todo: need to do actual next level loading
