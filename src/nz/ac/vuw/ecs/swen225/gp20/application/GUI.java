@@ -8,6 +8,7 @@ import nz.ac.vuw.ecs.swen225.gp20.render.RendererPanel;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -259,6 +260,8 @@ public abstract class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("new game at unfinished");
+
+                //TODO: Implement code
             }
         });
 
@@ -268,6 +271,7 @@ public abstract class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("level 1");
+                //TODO: Implement code
             }
         });
 
@@ -301,71 +305,21 @@ public abstract class GUI {
      * This includes displaying the current level, time, chips left and inventory.
      */
     public void displayGameStatsPanel(JPanel gameStats) {
-//        gameStats = new JPanel(new GridLayout(5, 1, 10, 30));
         gameStats.setBorder(BorderFactory.createEmptyBorder(50, 90, 50, 90));
-//        gameStats.setBackground(Color.GRAY);
-
 
         // level panel
         JPanel levelPanel = createGameStat("LEVEL", 1);
-      /*  JPanel levelPanel = new JPanel(layout);
-        JLabel levelTitle = new JLabel("LEVEL", JLabel.CENTER);
-        levelTitle.setFont(TITLE_FONT);
-        levelTitle.setForeground(Color.RED);
-
-        JLabel level = new JLabel("1", JLabel.CENTER);
-        formatStat(level, border);
-
-        levelPanel.add(levelTitle);
-        levelPanel.add(level); */
-
 
         // time panel
         JPanel timePanel = displayTimePanel();
 
-
-      /*  JPanel timePanel = new JPanel(layout);
-        JLabel timeTitle = new JLabel("TIME", JLabel.CENTER);
-        timeTitle.setFont(TITLE_FONT);
-        timeTitle.setForeground(Color.RED);
-
-        JLabel time = new JLabel("60", JLabel.CENTER);
-        formatStat(time, border);
-
-        timePanel.add(timeTitle);
-        timePanel.add(time); */
-
         // treasures left panel
         JPanel keysLeftPanel = createGameStat("TREASURES\nLEFT", treasures);
-      /*  JPanel keysLeftPanel = new JPanel(layout);
-        JLabel keysLeftTitle = new JLabel("CHIPS\nLEFT", JLabel.CENTER);
-        keysLeftTitle.setFont(TITLE_FONT);
-        keysLeftTitle.setForeground(Color.RED);
-
-        JLabel chips = new JLabel("2", JLabel.CENTER);
-        formatStat(chips, border);
-
-        keysLeftPanel.add(keysLeftTitle);
-        keysLeftPanel.add(chips); */
 
         // inventory (keys collected) panel
         JPanel inventoryPanel = createGameStat("KEYS COLLECTED", keysCollected);
-//        JPanel inventoryPanel = new JPanel(GAME_STATS_LAYOUT);
-//        JLabel inventoryTitle = new JLabel("KEYS COLLECTED", JLabel.CENTER);
-//        inventoryTitle.setFont(TITLE_FONT);
-//        inventoryTitle.setForeground(Color.RED);
-//
-//        JLabel inventory = new JLabel(String.valueOf(keys), JLabel.CENTER);
-//        inventory.setBorder(GAME_STATS_BORDER);
-//        inventory.setFont(TITLE_FONT);
-//        inventory.setOpaque(true);
-//        inventory.setBackground(Color.darkGray);
-//        inventory.setForeground(Color.WHITE);
 //
 //        //TODO: draw the actual keys
-//
-//        inventoryPanel.add(inventoryTitle);
-//        inventoryPanel.add(inventory);
 
 
         // add all components to frame
@@ -730,6 +684,23 @@ public abstract class GUI {
      */
     public void increaseKeys() {
         keysCollected++;
+    }
+
+    /**
+     * Gets a file from user via a {@link JFileChooser}
+     *
+     * @return the selected file
+     */
+    public static File getFile(){
+        JFileChooser fileChooser = new JFileChooser("Recordings/");
+        if (fileChooser.showOpenDialog(new JButton("Open")) == JFileChooser.APPROVE_OPTION)
+            return fileChooser.getSelectedFile();
+        return getFile();
+    }
+
+    public static void notifyError(String message){
+        // based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
     
 }
