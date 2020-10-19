@@ -16,8 +16,9 @@ public class parseJSON{
     private static int currentGameSave = 1;
 
     private Player player;
+    private Bug bug;
     private Tile[][] map;
-    private int treasures = 0, keys = 0, time = 60;
+    private int treasures = 0, keys = 0;
     public int totalSize = 30;
 
     /**
@@ -52,6 +53,14 @@ public class parseJSON{
                         map[row][col] = new floorTile(row, col, treasure);
                         this.treasures++;                                                  //Add 1 to the total number of treasures/chips.
                     }else if(tileType.equals("W"))                      map[row][col] = new winTile(row, col);
+                    else if(tileType.equals("B"))  {
+                        map[row][col]   = new floorTile(row, col, null);
+                        this.bug = new Bug(row, col);
+                    }else if(tileType.equals("X")){
+                        map[row][col] = new floorTile(row, col, null);
+                        ((floorTile) map[row][col]).setBugTile();
+                    }
+
                 }
             }
             
@@ -115,6 +124,14 @@ public class parseJSON{
 
     public int getTreasures(){
         return this.treasures;
+    }
+
+    public Bug getBug(){
+        return this.bug;
+    }
+
+    public int getNumberOfKeys(){
+        return this.keys;
     }
 
 }
