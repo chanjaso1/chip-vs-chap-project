@@ -21,23 +21,28 @@ public class Game {
     private Player player;
     private Tile currentTile;
     private Tile[][] map;
-    private final ArrayList<Move> moveSequence;
     private parseJSON parser;
+    private Bug bug = null;
 
     public Game()  {
-
-        parser = new parseJSON("levels/level1.json");
-
-        map = parser.getMap();
-        player = parser.getPlayer();
-
-        player.setGame(this);
-        moveSequence = new ArrayList<>();
+        loadLevel();
     }
 
     public void runGame(){
 
 
+    }
+
+    /**
+     * Create a new parser and initialised map, player and bug for the current level.
+     * This function will be called every time the level is reload.
+     */
+    public void loadLevel(){
+        parser = new parseJSON("levels/level" + player.getLevel() + ".json");
+        map = parser.getMap();
+        player = parser.getPlayer();
+        player.setGame(this);
+        bug = parser.getBug();
     }
 
     /**
@@ -72,11 +77,12 @@ public class Game {
         parser.saveGame(map,player);
     }
 
-    public void loadLevel(){
-        parser = new parseJSON("levels/level" + player.getLevel() + ".json");
-        map = parser.getMap();
-        player = parser.getPlayer();
-        player.setGame(this);
+    /**
+     * Return the current bug object in the game.
+     * @return -- the current bug object in the game.
+     */
+    public Bug getBug() {
+        return bug;
     }
 
     /**
