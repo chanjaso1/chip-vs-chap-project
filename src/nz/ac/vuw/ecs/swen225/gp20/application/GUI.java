@@ -33,9 +33,6 @@ public class GUI {
     private JPanel gameStatsPanel;
     private RendererPanel board;
     private RecordReader recordReader;
-    private Dimension screenSize;
-    private InputMap inputMap;
-    private ActionMap actionMap;
     private BufferedImage redKey, greenKey;
     private ArrayList<Move> moveSequence = new ArrayList<>();
 
@@ -200,8 +197,8 @@ public class GUI {
      */
     public JLabel addKeyStrokes() {
         JLabel keystrokes = new JLabel("");
-        inputMap = keystrokes.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        actionMap = keystrokes.getActionMap();
+        InputMap inputMap = keystrokes.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = keystrokes.getActionMap();
 
         // UP
         inputMap.put(KeyStroke.getKeyStroke("UP"), "MOVE_UP");
@@ -327,8 +324,6 @@ public class GUI {
      */
     public void displayGameStatsPanel(JPanel gameStats) {
         gameStats.setBorder(BorderFactory.createEmptyBorder(50, 90, 50, 90));
-//        gameStats.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-//        gameStats.setBackground(Color.blue);
 
         // level panel
         JPanel levelPanel = createGameStat("LEVEL", 1);
@@ -341,7 +336,6 @@ public class GUI {
 
         // inventory (keys collected) panel
         JPanel inventoryPanel = createKeysCollected("KEYS COLLECTED");
-//        inventoryPanel.setSize(100,600);
 
         // add all components to frame
         gameStats.add(levelPanel);
@@ -423,7 +417,8 @@ public class GUI {
                 displayReplayFrame();
 
                 System.out.println("RECORDREADER CALLED");
-                recordReader = new RecordReader();
+//                recordReader = new RecordReader();
+                recordReader = new RecordReader(game.getPlayer(), null);
             }
         });
 
@@ -446,12 +441,12 @@ public class GUI {
      */
     public void displayReplayFrame() {
         //get replay file
-        recordReader = new RecordReader();
+        recordReader = new RecordReader(game.getPlayer(), null);
 
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
         replayFrame.setSize(600, 270);
-        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         replayFrame.setLocation((screenSize.width / 2 - replayFrame.getWidth() / 2) + 385, (screenSize.height / 2 - replayFrame.getHeight() / 2) + 220);
 
         // title and text description
@@ -597,31 +592,32 @@ public class GUI {
         return panel;
     }
 
+    /**
+     * Creates and formats the JPanel containing the current keys collected.
+     *
+     * @param name -- name of panel.
+     * @return completed JPanel displaying title and keys collected.
+     */
     public JPanel createKeysCollected(String name) {
         JPanel panel = new JPanel(new GridLayout(3, 1));
-//        panel.setSize(500, 500);
-//        panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
         JLabel title = new JLabel(name, JLabel.CENTER);
         title.setFont(TITLE_FONT);
         title.setForeground(Color.RED);
 
-//        panel.setBackground(Color.GREEN);
         JPanel keysPanel = new JPanel();
         keysPanel.setLayout(new GridLayout(1, 3));
 
         // draw keys
 //        JLabel rKey = new JLabel(new ImageIcon(redKey));
+
+
         JLabel rKey = new JLabel(new ImageIcon(new ImageIcon(redKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
         JLabel gKey = new JLabel(new ImageIcon(new ImageIcon(greenKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
         keysPanel.add(rKey);
         keysPanel.add(gKey);
 
-//        ImageIcon imageIcon = new ImageIcon(new ImageIcon("icon.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
-
         panel.add(title);
         panel.add(keysPanel);
-//        panel.add(rKey);
-//        panel.add(gKey);
 
         return panel;
     }
@@ -682,7 +678,6 @@ public class GUI {
         }
     }
 
-
     /**
      * Gets the current replay speed selected by user.
      *
@@ -709,9 +704,6 @@ public class GUI {
     public void movePlayer(Move move) {
         moveSequence.add(move);
         game.moveActor(move);
-
-        //        player.moveToNextLevel();
-//        player.getGame().loadLevel();
     }
 
 
@@ -765,6 +757,13 @@ public class GUI {
         // based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
+
+    public Bug getBug(){
+        return null; //todo use game.getBug() when it's made
+    }
+//    public Player getPlayer(){
+//        return game.getPlayer();
+//    }
 
     public static void main(String[] args) {
         GUI gui = new GUI();
