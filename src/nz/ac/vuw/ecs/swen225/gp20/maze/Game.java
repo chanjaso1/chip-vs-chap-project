@@ -61,6 +61,10 @@ public class Game {
         return this.player;
     }
 
+    public void moveActor(Move move){
+        move.apply(player);
+    }
+
     /**
      * Return the number of treasure set in parser.
      * @return -- number of treasure.
