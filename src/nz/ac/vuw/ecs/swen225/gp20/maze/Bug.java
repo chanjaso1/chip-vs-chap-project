@@ -9,7 +9,7 @@ public class Bug extends Actor {
 
     public void moveBug(){
         if(moveDown) {
-            Tile tile = this.getGame().getMap()[this.getRow()][this.getCol()];
+            Tile tile = this.getGame().getMap()[this.getRow()+1][this.getCol()];
             if(tile instanceof floorTile && !((floorTile) tile).isBugPath()){
                 moveDown = false;
             }

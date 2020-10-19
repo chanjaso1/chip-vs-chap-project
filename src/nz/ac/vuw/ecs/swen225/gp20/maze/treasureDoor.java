@@ -11,16 +11,13 @@ public class treasureDoor implements Tile {
      * @param row -- The tile row position.
      * @param col -- The tile column position.
      */
-    treasureDoor(int row, int col){
+    public treasureDoor(int row, int col){
         this.row = row;
         this.col = col;
     }
     
     @Override
     public boolean checkValidMove(Player player) {
-        if(player.getNumberTreasures() < player.getGame().getParser().getTreasures()){
-            return false;
-        }
-        return true;
+        return player.getNumberTreasures() == player.getGame().getParser().getTreasures();
     }
 }
