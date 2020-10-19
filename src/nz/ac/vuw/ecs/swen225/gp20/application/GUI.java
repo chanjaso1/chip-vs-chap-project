@@ -37,8 +37,7 @@ public class GUI {
     private ArrayList<Move> moveSequence = new ArrayList<>();
 
     private Game game;
-    private double replaySpeed;
-    private double currentTime = MAX_TIME;
+    private double replaySpeed, currentTime = MAX_TIME;
     private int keysCollected, treasures;
     private boolean pauseGame;
 
@@ -119,7 +118,7 @@ public class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 pauseGame(true);
-                System.out.println("calling from menu");
+//                System.out.println("calling from menu");
                 displayReplayFrame();
             }
         });
@@ -216,6 +215,7 @@ public class GUI {
         actionMap.put("MOVE_DOWN", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 movePlayer(new moveDown(game.getPlayer()), 2);
 //                board.renderMove(2);
 //                checkWinTile();
@@ -595,6 +595,7 @@ public class GUI {
 
     /**
      * Creates and formats the JPanel containing the current keys collected.
+     * The keys are only displayed after the player collects them.
      *
      * @param name -- name of panel.
      * @return completed JPanel displaying title and keys collected.
@@ -608,14 +609,19 @@ public class GUI {
         JPanel keysPanel = new JPanel();
         keysPanel.setLayout(new GridLayout(1, 3));
 
-        // draw keys
 //        JLabel rKey = new JLabel(new ImageIcon(redKey));
 
+        // draws red key
+        if (game.getPlayer().getKeys().containsKey("R")) {
+            JLabel rKey = new JLabel(new ImageIcon(new ImageIcon(redKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
+            keysPanel.add(rKey);
+        }
 
-        JLabel rKey = new JLabel(new ImageIcon(new ImageIcon(redKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
-        JLabel gKey = new JLabel(new ImageIcon(new ImageIcon(greenKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
-        keysPanel.add(rKey);
-        keysPanel.add(gKey);
+        // draws green key
+        if (game.getPlayer().getKeys().containsKey("G")) {
+            JLabel gKey = new JLabel(new ImageIcon(new ImageIcon(greenKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
+            keysPanel.add(gKey);
+        }
 
         panel.add(title);
         panel.add(keysPanel);
@@ -702,7 +708,7 @@ public class GUI {
      * Also checks if the player has landed on the winTile.
      *
      * @param move -- the player's most recent move.
-     * @param dir -- the direction to move the player in.
+     * @param dir  -- the direction to move the player in.
      */
     public void movePlayer(Move move, int dir) {
         moveSequence.add(move);
@@ -769,7 +775,7 @@ public class GUI {
 //    }
 
     public static void main(String[] args) {
-       GUI gui = new GUI();
+        GUI gui = new GUI();
     }
 
 }
