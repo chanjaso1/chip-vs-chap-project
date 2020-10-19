@@ -17,7 +17,7 @@ public class parseJSON{
 
     private Player player;
     private Tile[][] map;
-    private int treasures = 0;
+    private int treasures = 0, keys = 0, time = 60;
     public int totalSize = 30;
 
     /**
@@ -39,11 +39,14 @@ public class parseJSON{
 
                     if(tileType.equals("_"))  map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
                     else if(tileType.equals("P"))  {                                              //Define the player's position on the board.
-                        map[row][col] = new floorTile(row, col, null);
+                        map[row][col]   = new floorTile(row, col, null);
                         this.player = new Player(row, col);
                     }else if(tileType.equals("▊"))   map[row][col] = new wallTile(row, col);                            //define a wall tile.
                     else if(tileType.substring(0,1).equals("D"))          map[row][col] = new doorTile(row, col, tileType.substring(1,2));  //define a coloured door.
-                    else if(tileType.substring(0,1).equals("K"))        map[row][col] = new floorTile(row, col, new Key(map[row][col],  tileType.substring(1,2)));  //define a coloured key
+                    else if(tileType.substring(0,1).equals("K"))        {
+                        this.keys++;
+                        map[row][col] = new floorTile(row, col, new Key(map[row][col],  tileType.substring(1,2)));  //define a coloured key
+                    }
                     else if(tileType.equals("T")){
                         Treasure treasure = new Treasure(map[row][col]);
                         map[row][col] = new floorTile(row, col, treasure);
