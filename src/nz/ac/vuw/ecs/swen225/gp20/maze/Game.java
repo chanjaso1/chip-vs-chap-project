@@ -23,14 +23,12 @@ public class Game {
     private Tile[][] map;
     private parseJSON parser;
     private Bug bug = null;
+    private int level = 0;
 
 
-    public Game()  {
-        parser = new parseJSON("levels/level1.json");
-        map = parser.getMap();
-        player = parser.getPlayer();
-        player.setGame(this);
-        bug = parser.getBug();
+    public Game(int level)  {
+        this.level = level;
+        loadLevel();
     }
 
     public void runGame(){
@@ -43,7 +41,7 @@ public class Game {
      * This function will be called every time the level is reload.
      */
     public void loadLevel(){
-        parser = new parseJSON("levels/level" + player.getLevel() + ".json");
+        parser = new parseJSON("levels/level" + level + ".json");
         map = parser.getMap();
         player = parser.getPlayer();
         player.setGame(this);
@@ -88,6 +86,14 @@ public class Game {
      */
     public Bug getBug() {
         return bug;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     /**

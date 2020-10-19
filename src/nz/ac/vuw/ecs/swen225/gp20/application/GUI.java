@@ -44,7 +44,7 @@ public class GUI {
 
 
     public GUI() {
-        game = new Game();
+        game = new Game(1);
         board = new RendererPanel(game);
 
         // creates red and green keys
@@ -205,9 +205,9 @@ public class GUI {
         actionMap.put("MOVE_UP", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveUp(game.getPlayer()));
-                board.renderMove(0);
-                checkWinTile();
+                movePlayer(new moveUp(game.getPlayer()), 0);
+//                board.renderMove(0);
+//                checkWinTile();
             }
         });
 
@@ -216,9 +216,9 @@ public class GUI {
         actionMap.put("MOVE_DOWN", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveDown(game.getPlayer()));
-                board.renderMove(2);
-                checkWinTile();
+                movePlayer(new moveDown(game.getPlayer()), 2);
+//                board.renderMove(2);
+//                checkWinTile();
             }
         });
 
@@ -227,9 +227,9 @@ public class GUI {
         actionMap.put("MOVE_LEFT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveLeft(game.getPlayer()));
-                board.renderMove(3);
-                checkWinTile();
+                movePlayer(new moveLeft(game.getPlayer()), 3);
+//                board.renderMove(3);
+//                checkWinTile();
             }
         });
 
@@ -238,9 +238,9 @@ public class GUI {
         actionMap.put("MOVE_RIGHT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveRight(game.getPlayer()));
-                board.renderMove(1);
-                checkWinTile();
+                movePlayer(new moveRight(game.getPlayer()), 1);
+//                board.renderMove(1);
+//                checkWinTile();
             }
         });
 
@@ -418,7 +418,7 @@ public class GUI {
 
                 System.out.println("RECORDREADER CALLED");
 //                recordReader = new RecordReader();
-                recordReader = new RecordReader(game.getPlayer(), null);
+//                recordReader = new RecordReader(game.getPlayer(), null);
             }
         });
 
@@ -441,7 +441,7 @@ public class GUI {
      */
     public void displayReplayFrame() {
         //get replay file
-        recordReader = new RecordReader(game.getPlayer(), null);
+//        recordReader = new RecordReader(game.getPlayer(), null);
 
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
@@ -697,13 +697,17 @@ public class GUI {
     }
 
     /**
-     * Abstract method that moves the player in the specified direction.
+     * This method moves the player in the specified direction and updates the board.
+     * Also checks if the player has landed on the winTile.
      *
      * @param move -- the player's most recent move.
+     * @param dir -- the direction to move the player in.
      */
-    public void movePlayer(Move move) {
+    public void movePlayer(Move move, int dir) {
         moveSequence.add(move);
         game.moveActor(move);
+        board.renderMove(dir);
+        checkWinTile();
     }
 
 
@@ -712,8 +716,6 @@ public class GUI {
      */
     public void saveMovements() {
         new RecordSaver(moveSequence);
-//        game.saveMovements();
-
     }
 
     /**
@@ -758,7 +760,7 @@ public class GUI {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    public Bug getBug(){
+    public Bug getBug() {
         return null; //todo use game.getBug() when it's made
     }
 //    public Player getPlayer(){

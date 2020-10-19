@@ -16,7 +16,6 @@ import java.util.HashSet;
 public class Player extends Actor {
     private HashSet<Key> keys = new HashSet<>();
     private int treasures = 0;
-    private int level = 1;
 
     /**
      * Player constructor created by using row and column the player is.
@@ -60,21 +59,13 @@ public class Player extends Actor {
         return treasures;
     }
 
-    public int getLevel() {
-        return level;
-    }
 
     /**
      * move the player to the next level
      */
     public void moveToNextLevel(){
-        level++;
-
+        this.getGame().setLevel(this.getGame().getLevel()+1);
     }
-
-    //@Override
-
-
 
 }
 
