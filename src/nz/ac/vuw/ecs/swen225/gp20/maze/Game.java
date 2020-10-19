@@ -1,17 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordReader;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordSaver;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Game class is the main class that run the game.
@@ -45,6 +34,7 @@ public class Game {
         map = parser.getMap();
         player = parser.getPlayer();
         player.setGame(this);
+        player.setTotalTreasures(parser.getTreasures());
         bug = parser.getBug();
     }
 

@@ -25,7 +25,6 @@ public class Player extends Actor {
      */
     public Player(int row, int col){
         super(row, col);
-        treasures = this.getGame().getTreasure();
     }
 
     @Override
@@ -61,6 +60,9 @@ public class Player extends Actor {
         return treasures;
     }
 
+    public void setTotalTreasures(int treasures) {
+        this.treasures = treasures;
+    }
 
     /**
      * move the player to the next level
