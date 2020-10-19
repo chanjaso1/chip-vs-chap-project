@@ -5,4 +5,4 @@
 | `renderer`    | John Cecilio     | `cecilijohn`          |
 | `persistence` | Jason Chan       | `chanjaso1`           |
 | `recnplay`    | Tian Welgemoed   | `welgemtian`          |
-| `monkey`      | 		   |  		           |
+| `monkey`      | 		           |  		               |
