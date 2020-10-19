@@ -38,7 +38,7 @@ public class GUI {
 
     private Game game;
     private double replaySpeed, currentTime = MAX_TIME;
-    private int keysCollected, treasures;
+    private int keysCollected;
     private boolean pauseGame;
 
 
@@ -54,14 +54,13 @@ public class GUI {
             System.out.println("Item image not found!");
         }
 
-        initialise(game.getTreasure(), 0);
+        initialise( 0);
     }
 
     /**
      * Initialises and displays the GUI on the screen.
      */
-    public void initialise(int numOfTreasures, int numOfKeys) {
-        treasures = numOfTreasures;
+    public void initialise(int numOfKeys) {
         keysCollected = numOfKeys;
 
         // creates main frame
@@ -733,15 +732,7 @@ public class GUI {
     public void pauseGame(boolean pause) {
         pauseGame = pause;
     }
-
-
-    /**
-     * Decreases the amount of treasures left in the level.
-     * This method is called whenever the player picks up a treasure.
-     */
-    public void decreaseTreasures() {
-        treasures--;
-    }
+    
 
     /**
      * Increases the number of keys player has collected.
