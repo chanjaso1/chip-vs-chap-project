@@ -7,6 +7,7 @@ public class moveLeft extends Move {
 
     public moveLeft(Actor actor) {
         super(actor);
+        dir = 3;
     }
 
     @Override

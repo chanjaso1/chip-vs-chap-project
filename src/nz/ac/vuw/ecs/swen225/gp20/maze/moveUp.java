@@ -7,6 +7,8 @@ public class moveUp extends Move {
 
     public moveUp(Actor actor) {
         super(actor);
+
+        dir = 0;
     }
 
     @Override

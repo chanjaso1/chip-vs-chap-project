@@ -5,6 +5,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 public abstract class Move {
     protected Actor mover;
+    protected int dir;
 
     public Move(Actor actor){
         mover = actor;
@@ -17,6 +18,10 @@ public abstract class Move {
 
     public Actor getMover() {
         return mover;
+    }
+
+    public int getDir(){
+        return dir;
     }
 
     @Override

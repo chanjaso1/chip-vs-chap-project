@@ -3,7 +3,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
 
 /**
- * Game class is the main class that run the game.
+ * Game create a new parser and initialized every object that will need to run a game.
  */
 public class Game {
     private int num;
@@ -14,7 +14,10 @@ public class Game {
     private Bug bug = null;
     private int level = 0;
 
-
+    /**
+     * Game constructor to create a game object.
+     * @param level -- level of the game.
+     */
     public Game(int level)  {
         this.level = level;
         loadLevel();
@@ -54,6 +57,10 @@ public class Game {
         return this;
     }
 
+    /**
+     * Return the parser.
+     * @return -- current parser that defin
+     */
     public parseJSON getParser() {
         return parser;
     }
