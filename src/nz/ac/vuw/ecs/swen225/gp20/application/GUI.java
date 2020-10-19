@@ -650,7 +650,7 @@ public class GUI {
      */
     public void movePlayer(Move move) {
         moveSequence.add(move);
-//        game.moveActor(move);
+        game.moveActor(move);
     }
 
     /**
