@@ -1,20 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordReader;
-import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordSaver;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
- * Game class is the main class that run the game.
+ * Game create a new parser and initialized every object that will need to run a game.
  */
 public class Game {
     private int num;
@@ -25,7 +15,10 @@ public class Game {
     private Bug bug = null;
     private int level = 0;
 
-
+    /**
+     * Game constructor to create a game object.
+     * @param level -- level of the game.
+     */
     public Game(int level)  {
         this.level = level;
         loadLevel();
@@ -45,6 +38,7 @@ public class Game {
         map = parser.getMap();
         player = parser.getPlayer();
         player.setGame(this);
+        player.setTotalTreasures(parser.getTreasures());
         bug = parser.getBug();
     }
 
@@ -64,6 +58,10 @@ public class Game {
         return this;
     }
 
+    /**
+     * Return the parser.
+     * @return -- current parser that defin
+     */
     public parseJSON getParser() {
         return parser;
     }

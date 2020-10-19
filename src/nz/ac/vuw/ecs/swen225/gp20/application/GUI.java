@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Move;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordReader;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordSaver;
 import nz.ac.vuw.ecs.swen225.gp20.render.RendererPanel;
@@ -37,9 +38,8 @@ public class GUI {
     private ArrayList<Move> moveSequence = new ArrayList<>();
 
     private Game game;
-    private double replaySpeed;
-    private double currentTime = MAX_TIME;
-    private int keysCollected, treasures;
+    private double replaySpeed, currentTime = MAX_TIME;
+    private int keysCollected;
     private boolean pauseGame;
 
 
@@ -55,14 +55,13 @@ public class GUI {
             System.out.println("Item image not found!");
         }
 
-        initialise(game.getTreasure(), 0);
+        initialise( 0);
     }
 
     /**
      * Initialises and displays the GUI on the screen.
      */
-    public void initialise(int numOfTreasures, int numOfKeys) {
-        treasures = numOfTreasures;
+    public void initialise(int numOfKeys) {
         keysCollected = numOfKeys;
 
         // creates main frame
@@ -119,7 +118,7 @@ public class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 pauseGame(true);
-                System.out.println("calling from menu");
+//                System.out.println("calling from menu");
                 displayReplayFrame();
             }
         });
@@ -216,6 +215,7 @@ public class GUI {
         actionMap.put("MOVE_DOWN", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 movePlayer(new moveDown(game.getPlayer()), 2);
 //                board.renderMove(2);
 //                checkWinTile();
@@ -332,7 +332,7 @@ public class GUI {
         JPanel timePanel = displayTimePanel();
 
         // treasures left panel
-        JPanel keysLeftPanel = createGameStat("TREASURES\nLEFT", treasures);
+        JPanel keysLeftPanel = createGameStat("TREASURES\nLEFT", game.getPlayer().getNumberTreasures());
 
         // inventory (keys collected) panel
         JPanel inventoryPanel = createKeysCollected("KEYS COLLECTED");
@@ -419,7 +419,7 @@ public class GUI {
 
                 System.out.println("RECORDREADER CALLED");
 //                recordReader = new RecordReader();
-                recordReader = new RecordReader(tempGUI, game.getPlayer(), null);
+              //  recordReader = new RecordReader(tempGUI, game.getPlayer(), null);
             }
         });
 
@@ -442,7 +442,7 @@ public class GUI {
      */
     public void displayReplayFrame() {
         //get replay file
-        recordReader = new RecordReader(this, game.getPlayer(), null);
+      //  recordReader = new RecordReader(this, game.getPlayer(), null);
 
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
@@ -595,6 +595,7 @@ public class GUI {
 
     /**
      * Creates and formats the JPanel containing the current keys collected.
+     * The keys are only displayed after the player collects them.
      *
      * @param name -- name of panel.
      * @return completed JPanel displaying title and keys collected.
@@ -608,14 +609,19 @@ public class GUI {
         JPanel keysPanel = new JPanel();
         keysPanel.setLayout(new GridLayout(1, 3));
 
-        // draw keys
 //        JLabel rKey = new JLabel(new ImageIcon(redKey));
 
+        // draws red key
+        if (game.getPlayer().getKeys().containsKey("R")) {
+            JLabel rKey = new JLabel(new ImageIcon(new ImageIcon(redKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
+            keysPanel.add(rKey);
+        }
 
-        JLabel rKey = new JLabel(new ImageIcon(new ImageIcon(redKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
-        JLabel gKey = new JLabel(new ImageIcon(new ImageIcon(greenKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
-        keysPanel.add(rKey);
-        keysPanel.add(gKey);
+        // draws green key
+        if (game.getPlayer().getKeys().containsKey("G")) {
+            JLabel gKey = new JLabel(new ImageIcon(new ImageIcon(greenKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
+            keysPanel.add(gKey);
+        }
 
         panel.add(title);
         panel.add(keysPanel);
@@ -702,7 +708,7 @@ public class GUI {
      * Also checks if the player has landed on the winTile.
      *
      * @param move -- the player's most recent move.
-     * @param dir -- the direction to move the player in.
+     * @param dir  -- the direction to move the player in.
      */
     public void movePlayer(Move move, int dir) {
         moveSequence.add(move);
@@ -727,15 +733,7 @@ public class GUI {
     public void pauseGame(boolean pause) {
         pauseGame = pause;
     }
-
-
-    /**
-     * Decreases the amount of treasures left in the level.
-     * This method is called whenever the player picks up a treasure.
-     */
-    public void decreaseTreasures() {
-        treasures--;
-    }
+    
 
     /**
      * Increases the number of keys player has collected.
@@ -769,7 +767,7 @@ public class GUI {
 //    }
 
     public static void main(String[] args) {
-       GUI gui = new GUI();
+        GUI gui = new GUI();
     }
 
 }

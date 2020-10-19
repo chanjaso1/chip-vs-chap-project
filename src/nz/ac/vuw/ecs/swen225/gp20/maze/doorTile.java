@@ -41,7 +41,7 @@ public class doorTile implements Tile{
         if(player instanceof Player){
 
         }
-        for(Key key : player.getKeys()){
+        for(Key key : player.getKeys().values()){
             if(key.getColor().equalsIgnoreCase(color)){
                 open = true;
                 return true;

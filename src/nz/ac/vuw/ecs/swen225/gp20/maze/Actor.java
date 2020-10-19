@@ -2,11 +2,17 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
  * This interface represent the characters in the game.
+ *  Each characters will have t
  */
 public class Actor {
     private Game game;
     private int row, col;
 
+    /**
+     * Actor constructor use to create all the actor in the game that has movement.
+     * @param row -- the row on the map this actor is on.
+     * @param col -- the column in the map this actor is on.
+     */
     public Actor(int row, int col){
         this.row = row;
         this.col = col;
