@@ -73,7 +73,11 @@ public class Game {
     }
 
     public void loadLevel(){
-        parser = new parseJSON("level" + player.getLevel() + ".json");
+        parser = new parseJSON("levels/level" + player.getLevel() + ".json");
+        map = parser.getMap();
+        player = parser.getPlayer();
+
+        player.setGame(this);
     }
 
     /**
