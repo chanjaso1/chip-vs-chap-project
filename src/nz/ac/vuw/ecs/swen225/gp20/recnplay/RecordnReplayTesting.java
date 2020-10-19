@@ -25,15 +25,16 @@ public class RecordnReplayTesting {
     @Test
     public void testCanReadMovements(){
         //make RecordReader with manually generated file
-        RecordReader rr = null;
-        rr = new RecordReader();
+        RecordReader rr = new RecordReader(); //open playerMoveswithBugsReading.json
 
         //store what the output of the movements should be
         ArrayList<Move> answer = new ArrayList<>();
-        answer.add(new moveLeft());
-        answer.add(new moveRight());
-        answer.add(new moveDown());
-        answer.add(new moveUp());
+        Player player = new Player(0, 0);
+//        Bug bug = new Bug();
+//        answer.add(new moveLeft(player));
+//        answer.add(new moveRight(bug));
+//        answer.add(new moveDown(player));
+//        answer.add(new moveUp(bug));
 
         //compare output with what it should be
         if (!(rr.getMoves().equals(answer)))
@@ -62,17 +63,19 @@ public class RecordnReplayTesting {
     public void testRecordingMovementsOutput(){
         //get arraylist of movements and put into RecordSaver
         ArrayList<Move> answerMoves = new ArrayList<>();
-        answerMoves.add(new moveUp()); //different order from reading testing
-        answerMoves.add(new moveDown());
-        answerMoves.add(new moveLeft());
-        answerMoves.add(new moveRight());
+        Player player = new Player(0, 0);
+//        Bug bug = new Bug();
+//        answerMoves.add(new moveUp(player)); //different order from reading testing
+//        answerMoves.add(new moveDown(bug));
+//        answerMoves.add(new moveLeft(player));
+//        answerMoves.add(new moveRight(bug));
 
         //save
-        RecordSaver rs = new RecordSaver(answerMoves);
+        RecordSaver rs = new RecordSaver(answerMoves); //save to playerMoveswithBugsReading.json - yes, override every time
         rs.save("testRecordingMovementsOutput");
 
         //compare moves from RecordReader with output file
-        RecordReader outputReader = new RecordReader();
+        RecordReader outputReader = new RecordReader(); //open playerMoveswithBugsReading.json
         //check file exists
         if (!outputReader.getMoves().equals(answerMoves))
             fail("ArrayList \"" + outputReader.getMoves() + "\" should be \"" + answerMoves + "\"");

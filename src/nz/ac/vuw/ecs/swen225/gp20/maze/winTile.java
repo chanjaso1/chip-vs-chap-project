@@ -28,7 +28,8 @@ public class winTile implements Tile{
 
     @Override
     public boolean checkValidMove(Player player) {
-        player.moveToNextLevel();
+//        player.moveToNextLevel();
+//        player.getGame().loadLevel();
 
         //player can always move onto this tile
         return true;

@@ -8,8 +8,11 @@ import nz.ac.vuw.ecs.swen225.gp20.render.RendererPanel;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -19,7 +22,7 @@ import javax.swing.border.Border;
  * and the number of treasures that still need to be connected.
  * The player can interact with the GUI through keystrokes.
  */
-public abstract class GUI {
+public class GUI {
 
     private final Font TITLE_FONT = new Font("", Font.BOLD, 30);
     private final GridLayout GAME_STATS_LAYOUT = new GridLayout(2, 1);
@@ -29,12 +32,14 @@ public abstract class GUI {
     private JFrame frame, replayFrame = new JFrame();
     private JPanel gameStatsPanel;
     private RendererPanel board;
+    private RecordReader recordReader;
     private Dimension screenSize;
     private InputMap inputMap;
     private ActionMap actionMap;
+    private BufferedImage redKey, greenKey;
+    private ArrayList<Move> moveSequence = new ArrayList<>();
 
-
-    private RecordReader recordReader;
+    private Game game;
     private double replaySpeed;
     private double currentTime = MAX_TIME;
     private int keysCollected, treasures;
@@ -42,6 +47,18 @@ public abstract class GUI {
 
 
     public GUI() {
+        game = new Game();
+        board = new RendererPanel(game);
+
+        // creates red and green keys
+        try {
+            greenKey = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/greenKey.png"));
+            redKey = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/redKey.png"));
+        } catch (IOException e) {
+            System.out.println("Item image not found!");
+        }
+
+        initialise(game.getTreasure(), 0);
     }
 
     /**
@@ -154,7 +171,8 @@ public abstract class GUI {
         // creates board panel
 
         // creates game stats panel
-        gameStatsPanel = new JPanel(new GridLayout(5, 1, 10, 30));
+//        gameStatsPanel = new JPanel(new GridLayout(5, 1, 10, 30));
+        gameStatsPanel = new JPanel(new GridLayout(4, 1, 0, 15));
         displayGameStatsPanel(gameStatsPanel);
 
         // creates panel containing user controls
@@ -190,8 +208,9 @@ public abstract class GUI {
         actionMap.put("MOVE_UP", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveUp());
+                movePlayer(new moveUp(game.getPlayer()));
                 board.renderMove(0);
+                checkWinTile();
             }
         });
 
@@ -200,8 +219,9 @@ public abstract class GUI {
         actionMap.put("MOVE_DOWN", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveDown());
+                movePlayer(new moveDown(game.getPlayer()));
                 board.renderMove(2);
+                checkWinTile();
             }
         });
 
@@ -210,9 +230,9 @@ public abstract class GUI {
         actionMap.put("MOVE_LEFT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveLeft());
+                movePlayer(new moveLeft(game.getPlayer()));
                 board.renderMove(3);
-
+                checkWinTile();
             }
         });
 
@@ -221,8 +241,9 @@ public abstract class GUI {
         actionMap.put("MOVE_RIGHT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveRight());
+                movePlayer(new moveRight(game.getPlayer()));
                 board.renderMove(1);
+                checkWinTile();
             }
         });
 
@@ -306,6 +327,8 @@ public abstract class GUI {
      */
     public void displayGameStatsPanel(JPanel gameStats) {
         gameStats.setBorder(BorderFactory.createEmptyBorder(50, 90, 50, 90));
+//        gameStats.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+//        gameStats.setBackground(Color.blue);
 
         // level panel
         JPanel levelPanel = createGameStat("LEVEL", 1);
@@ -317,10 +340,8 @@ public abstract class GUI {
         JPanel keysLeftPanel = createGameStat("TREASURES\nLEFT", treasures);
 
         // inventory (keys collected) panel
-        JPanel inventoryPanel = createGameStat("KEYS COLLECTED", keysCollected);
-//
-//        //TODO: draw the actual keys
-
+        JPanel inventoryPanel = createKeysCollected("KEYS COLLECTED");
+//        inventoryPanel.setSize(100,600);
 
         // add all components to frame
         gameStats.add(levelPanel);
@@ -406,7 +427,6 @@ public abstract class GUI {
             }
         });
 
-
         controlPanel.add(replayTitle);
         controlPanel.add(pauseButton);
         controlPanel.add(resumeButton);
@@ -425,6 +445,9 @@ public abstract class GUI {
      * The replay speed is displayed as a JComboBox so users can select a speed within the specified range.
      */
     public void displayReplayFrame() {
+        //get replay file
+        recordReader = new RecordReader();
+
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
         replayFrame.setSize(600, 270);
@@ -489,8 +512,6 @@ public abstract class GUI {
             }
         });
 
-
-//        actions.add(speed);
         actions.add(stepButton);
         actions.add(autoButton);
 
@@ -576,6 +597,35 @@ public abstract class GUI {
         return panel;
     }
 
+    public JPanel createKeysCollected(String name) {
+        JPanel panel = new JPanel(new GridLayout(3, 1));
+//        panel.setSize(500, 500);
+//        panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+        JLabel title = new JLabel(name, JLabel.CENTER);
+        title.setFont(TITLE_FONT);
+        title.setForeground(Color.RED);
+
+//        panel.setBackground(Color.GREEN);
+        JPanel keysPanel = new JPanel();
+        keysPanel.setLayout(new GridLayout(1, 3));
+
+        // draw keys
+//        JLabel rKey = new JLabel(new ImageIcon(redKey));
+        JLabel rKey = new JLabel(new ImageIcon(new ImageIcon(redKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
+        JLabel gKey = new JLabel(new ImageIcon(new ImageIcon(greenKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
+        keysPanel.add(rKey);
+        keysPanel.add(gKey);
+
+//        ImageIcon imageIcon = new ImageIcon(new ImageIcon("icon.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+
+        panel.add(title);
+        panel.add(keysPanel);
+//        panel.add(rKey);
+//        panel.add(gKey);
+
+        return panel;
+    }
+
     /**
      * Creates and executes the timer for each round.
      * Player wins a round if they succeed in collecting all the keys within the time limit.
@@ -618,6 +668,20 @@ public abstract class GUI {
         gameStatsPanel.revalidate();
     }
 
+    /**
+     * Checks if the player has landed on the win tile.
+     * Executed after a player moves.
+     */
+    public void checkWinTile() {
+        Player player = game.getPlayer();
+
+        if (game.getMap()[player.getRow()][player.getCol()] instanceof winTile) {
+            player.moveToNextLevel();
+            game.loadLevel();
+            board.winLevel();
+        }
+    }
+
 
     /**
      * Gets the current replay speed selected by user.
@@ -638,27 +702,25 @@ public abstract class GUI {
     }
 
     /**
-     * Initialises the RendererPanel, passing in the Game object.
-     *
-     * @param game -- the current game.
-     */
-    public void setRendererPanel(Game game) {
-        board = new RendererPanel(game);
-    }
-
-    /**
      * Abstract method that moves the player in the specified direction.
      *
      * @param move -- the player's most recent move.
      */
     public void movePlayer(Move move) {
+        moveSequence.add(move);
+        game.moveActor(move);
 
+        //        player.moveToNextLevel();
+//        player.getGame().loadLevel();
     }
+
 
     /**
      * Abstract method that saves the movements.
      */
     public void saveMovements() {
+        new RecordSaver(moveSequence);
+//        game.saveMovements();
 
     }
 
@@ -670,6 +732,7 @@ public abstract class GUI {
     public void pauseGame(boolean pause) {
         pauseGame = pause;
     }
+
 
     /**
      * Decreases the amount of treasures left in the level.
@@ -691,18 +754,22 @@ public abstract class GUI {
      *
      * @return the selected file
      */
-    public static File getFile(){
+    public static File getFile() {
         JFileChooser fileChooser = new JFileChooser("Recordings/");
         if (fileChooser.showOpenDialog(new JButton("Open")) == JFileChooser.APPROVE_OPTION)
             return fileChooser.getSelectedFile();
         return getFile();
     }
 
-    public static void notifyError(String message){
+    public static void notifyError(String message) {
         // based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
-    
+
+    public static void main(String[] args) {
+        GUI gui = new GUI();
+    }
+
 }
 
 

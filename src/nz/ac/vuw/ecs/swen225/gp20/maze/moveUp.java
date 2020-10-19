@@ -3,29 +3,24 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 /**
  * This class is created to move the player up
  */
-public class moveUp implements Move {
+public class moveUp extends Move {
+
+    public moveUp(Actor actor) {
+        super(actor);
+    }
 
     @Override
-    public void apply(Player player) {
+    public void apply() {
 
-        Tile nextTile = player.getGame().getMap()[Math.max(0,player.getRow()-1)][player.getCol()];
-        if (nextTile.checkValidMove(player)) {
-            player.setPosition(Math.max(0,player.getRow()-1),player.getCol());
+
+        Tile nextTile = mover.getGame().getMap()[Math.max(0,mover.getRow()-1)][mover.getCol()];
+        if(mover instanceof Player && nextTile.checkValidMove((Player) mover) || mover instanceof Bug) {
+            mover.setPosition(Math.max(0,mover.getRow()-1),mover.getCol());
         }
     }
 
     @Override
     public String toString() {
         return "up";
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj.getClass() == getClass();
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
     }
 }

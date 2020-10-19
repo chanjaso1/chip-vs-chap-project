@@ -16,12 +16,12 @@ import java.util.Arrays;
 /**
  * Game class is the main class that run the game.
  */
-public class Game extends GUI {
+public class Game {
     private int num;
     private Player player;
     private Tile currentTile;
     private Tile[][] map;
-    private ArrayList<Move> moveSequence;
+    private final ArrayList<Move> moveSequence;
     private parseJSON parser;
 
     public Game()  {
@@ -33,14 +33,11 @@ public class Game extends GUI {
 
         player.setGame(this);
         moveSequence = new ArrayList<>();
-
-        this.setRendererPanel(this);
-        this.initialise(parser.getTreasures(), 0);
     }
 
     public void runGame(){
 
-        
+
     }
 
     /**
@@ -59,23 +56,35 @@ public class Game extends GUI {
         return this;
     }
 
-    @Override
-    public void movePlayer(Move move) {
-        moveSequence.add(move);
-        move.apply(player);
+    public parseJSON getParser() {
+        return parser;
     }
 
     public Player getPlayer() {
         return this.player;
     }
 
-    @Override
-    public void saveMovements(){
-        new RecordSaver(moveSequence);
+    public void moveActor(Move move){
+        move.apply();
+    }
+
+    public void saveGame(){
         parser.saveGame(map,player);
     }
 
-    public static void main(String[] args){
-        new Game().runGame();
+    public void loadLevel(){
+        parser = new parseJSON("levels/level" + player.getLevel() + ".json");
+        map = parser.getMap();
+        player = parser.getPlayer();
+        player.setGame(this);
     }
+
+    /**
+     * Return the number of treasure set in parser.
+     * @return -- number of treasure.
+     */
+    public int getTreasure(){
+        return parser.getTreasures();
+    }
+
 }

@@ -27,7 +27,10 @@ public class RecordSaver {
         jsonRecording.append("{\n\t\"Actions\": [\n");
         for (int i = 0; i < moves.size(); i++) {
             jsonRecording.append("\t\t{\n");
-            jsonRecording.append("\t\t\t\"movement\": \"").append(moves.get(i)).append("\"\n");
+
+            //player or bug
+            jsonRecording.append("\t\t\t\"").append(moves.get(i).getMover()).append("\": \"").append(moves.get(i)).append("\"\n");
+
             jsonRecording.append(i < moves.size()-1 ? "\t\t},\n":"\t\t}\n");
         }
         jsonRecording.append("\t]\n}");

@@ -301,8 +301,8 @@ public class RendererPanel extends JComponent {
      */
     public void winLevel() {
         winSound.playSound();
-        //updateLevel(game.getMap()); // Todo: need to do actual next level loading
-        //updateRenderMaps();
+//        updateLevel(game.getMap()); // Todo: need to do actual next level loading
+//        updateRenderMaps();
         this.repaint();
     }
 }
