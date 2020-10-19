@@ -73,19 +73,6 @@ public class RendererPanel extends JComponent {
         game = g;
         levelTiles = game.getMap();
 
-        // Print out formatted level map
-        for (int i = 0; i < levelTiles.length; i++) {
-            System.out.println();
-            for (int j = 0; j < levelTiles[0].length; j++) {
-                //System.out.print(" ");
-                //System.out.print(levelTiles[i][j]);
-                if (levelTiles[i][j] instanceof floorTile) System.out.print("▊");
-                else if (levelTiles[i][j] instanceof wallTile) System.out.print("0");
-                else if (levelTiles[i][j] instanceof doorTile) System.out.print("K");
-                else if (levelTiles[i][j] instanceof winTile) System.out.print("W");
-            }
-        }
-
         // Initialize character facing GIFS
         north = new ImageIcon(getClass().getResource("resource/backFacing.gif")).getImage();
         south = new ImageIcon(getClass().getResource("resource/frontFacing.gif")).getImage();
@@ -107,6 +94,22 @@ public class RendererPanel extends JComponent {
         winSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/endTeleport.wav");
     }
 
+    public void printMap() {
+        // Print out formatted level map
+        for (int i = 0; i < levelTiles.length; i++) {
+            System.out.println();
+            for (int j = 0; j < levelTiles[0].length; j++) {
+                //System.out.print(" ");
+                //System.out.print(levelTiles[i][j]);
+                if (levelTiles[i][j] instanceof floorTile) System.out.print("▊");
+                else if (levelTiles[i][j] instanceof wallTile) System.out.print("0");
+                else if (levelTiles[i][j] instanceof doorTile) System.out.print("K");
+                else if (levelTiles[i][j] instanceof winTile) System.out.print("W");
+                else if (levelTiles[i][j] instanceof treasureDoor) System.out.print("T");
+            }
+        }
+    }
+
     /**
      * method to call when loading in new level, to update the level data
      * @param t The 2D Array to update level data loaded
@@ -123,6 +126,8 @@ public class RendererPanel extends JComponent {
     public void updateRenderMaps() {
         RenderTile tile = null;
         RenderItem item = null;
+
+        printMap();
 
         xPos = game.getPlayer().getCol();
         yPos = game.getPlayer().getRow();
