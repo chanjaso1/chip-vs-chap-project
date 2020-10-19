@@ -286,12 +286,6 @@ public class RendererPanel extends JComponent {
             moveSound.playSound();
         }
 
-        // Todo: Temporary placeholder for executing set up for next level
-        // Todo: STANDARD MIGHT DO THIS METHOD CALL HERSELF, FROM APPLICATION
-        if (tileMap[yPos][xPos] instanceof ExitTile) {
-            this.winLevel();
-        }
-
         this.repaint();
     }
 
@@ -301,8 +295,8 @@ public class RendererPanel extends JComponent {
      */
     public void winLevel() {
         winSound.playSound();
-//        updateLevel(game.getMap()); // Todo: need to do actual next level loading
-//        updateRenderMaps();
+        updateLevel(game.getMap());
+        updateRenderMaps();
         this.repaint();
     }
 }
