@@ -19,7 +19,7 @@ import javax.swing.border.Border;
  * and the number of treasures that still need to be connected.
  * The player can interact with the GUI through keystrokes.
  */
-public abstract class GUI {
+public class GUI {
 
     private final Font TITLE_FONT = new Font("", Font.BOLD, 30);
     private final GridLayout GAME_STATS_LAYOUT = new GridLayout(2, 1);
@@ -35,6 +35,7 @@ public abstract class GUI {
 
 
     private RecordReader recordReader;
+    private Game game;
     private double replaySpeed;
     private double currentTime = MAX_TIME;
     private int keysCollected, treasures;
@@ -42,6 +43,10 @@ public abstract class GUI {
 
 
     public GUI() {
+        game = new Game();
+        RendererPanel rendererPanel = new RendererPanel(game);
+//        initialise(game.getTreasures(), 0);
+        initialise(2, 0);
     }
 
     /**
@@ -701,6 +706,10 @@ public abstract class GUI {
     public static void notifyError(String message){
         // based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void main(String[] args){
+        GUI gui = new GUI();
     }
     
 }
