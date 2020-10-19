@@ -441,7 +441,7 @@ public class GUI {
      */
     public void displayReplayFrame() {
         //get replay file
-        recordReader = new RecordReader();
+        recordReader = new RecordReader(game.getPlayer(), null);
 
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
