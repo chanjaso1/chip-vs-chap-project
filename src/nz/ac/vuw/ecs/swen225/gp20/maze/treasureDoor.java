@@ -18,6 +18,7 @@ public class treasureDoor implements Tile {
     
     @Override
     public boolean checkValidMove(Player player) {
-        return player.getNumberTreasures() == player.getGame().getParser().getTreasures();
+        //this door can only open when there're no treasure left
+        return player.getNumberTreasures() == 0;
     }
 }

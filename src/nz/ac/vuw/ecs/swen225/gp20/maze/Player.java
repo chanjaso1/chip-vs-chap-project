@@ -25,6 +25,7 @@ public class Player extends Actor {
      */
     public Player(int row, int col){
         super(row, col);
+        treasures = this.getGame().getTreasure();
     }
 
     @Override
@@ -48,7 +49,7 @@ public class Player extends Actor {
         if(item instanceof Key){
             keys.put(((Key) item).getColor(), ((Key) item));
         } else {
-            treasures++;
+            treasures--;
         }
     }
 
