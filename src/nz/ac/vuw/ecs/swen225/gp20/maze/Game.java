@@ -56,6 +56,9 @@ public class Game {
         return this;
     }
 
+    public parseJSON getParser() {
+        return parser;
+    }
 
     public Player getPlayer() {
         return this.player;
