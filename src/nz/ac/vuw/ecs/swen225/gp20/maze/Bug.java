@@ -8,8 +8,12 @@ public class Bug extends Actor {
     }
 
     public void moveBug(){
-        if(moveDown) //MOVE DOWN AND CHECK IF TILE IS GOOD
-            this.getGame()
+        if(moveDown) {
+            Tile tile = this.getGame().getMap()[this.getRow()][this.getCol()];
+            if(tile instanceof floorTile && !((floorTile) tile).isBugPath()){
+                moveDown = false;
+            }
+        }
     }
 
     @Override
