@@ -31,6 +31,8 @@ public class RecordReader {
         //read path
         try {
             JsonObject jo = new Gson().fromJson(new FileReader(replayFile), JsonObject.class);
+//            jo.get("Header").get
+
             JsonArray jsonMoves = jo.getAsJsonArray("Actions");
 
 //            System.out.println(jsonMoves);

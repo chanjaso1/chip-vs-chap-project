@@ -1,4 +1,7 @@
 {
+	"Header": {
+		"level": 1 //todo make sure player and bug are loaded
+	},
 	"Actions": [
 		{
 			"P": "left"
