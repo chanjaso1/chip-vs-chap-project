@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 //public interface Actor {
@@ -14,9 +15,8 @@ import java.util.HashSet;
  * Player class to keep track of the player's position, inventory and stages.
  */
 public class Player extends Actor {
-    private HashSet<Key> keys = new HashSet<>();
+    private HashMap<String,Key> keys = new HashMap<>();
     private int treasures = 0;
-    private int level = 1;
 
     /**
      * Player constructor created by using row and column the player is.
@@ -36,7 +36,7 @@ public class Player extends Actor {
      * Return the  keys that has been picked up.
      * @return -- player's keys.
      */
-    public HashSet<Key> getKeys() {
+    public HashMap<String,Key> getKeys() {
         return keys;
     }
 
@@ -46,9 +46,9 @@ public class Player extends Actor {
      */
     public void pickUp(Item item){
         if(item instanceof Key){
-            keys.add(((Key) item));
+            keys.put(((Key) item).getColor(), ((Key) item));
         } else {
-            treasures++;
+            treasures--;
         }
     }
 
@@ -60,20 +60,16 @@ public class Player extends Actor {
         return treasures;
     }
 
-    public int getLevel() {
-        return level;
+    public void setTotalTreasures(int treasures) {
+        this.treasures = treasures;
     }
 
     /**
      * move the player to the next level
      */
     public void moveToNextLevel(){
-        level++;
+        this.getGame().setLevel(this.getGame().getLevel()+1);
     }
-
-    //@Override
-
-
 
 }
 

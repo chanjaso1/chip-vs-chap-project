@@ -33,21 +33,17 @@ public class GUI {
     private JPanel gameStatsPanel;
     private RendererPanel board;
     private RecordReader recordReader;
-    private Dimension screenSize;
-    private InputMap inputMap;
-    private ActionMap actionMap;
     private BufferedImage redKey, greenKey;
     private ArrayList<Move> moveSequence = new ArrayList<>();
 
     private Game game;
-    private double replaySpeed;
-    private double currentTime = MAX_TIME;
-    private int keysCollected, treasures;
+    private double replaySpeed, currentTime = MAX_TIME;
+    private int keysCollected;
     private boolean pauseGame;
 
 
     public GUI() {
-        game = new Game();
+        game = new Game(1);
         board = new RendererPanel(game);
 
         // creates red and green keys
@@ -58,14 +54,13 @@ public class GUI {
             System.out.println("Item image not found!");
         }
 
-        initialise(game.getTreasure(), 0);
+        initialise( 0);
     }
 
     /**
      * Initialises and displays the GUI on the screen.
      */
-    public void initialise(int numOfTreasures, int numOfKeys) {
-        treasures = numOfTreasures;
+    public void initialise(int numOfKeys) {
         keysCollected = numOfKeys;
 
         // creates main frame
@@ -122,7 +117,7 @@ public class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 pauseGame(true);
-                System.out.println("calling from menu");
+//                System.out.println("calling from menu");
                 displayReplayFrame();
             }
         });
@@ -200,17 +195,17 @@ public class GUI {
      */
     public JLabel addKeyStrokes() {
         JLabel keystrokes = new JLabel("");
-        inputMap = keystrokes.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        actionMap = keystrokes.getActionMap();
+        InputMap inputMap = keystrokes.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = keystrokes.getActionMap();
 
         // UP
         inputMap.put(KeyStroke.getKeyStroke("UP"), "MOVE_UP");
         actionMap.put("MOVE_UP", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveUp(game.getPlayer()));
-                board.renderMove(0);
-                checkWinTile();
+                movePlayer(new moveUp(game.getPlayer()), 0);
+//                board.renderMove(0);
+//                checkWinTile();
             }
         });
 
@@ -219,9 +214,10 @@ public class GUI {
         actionMap.put("MOVE_DOWN", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveDown(game.getPlayer()));
-                board.renderMove(2);
-                checkWinTile();
+
+                movePlayer(new moveDown(game.getPlayer()), 2);
+//                board.renderMove(2);
+//                checkWinTile();
             }
         });
 
@@ -230,9 +226,9 @@ public class GUI {
         actionMap.put("MOVE_LEFT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveLeft(game.getPlayer()));
-                board.renderMove(3);
-                checkWinTile();
+                movePlayer(new moveLeft(game.getPlayer()), 3);
+//                board.renderMove(3);
+//                checkWinTile();
             }
         });
 
@@ -241,9 +237,9 @@ public class GUI {
         actionMap.put("MOVE_RIGHT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveRight(game.getPlayer()));
-                board.renderMove(1);
-                checkWinTile();
+                movePlayer(new moveRight(game.getPlayer()), 1);
+//                board.renderMove(1);
+//                checkWinTile();
             }
         });
 
@@ -327,8 +323,6 @@ public class GUI {
      */
     public void displayGameStatsPanel(JPanel gameStats) {
         gameStats.setBorder(BorderFactory.createEmptyBorder(50, 90, 50, 90));
-//        gameStats.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-//        gameStats.setBackground(Color.blue);
 
         // level panel
         JPanel levelPanel = createGameStat("LEVEL", 1);
@@ -337,11 +331,10 @@ public class GUI {
         JPanel timePanel = displayTimePanel();
 
         // treasures left panel
-        JPanel keysLeftPanel = createGameStat("TREASURES\nLEFT", treasures);
+        JPanel keysLeftPanel = createGameStat("TREASURES\nLEFT", game.getPlayer().getNumberTreasures());
 
         // inventory (keys collected) panel
         JPanel inventoryPanel = createKeysCollected("KEYS COLLECTED");
-//        inventoryPanel.setSize(100,600);
 
         // add all components to frame
         gameStats.add(levelPanel);
@@ -416,6 +409,7 @@ public class GUI {
         // REPLAY button
         JButton replayButton = new JButton("REPLAY");
         replayButton.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none"); // ignores space key
+        GUI tempGUI = this; // used to pass GUI
         replayButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -423,7 +417,8 @@ public class GUI {
                 displayReplayFrame();
 
                 System.out.println("RECORDREADER CALLED");
-                recordReader = new RecordReader();
+//                recordReader = new RecordReader();
+              //  recordReader = new RecordReader(tempGUI, game.getPlayer(), null);
             }
         });
 
@@ -446,12 +441,12 @@ public class GUI {
      */
     public void displayReplayFrame() {
         //get replay file
-        recordReader = new RecordReader();
+      //  recordReader = new RecordReader(this, game.getPlayer(), null);
 
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
         replayFrame.setSize(600, 270);
-        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         replayFrame.setLocation((screenSize.width / 2 - replayFrame.getWidth() / 2) + 385, (screenSize.height / 2 - replayFrame.getHeight() / 2) + 220);
 
         // title and text description
@@ -597,31 +592,38 @@ public class GUI {
         return panel;
     }
 
+    /**
+     * Creates and formats the JPanel containing the current keys collected.
+     * The keys are only displayed after the player collects them.
+     *
+     * @param name -- name of panel.
+     * @return completed JPanel displaying title and keys collected.
+     */
     public JPanel createKeysCollected(String name) {
         JPanel panel = new JPanel(new GridLayout(3, 1));
-//        panel.setSize(500, 500);
-//        panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
         JLabel title = new JLabel(name, JLabel.CENTER);
         title.setFont(TITLE_FONT);
         title.setForeground(Color.RED);
 
-//        panel.setBackground(Color.GREEN);
         JPanel keysPanel = new JPanel();
         keysPanel.setLayout(new GridLayout(1, 3));
 
-        // draw keys
 //        JLabel rKey = new JLabel(new ImageIcon(redKey));
-        JLabel rKey = new JLabel(new ImageIcon(new ImageIcon(redKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
-        JLabel gKey = new JLabel(new ImageIcon(new ImageIcon(greenKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
-        keysPanel.add(rKey);
-        keysPanel.add(gKey);
 
-//        ImageIcon imageIcon = new ImageIcon(new ImageIcon("icon.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        // draws red key
+        if (game.getPlayer().getKeys().containsKey("R")) {
+            JLabel rKey = new JLabel(new ImageIcon(new ImageIcon(redKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
+            keysPanel.add(rKey);
+        }
+
+        // draws green key
+        if (game.getPlayer().getKeys().containsKey("G")) {
+            JLabel gKey = new JLabel(new ImageIcon(new ImageIcon(greenKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
+            keysPanel.add(gKey);
+        }
 
         panel.add(title);
         panel.add(keysPanel);
-//        panel.add(rKey);
-//        panel.add(gKey);
 
         return panel;
     }
@@ -682,7 +684,6 @@ public class GUI {
         }
     }
 
-
     /**
      * Gets the current replay speed selected by user.
      *
@@ -702,16 +703,17 @@ public class GUI {
     }
 
     /**
-     * Abstract method that moves the player in the specified direction.
+     * This method moves the player in the specified direction and updates the board.
+     * Also checks if the player has landed on the winTile.
      *
      * @param move -- the player's most recent move.
+     * @param dir  -- the direction to move the player in.
      */
-    public void movePlayer(Move move) {
+    public void movePlayer(Move move, int dir) {
         moveSequence.add(move);
         game.moveActor(move);
-
-        //        player.moveToNextLevel();
-//        player.getGame().loadLevel();
+        board.renderMove(dir);
+        checkWinTile();
     }
 
 
@@ -720,8 +722,6 @@ public class GUI {
      */
     public void saveMovements() {
         new RecordSaver(moveSequence);
-//        game.saveMovements();
-
     }
 
     /**
@@ -732,15 +732,7 @@ public class GUI {
     public void pauseGame(boolean pause) {
         pauseGame = pause;
     }
-
-
-    /**
-     * Decreases the amount of treasures left in the level.
-     * This method is called whenever the player picks up a treasure.
-     */
-    public void decreaseTreasures() {
-        treasures--;
-    }
+    
 
     /**
      * Increases the number of keys player has collected.
@@ -765,6 +757,13 @@ public class GUI {
         // based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
+
+    public Bug getBug() {
+        return null; //todo use game.getBug() when it's made
+    }
+//    public Player getPlayer(){
+//        return game.getPlayer();
+//    }
 
     public static void main(String[] args) {
         GUI gui = new GUI();

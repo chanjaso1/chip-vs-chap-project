@@ -9,6 +9,7 @@ public class moveDown extends Move {
 
     public moveDown(Actor actor) {
         super(actor);
+        dir = 2;
     }
 
     @Override
