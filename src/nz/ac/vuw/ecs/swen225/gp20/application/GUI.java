@@ -332,7 +332,7 @@ public class GUI {
         JPanel timePanel = displayTimePanel();
 
         // treasures left panel
-        JPanel keysLeftPanel = createGameStat("TREASURES\nLEFT", treasures);
+        JPanel keysLeftPanel = createGameStat("TREASURES\nLEFT", game.getPlayer().getNumberTreasures());
 
         // inventory (keys collected) panel
         JPanel inventoryPanel = createKeysCollected("KEYS COLLECTED");
