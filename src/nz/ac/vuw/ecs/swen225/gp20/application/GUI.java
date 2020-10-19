@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -29,12 +30,13 @@ public class GUI {
     private JFrame frame, replayFrame = new JFrame();
     private JPanel gameStatsPanel;
     private RendererPanel board;
+    private RecordReader recordReader;
+    private RecordSaver recordSaver;
     private Dimension screenSize;
     private InputMap inputMap;
     private ActionMap actionMap;
+    private ArrayList<Move> moveSequence = new ArrayList<>();
 
-
-    private RecordReader recordReader;
     private Game game;
     private double replaySpeed;
     private double currentTime = MAX_TIME;
@@ -44,9 +46,8 @@ public class GUI {
 
     public GUI() {
         game = new Game();
-        RendererPanel rendererPanel = new RendererPanel(game);
-//        initialise(game.getTreasures(), 0);
-        initialise(2, 0);
+        board = new RendererPanel(game);
+        initialise(game.getTreasure(), 0);
     }
 
     /**
@@ -643,21 +644,13 @@ public class GUI {
     }
 
     /**
-     * Initialises the RendererPanel, passing in the Game object.
-     *
-     * @param game -- the current game.
-     */
-    public void setRendererPanel(Game game) {
-        board = new RendererPanel(game);
-    }
-
-    /**
      * Abstract method that moves the player in the specified direction.
      *
      * @param move -- the player's most recent move.
      */
     public void movePlayer(Move move) {
-
+        moveSequence.add(move);
+//        game.moveActor(move);
     }
 
     /**
