@@ -71,7 +71,7 @@ public class RecordReader {
                     }
                 }
                 else {
-                    Bug bug = new Bug();
+                    Bug bug = new Bug(0,0);
                     typeMove = jsonMove.getAsJsonObject().get("B").getAsString();
                     switch (typeMove.toLowerCase()){
                         case "left":

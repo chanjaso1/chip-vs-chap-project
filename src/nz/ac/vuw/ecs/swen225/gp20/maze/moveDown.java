@@ -10,12 +10,12 @@ public class moveDown extends Move {
     }
 
     @Override
-    public void apply(Player player) {
+    public void apply() {
         //the next tile that player is moving to
-        Tile nextTile = player.getGame().getMap()[Math.min(24, player.getRow() + 1)][player.getCol()];
-        if (nextTile.checkValidMove(player)) {
-            player.setPosition(Math.min(24, player.getRow() + 1), player.getCol());
-        }
+        System.out.println(mover.getGame());
+        Tile nextTile = mover.getGame().getMap()[Math.min(24, mover.getRow() + 1)][mover.getCol()];
+        if(mover instanceof Player && nextTile.checkValidMove((Player) mover) || mover instanceof Bug)
+                mover.setPosition(Math.min(24, mover.getRow() + 1), mover.getCol());
     }
 
     @Override

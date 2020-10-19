@@ -30,11 +30,11 @@ public class RecordnReplayTesting {
         //store what the output of the movements should be
         ArrayList<Move> answer = new ArrayList<>();
         Player player = new Player(0, 0);
-        Bug bug = new Bug();
-        answer.add(new moveLeft(player));
-        answer.add(new moveRight(bug));
-        answer.add(new moveDown(player));
-        answer.add(new moveUp(bug));
+//        Bug bug = new Bug();
+//        answer.add(new moveLeft(player));
+//        answer.add(new moveRight(bug));
+//        answer.add(new moveDown(player));
+//        answer.add(new moveUp(bug));
 
         //compare output with what it should be
         if (!(rr.getMoves().equals(answer)))
@@ -64,11 +64,11 @@ public class RecordnReplayTesting {
         //get arraylist of movements and put into RecordSaver
         ArrayList<Move> answerMoves = new ArrayList<>();
         Player player = new Player(0, 0);
-        Bug bug = new Bug();
-        answerMoves.add(new moveUp(player)); //different order from reading testing
-        answerMoves.add(new moveDown(bug));
-        answerMoves.add(new moveLeft(player));
-        answerMoves.add(new moveRight(bug));
+//        Bug bug = new Bug();
+//        answerMoves.add(new moveUp(player)); //different order from reading testing
+//        answerMoves.add(new moveDown(bug));
+//        answerMoves.add(new moveLeft(player));
+//        answerMoves.add(new moveRight(bug));
 
         //save
         RecordSaver rs = new RecordSaver(answerMoves); //save to playerMoveswithBugsReading.json - yes, override every time

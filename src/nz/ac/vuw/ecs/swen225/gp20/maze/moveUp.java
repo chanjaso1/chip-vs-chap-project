@@ -10,11 +10,12 @@ public class moveUp extends Move {
     }
 
     @Override
-    public void apply(Player player) {
+    public void apply() {
 
-        Tile nextTile = player.getGame().getMap()[Math.max(0,player.getRow()-1)][player.getCol()];
-        if (nextTile.checkValidMove(player)) {
-            player.setPosition(Math.max(0,player.getRow()-1),player.getCol());
+
+        Tile nextTile = mover.getGame().getMap()[Math.max(0,mover.getRow()-1)][mover.getCol()];
+        if(mover instanceof Player && nextTile.checkValidMove((Player) mover) || mover instanceof Bug) {
+            mover.setPosition(Math.max(0,mover.getRow()-1),mover.getCol());
         }
     }
 

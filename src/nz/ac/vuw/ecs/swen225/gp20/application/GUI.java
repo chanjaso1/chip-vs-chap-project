@@ -196,7 +196,7 @@ public class GUI {
         actionMap.put("MOVE_UP", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveUp(new Player(0, 0)));
+                movePlayer(new moveUp(game.getPlayer()));
                 board.renderMove(0);
             }
         });
@@ -206,7 +206,7 @@ public class GUI {
         actionMap.put("MOVE_DOWN", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveDown(new Player(0, 0)));
+                movePlayer(new moveDown(game.getPlayer()));
                 board.renderMove(2);
             }
         });
@@ -216,7 +216,7 @@ public class GUI {
         actionMap.put("MOVE_LEFT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveLeft(new Player(0, 0)));
+                movePlayer(new moveLeft(game.getPlayer()));
                 board.renderMove(3);
 
             }
@@ -227,7 +227,7 @@ public class GUI {
         actionMap.put("MOVE_RIGHT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveRight(new Player(0, 0)));
+                movePlayer(new moveRight(game.getPlayer()));
                 board.renderMove(1);
             }
         });

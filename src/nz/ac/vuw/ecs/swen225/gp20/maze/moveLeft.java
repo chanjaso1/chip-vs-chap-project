@@ -10,10 +10,10 @@ public class moveLeft extends Move {
     }
 
     @Override
-    public void apply(Player player) {
-        Tile nextTile = player.getGame().getMap()[player.getRow()][Math.max(player.getCol() - 1, 0)];
-        if (nextTile.checkValidMove(player)) {
-            player.setPosition(player.getRow(), Math.max(player.getCol() - 1, 0));
+    public void apply() {
+        Tile nextTile = mover.getGame().getMap()[mover.getRow()][Math.max(mover.getCol() - 1, 0)];
+        if(mover instanceof Player && nextTile.checkValidMove((Player) mover) || mover instanceof Bug) {
+            mover.setPosition(mover.getRow(), Math.max(mover.getCol() - 1, 0));
         }
     }
 

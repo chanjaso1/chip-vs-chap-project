@@ -65,11 +65,15 @@ public class Game {
     }
 
     public void moveActor(Move move){
-        move.apply(player);
+        move.apply();
     }
 
     public void saveGame(){
         parser.saveGame(map,player);
+    }
+
+    public void loadLevel(){
+        parser = new parseJSON("level" + player.getLevel() + ".json");
     }
 
     /**
