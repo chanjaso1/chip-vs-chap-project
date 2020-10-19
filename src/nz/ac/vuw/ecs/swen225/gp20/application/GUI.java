@@ -410,6 +410,7 @@ public class GUI {
         // REPLAY button
         JButton replayButton = new JButton("REPLAY");
         replayButton.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none"); // ignores space key
+        GUI tempGUI = this; // used to pass GUI
         replayButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -418,7 +419,7 @@ public class GUI {
 
                 System.out.println("RECORDREADER CALLED");
 //                recordReader = new RecordReader();
-                recordReader = new RecordReader(this, game.getPlayer(), null);
+                recordReader = new RecordReader(tempGUI, game.getPlayer(), null);
             }
         });
 
@@ -768,7 +769,7 @@ public class GUI {
 //    }
 
     public static void main(String[] args) {
-        GUI gui = new GUI();
+       GUI gui = new GUI();
     }
 
 }
