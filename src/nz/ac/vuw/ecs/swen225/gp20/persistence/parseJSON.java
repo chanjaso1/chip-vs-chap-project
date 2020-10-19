@@ -52,6 +52,14 @@ public class parseJSON{
                         map[row][col] = new floorTile(row, col, treasure);
                         this.treasures++;                                                  //Add 1 to the total number of treasures/chips.
                     }else if(tileType.equals("W"))                      map[row][col] = new winTile(row, col);
+                    else if(tileType.equals("B"))  {
+                        map[row][col]   = new floorTile(row, col, null);
+                        Bug bug = new Bug(row, col);
+                    }else if(tileType.equals("X")){
+                        map[row][col] = new floorTile(row, col, null);
+                        //TODO mark the current tile as true @Phoebe
+                    }
+
                 }
             }
             
