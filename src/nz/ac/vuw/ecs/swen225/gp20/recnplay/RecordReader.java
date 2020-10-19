@@ -40,37 +40,60 @@ public class RecordReader {
 //            System.out.println(jsonMoves.get(1));
 
             for (JsonElement jsonMove: jsonMoves){
-                String moveType;
-                //player
-                //change "movement" to "player"
-                moveType = jsonMove.getAsJsonObject().get("movement").getAsString();
-//                moveType = jsonMove.getAsJsonObject().get("player").getAsString();
-
-                //todo deal with bug moves as well
-                //bug
-                //use "bug"
-                //moveType = jsonMove.getAsJsonObject().get("bug").getAsString();
+                boolean isPlayerMove;
+                isPlayerMove = jsonMove.getAsJsonObject().has("P");
+//                moveType = jsonMove.getAsJsonObject().get("movement").getAsString();
 
                 Move move;
                 //switch to move type
-                switch (moveType.toLowerCase()){
-                    case "left":
-                        move = new moveLeft();
-                        break;
-                    case "right":
-                        move = new moveRight();
-                        break;
-                    case "up":
-                        move = new moveUp();
-                        break;
-                    case "down":
-                        move = new moveDown();
-                        break;
-                    default:
-                        //should never happen
-                        //todo error
-                        throw new NullPointerException("Move is not recognised");
+                String typeMove;
+
+                if (isPlayerMove){
+                    Player player = new Player(0, 0); //dummy todo change to deal with real player
+                    typeMove = jsonMove.getAsJsonObject().get("P").getAsString();
+                    switch (typeMove.toLowerCase()){
+                        case "left":
+                            move = new moveLeft(player);
+                            break;
+                        case "right":
+                            move = new moveRight(player);
+                            break;
+                        case "up":
+                            move = new moveUp(player);
+                            break;
+                        case "down":
+                            move = new moveDown(player);
+                            break;
+                        default:
+                            //should never happen
+                            //todo error
+                            throw new NullPointerException("Move is not recognised");
+                    }
                 }
+                else {
+                    Bug bug = new Bug();
+                    typeMove = jsonMove.getAsJsonObject().get("B").getAsString();
+                    switch (typeMove.toLowerCase()){
+                        case "left":
+                            move = new moveLeft(bug);
+                            break;
+                        case "right":
+                            move = new moveRight(bug);
+                            break;
+                        case "up":
+                            move = new moveUp(bug);
+                            break;
+                        case "down":
+                            move = new moveDown(bug);
+                            break;
+                        default:
+                            //should never happen
+                            //todo error
+                            throw new NullPointerException("Move is not recognised");
+                    }
+                }
+
+                //add move - made by whoever - to moves list to preserve order
                 moves.add(move);
             }
         } catch (Exception e) {
@@ -143,4 +166,10 @@ public class RecordReader {
         return moves;
     }
 
+    public static void main(String[] args) {
+        RecordReader rr = new RecordReader();
+        for (Move move : rr.moves) {
+            System.out.println(move.getMover() + " moved " + move); //testing
+        }
+    }
 }

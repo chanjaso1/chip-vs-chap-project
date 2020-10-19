@@ -196,7 +196,7 @@ public class GUI {
         actionMap.put("MOVE_UP", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveUp());
+                movePlayer(new moveUp(new Player(0, 0)));
                 board.renderMove(0);
             }
         });
@@ -206,7 +206,7 @@ public class GUI {
         actionMap.put("MOVE_DOWN", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveDown());
+                movePlayer(new moveDown(new Player(0, 0)));
                 board.renderMove(2);
             }
         });
@@ -216,7 +216,7 @@ public class GUI {
         actionMap.put("MOVE_LEFT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveLeft());
+                movePlayer(new moveLeft(new Player(0, 0)));
                 board.renderMove(3);
 
             }
@@ -227,7 +227,7 @@ public class GUI {
         actionMap.put("MOVE_RIGHT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveRight());
+                movePlayer(new moveRight(new Player(0, 0)));
                 board.renderMove(1);
             }
         });
@@ -431,6 +431,9 @@ public class GUI {
      * The replay speed is displayed as a JComboBox so users can select a speed within the specified range.
      */
     public void displayReplayFrame() {
+        //get replay file
+        recordReader = new RecordReader();
+
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
         replayFrame.setSize(600, 270);

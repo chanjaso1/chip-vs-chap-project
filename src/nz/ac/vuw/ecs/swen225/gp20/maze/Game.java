@@ -68,6 +68,10 @@ public class Game {
         move.apply(player);
     }
 
+    public void saveGame(){
+        parser.saveGame(map,player);
+    }
+
     /**
      * Return the number of treasure set in parser.
      * @return -- number of treasure.
