@@ -25,7 +25,7 @@ public class RendererPanel extends JComponent {
 
     public BufferedImage chip = null, redKey = null, greenKey = null;
     public BufferedImage wall = null, gDoor = null, rDoor = null, floor = null, unlocked = null;
-    Image win;
+    Image win, cDoor;
 
     // ALL SOUND EFFECTS GENERATED/ EDITED/ PRODUCED USING THE WEBSITE:
     // https://jfxr.frozenfractal.com/
@@ -60,8 +60,9 @@ public class RendererPanel extends JComponent {
             rDoor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/redDoor.png"));
             floor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/floor.png"));
             unlocked = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/unlocked.png"));
-            // winTile different because it's a gif
+            // winTile and cDoorTile different because it's a gif
             win = new ImageIcon(getClass().getResource("data/winTile.gif")).getImage();
+            cDoor = new ImageIcon(getClass().getResource("data/chipDoor.gif")).getImage();
         } catch (IOException e) {
             System.out.println("Tile image not found!");
         }
@@ -150,6 +151,8 @@ public class RendererPanel extends JComponent {
                     else if (d.getColor().equals("G")) tile = new GreenDoor(i, j, gDoor, unlocked);
                 } else if (levelTiles[i][j] instanceof winTile) {
                     tile = new ExitTile(i, j, win, this);
+                } else if (levelTiles[i][j] instanceof treasureDoor) {
+                    tile = new ChipDoorTile(i, j, cDoor, this);
                 }
                 tileMap[i][j] = tile;
             }
