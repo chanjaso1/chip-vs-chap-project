@@ -64,7 +64,7 @@ public class parseJSON{
      * Save the current state of the game to a JSON file
      * @param board - The current state of the board.
      */
-    public void saveGame(Tile[][] board, Player player){
+        public void saveGame(Tile[][] board, Player player){
         String fileName = "save" + currentGameSave++ + ".json";
         StringBuilder stringFile = new StringBuilder();
 

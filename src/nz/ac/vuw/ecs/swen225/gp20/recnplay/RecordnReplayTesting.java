@@ -26,11 +26,7 @@ public class RecordnReplayTesting {
     public void testCanReadMovements(){
         //make RecordReader with manually generated file
         RecordReader rr = null;
-        try {
-            rr = new RecordReader("Recordings/testCanReadMovements.json");
-        } catch (FileNotFoundException e) {
-            fail("File not found, but should have been.");
-        }
+        rr = new RecordReader();
 
         //store what the output of the movements should be
         ArrayList<Move> answer = new ArrayList<>();
@@ -76,12 +72,10 @@ public class RecordnReplayTesting {
         rs.save("testRecordingMovementsOutput");
 
         //compare moves from RecordReader with output file
-        try {
-            RecordReader outputReader = new RecordReader("Recordings/testRecordingMovementsOutput.json");
-            if (!outputReader.getMoves().equals(answerMoves))
-                fail("ArrayList \"" + outputReader.getMoves() + "\" should be \"" + answerMoves + "\"");
-        } catch (FileNotFoundException e) {
-            fail("File not found, but should have been.");
-        }
+        RecordReader outputReader = new RecordReader();
+        //check file exists
+        if (!outputReader.getMoves().equals(answerMoves))
+            fail("ArrayList \"" + outputReader.getMoves() + "\" should be \"" + answerMoves + "\"");
+
     }
 }

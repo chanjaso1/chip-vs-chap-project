@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 import javax.swing.*;
@@ -16,28 +17,20 @@ import java.util.ArrayList;
 
 public class RecordReader {
     private final ArrayList<Move> moves = new ArrayList<>();
-    private static boolean playNextFrame;
+    private int lastMovePos;
 
     /**
-     * This class reads a JSON file from filePath and stores the moves
+     * This class reads a JSON file from file's path and stores the moves
      * that are read.
      * They are read as Actions > movement > *a move*
-     *
-     * @param filePath location of file
      */
-    public RecordReader(String filePath) throws FileNotFoundException {
-        //check path exists
+    public RecordReader() {
         //based on https://stackoverflow.com/questions/15571496/how-to-check-if-a-folder-exists
-        File f = new File(filePath);
-        if (!f.exists()) {// || !f.isDirectory()
-            throw new FileNotFoundException();
-        }
-
-        playNextFrame = false;
+        File replayFile = GUI.getFile();
 
         //read path
         try {
-            JsonObject jo = new Gson().fromJson(new FileReader(filePath), JsonObject.class);
+            JsonObject jo = new Gson().fromJson(new FileReader(replayFile), JsonObject.class);
             JsonArray jsonMoves = jo.getAsJsonArray("Actions");
 
 //            System.out.println(jsonMoves);
@@ -47,7 +40,17 @@ public class RecordReader {
 //            System.out.println(jsonMoves.get(1));
 
             for (JsonElement jsonMove: jsonMoves){
-                String moveType = jsonMove.getAsJsonObject().get("movement").getAsString();
+                String moveType;
+                //player
+                //change "movement" to "player"
+                moveType = jsonMove.getAsJsonObject().get("movement").getAsString();
+//                moveType = jsonMove.getAsJsonObject().get("player").getAsString();
+
+                //todo deal with bug moves as well
+                //bug
+                //use "bug"
+                //moveType = jsonMove.getAsJsonObject().get("bug").getAsString();
+
                 Move move;
                 //switch to move type
                 switch (moveType.toLowerCase()){
@@ -71,8 +74,17 @@ public class RecordReader {
                 moves.add(move);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            GUI.notifyError("Unsupported file format.");
+            System.out.println(e.toString()); //todo remove?
+            return;
         }
+
+        if (moves.isEmpty())
+            //let user know file is empty
+            //based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
+            JOptionPane.showMessageDialog(null, "Please try again and select a different file. ", "Your file was empty", JOptionPane.ERROR_MESSAGE);
+
+        lastMovePos = 0;
     }
 
     /**
@@ -100,27 +112,19 @@ public class RecordReader {
      * @param player the player doing the move
      */
     public void playPerFrame(Player player){
-        for (Move move: moves){
-            //wait for signal
-            while (!playNextFrame){}
-
-            //do move
+        //do move
 //            move.apply(player);
-            System.out.println("move");
+        System.out.println("move: "+moves.get(lastMovePos++));
 
-            //reset playNextFrame
-            playNextFrame = false;
+        //last move
+        if (moves.size() == lastMovePos){
+            JOptionPane.showMessageDialog(null, "That was the last move, starting over!");
+            lastMovePos = 0;
         }
-    }
 
-    /**
-     * Used for playing the next frame in playPerFrame method.
-     * This is done by setting playNextFrame to TRUE.
-     *
-     * @param playNextFrame boolean value that private playPerFrame will be set to.
-     */
-    public static void setPlayNextFrame(boolean playNextFrame) {
-        RecordReader.playNextFrame = playNextFrame;
+        // todo need to call move.apply() but it needs a player
+        //  and this method is called from gui which does not have
+        //  a player object
     }
 
     /*
@@ -139,14 +143,4 @@ public class RecordReader {
         return moves;
     }
 
-    public static void main(String[] args) {
-//        JFileChooser jfc = new JFileChooser(); //based off https://stackoverflow.com/questions/8402889/working-with-jfilechooser-getting-access-to-the-selected-file
-//        int returnValue = jfc.showOpenDialog(new JFrame("Select a file"));
-//
-//        if (returnValue == JFileChooser.APPROVE_OPTION){
-//            new RecordReader(jfc.getSelectedFile());
-//        }File recordFileSystem.out.println("File:"+recordFile.getName());
-
-//        new RecordReader("Recordings/testRecording.json");
-    }
 }
