@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
 
 /**

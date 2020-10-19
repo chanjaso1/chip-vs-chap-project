@@ -2,6 +2,7 @@ package nz.ac.vuw.ecs.swen225.gp20.application;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Move;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordReader;
 import nz.ac.vuw.ecs.swen225.gp20.recnplay.RecordSaver;
 import nz.ac.vuw.ecs.swen225.gp20.render.RendererPanel;
