@@ -54,7 +54,7 @@ public class GUI {
         try {
             greenKey = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/greenKey.png"));
             redKey = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/redKey.png"));
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.out.println("Item image not found!");
         }
 
@@ -210,6 +210,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveUp(game.getPlayer()));
                 board.renderMove(0);
+                checkWinTile();
             }
         });
 
@@ -220,6 +221,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveDown(game.getPlayer()));
                 board.renderMove(2);
+                checkWinTile();
             }
         });
 
@@ -230,7 +232,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveLeft(game.getPlayer()));
                 board.renderMove(3);
-
+                checkWinTile();
             }
         });
 
@@ -241,6 +243,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveRight(game.getPlayer()));
                 board.renderMove(1);
+                checkWinTile();
             }
         });
 
@@ -595,7 +598,7 @@ public class GUI {
     }
 
     public JPanel createKeysCollected(String name) {
-        JPanel panel = new JPanel(new GridLayout(3,1));
+        JPanel panel = new JPanel(new GridLayout(3, 1));
 //        panel.setSize(500, 500);
 //        panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
         JLabel title = new JLabel(name, JLabel.CENTER);
@@ -665,6 +668,20 @@ public class GUI {
         gameStatsPanel.revalidate();
     }
 
+    /**
+     * Checks if the player has landed on the win tile.
+     * Executed after a player moves.
+     */
+    public void checkWinTile() {
+        Player player = game.getPlayer();
+
+        if (game.getMap()[player.getRow()][player.getCol()] instanceof winTile) {
+            player.moveToNextLevel();
+            game.loadLevel();
+            board.winLevel();
+        }
+    }
+
 
     /**
      * Gets the current replay speed selected by user.
@@ -692,6 +709,9 @@ public class GUI {
     public void movePlayer(Move move) {
         moveSequence.add(move);
         game.moveActor(move);
+
+        //        player.moveToNextLevel();
+//        player.getGame().loadLevel();
     }
 
 
@@ -713,6 +733,7 @@ public class GUI {
         pauseGame = pause;
     }
 
+
     /**
      * Decreases the amount of treasures left in the level.
      * This method is called whenever the player picks up a treasure.
@@ -733,22 +754,22 @@ public class GUI {
      *
      * @return the selected file
      */
-    public static File getFile(){
+    public static File getFile() {
         JFileChooser fileChooser = new JFileChooser("Recordings/");
         if (fileChooser.showOpenDialog(new JButton("Open")) == JFileChooser.APPROVE_OPTION)
             return fileChooser.getSelectedFile();
         return getFile();
     }
 
-    public static void notifyError(String message){
+    public static void notifyError(String message) {
         // based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         GUI gui = new GUI();
     }
-    
+
 }
 
 

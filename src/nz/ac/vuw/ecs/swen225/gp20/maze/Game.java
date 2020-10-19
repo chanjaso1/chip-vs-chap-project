@@ -76,7 +76,6 @@ public class Game {
         parser = new parseJSON("levels/level" + player.getLevel() + ".json");
         map = parser.getMap();
         player = parser.getPlayer();
-
         player.setGame(this);
     }
 
