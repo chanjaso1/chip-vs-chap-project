@@ -32,6 +32,25 @@ public abstract class Move {
     }
 }
 
+ class MoveTesting {
+    String direction;
+
+    public MoveTesting(String direction) {
+        this.direction = direction;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    //todo object does not have fields to check hence the weird equals and hashcode
+    @Override
+    public boolean equals(Object obj) {
+        return obj.getClass() == getClass() && mover.getClass() == ((Move)obj).getMover().getClass();
+    }
+}
+
 
 
 
