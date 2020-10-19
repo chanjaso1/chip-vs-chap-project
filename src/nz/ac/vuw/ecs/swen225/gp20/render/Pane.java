@@ -17,7 +17,7 @@ public class Pane {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 1000);
 
-       RendererPanel drawBoard = new RendererPanel(new Game());
+       RendererPanel drawBoard = new RendererPanel(new Game(1));
 
         frame.addKeyListener(new KeyListener() {
             @Override
