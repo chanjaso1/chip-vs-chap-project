@@ -6,6 +6,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 public class floorTile implements Tile{
     private int row,col;
     private Item item;
+    private boolean bugPath = false;
 
     /**
      * wallTile constructor.
@@ -40,6 +41,22 @@ public class floorTile implements Tile{
 
         //players can always move on the floor
         return true;
+    }
+
+    /**
+     * Set this tile to the bug path.
+     */
+    public void setBugTile(){
+        bugPath = true;
+    }
+
+    /**
+     * Return true if this tile is the bug path.
+     * @return true -- this tile is the bug path
+     *          false -- this tile is not the bug path
+     */
+    public boolean isBugPath() {
+        return bugPath;
     }
 
     public Item getItem() {

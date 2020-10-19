@@ -5,10 +5,6 @@ public class Bug extends Actor {
         super(row, col);
     }
 
-    @Override
-    public void move(Move move) {
-        System.out.println("moving bug");
-    }
 
     @Override
     public String toString() {
