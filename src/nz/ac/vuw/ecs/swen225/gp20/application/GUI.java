@@ -204,7 +204,7 @@ public class GUI {
         actionMap.put("MOVE_UP", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveUp(game.getPlayer()), 0);
+                movePlayer(new moveUp(game.getPlayer()));
 //                board.renderMove(0);
 //                checkWinTile();
             }
@@ -215,8 +215,7 @@ public class GUI {
         actionMap.put("MOVE_DOWN", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                movePlayer(new moveDown(game.getPlayer()), 2);
+                movePlayer(new moveDown(game.getPlayer()));
 //                board.renderMove(2);
 //                checkWinTile();
             }
@@ -227,7 +226,7 @@ public class GUI {
         actionMap.put("MOVE_LEFT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveLeft(game.getPlayer()), 3);
+                movePlayer(new moveLeft(game.getPlayer()));
 //                board.renderMove(3);
 //                checkWinTile();
             }
@@ -238,7 +237,7 @@ public class GUI {
         actionMap.put("MOVE_RIGHT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveRight(game.getPlayer()), 1);
+                movePlayer(new moveRight(game.getPlayer()));
 //                board.renderMove(1);
 //                checkWinTile();
             }
@@ -482,7 +481,7 @@ public class GUI {
                 System.out.println("next step");
 
                 //play next step
-                recordReader.playPerFrame(null); //todo give player an object not null
+                recordReader.playPerFrame(); //todo give player an object not null
             }
         });
 
@@ -504,7 +503,7 @@ public class GUI {
                 JOptionPane.showMessageDialog(replayFrame, speed, "AUTO-REPLAY", JOptionPane.INFORMATION_MESSAGE);
                 replaySpeed = Double.parseDouble((String) combobox.getSelectedItem());
                 System.out.println("speed: " + replaySpeed);
-                recordReader.playAtSpeed(replaySpeed, null); //todo give null player the player value
+                recordReader.playAtSpeed(replaySpeed);
             }
         });
 
@@ -710,10 +709,11 @@ public class GUI {
      * @param move -- the player's most recent move.
      * @param dir  -- the direction to move the player in.
      */
-    public void movePlayer(Move move, int dir) {
+    public void movePlayer(Move move) {
         moveSequence.add(move);
         game.moveActor(move);
-        board.renderMove(dir);
+        board.renderMove(move.getDir());
+        System.out.println("render by tian");
         checkWinTile();
     }
 
