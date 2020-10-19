@@ -9,6 +9,8 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class RecordReader {
     private final ArrayList<Move> moves = new ArrayList<>();
     private int lastMovePos;
     private GUI gui;
+    private Timer timer = null;
 
     /**
      * This class reads a JSON file from file's path and stores the moves
@@ -119,19 +122,28 @@ public class RecordReader {
      * @param secsToWait amount of time to wait per move
      */
     public void playAtSpeed(double secsToWait){
-        for (Move move: moves){
-
-            gui.movePlayer(move);
-            System.out.println("did move:" + move);
-
-            long time = System.currentTimeMillis() + (long)(secsToWait*1000);
-            while (System.currentTimeMillis() < time){
-//                System.out.println("waiting");
-                gui.getBoard().repaint();
-                gui.getBoard().revalidate();
-                System.out.flush();
+        timer = new Timer((int) secsToWait * 1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playPerFrame();
             }
-        }
+        });
+
+        timer.start();
+
+//        for (Move move: moves){
+//
+//            gui.movePlayer(move);
+//            System.out.println("did move:" + move);
+//
+//            long time = System.currentTimeMillis() + (long)(secsToWait*1000);
+//            while (System.currentTimeMillis() < time){
+////                System.out.println("waiting");
+//                gui.getBoard().repaint();
+//                gui.getBoard().revalidate();
+//                System.out.flush();
+//            }
+//        }
     }
 
     /**
@@ -147,6 +159,7 @@ public class RecordReader {
         if (moves.size() == lastMovePos){
             JOptionPane.showMessageDialog(null, "That was the last move, starting over!");
             lastMovePos = 0;
+            timer.stop();
         }
 
 
