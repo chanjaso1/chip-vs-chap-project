@@ -418,7 +418,7 @@ public class GUI {
 
                 System.out.println("RECORDREADER CALLED");
 //                recordReader = new RecordReader();
-//                recordReader = new RecordReader(game.getPlayer(), null);
+                recordReader = new RecordReader(this, game.getPlayer(), null);
             }
         });
 
@@ -441,7 +441,7 @@ public class GUI {
      */
     public void displayReplayFrame() {
         //get replay file
-//        recordReader = new RecordReader(game.getPlayer(), null);
+        recordReader = new RecordReader(this, game.getPlayer(), null);
 
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
