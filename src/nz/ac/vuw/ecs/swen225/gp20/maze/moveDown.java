@@ -3,15 +3,19 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 /**
  * This class is created to move the player down
  */
-public class moveDown implements Move {
+public class moveDown extends Move {
+
+    public moveDown(Actor actor) {
+        super(actor);
+    }
 
     @Override
-    public void apply(Player player) {
+    public void apply() {
         //the next tile that player is moving to
-        Tile nextTile = player.getGame().getMap()[Math.min(24, player.getRow() + 1)][player.getCol()];
-        if (nextTile.checkValidMove(player)) {
-            player.setPosition(Math.min(24, player.getRow() + 1), player.getCol());
-        }
+        System.out.println(mover.getGame());
+        Tile nextTile = mover.getGame().getMap()[Math.min(24, mover.getRow() + 1)][mover.getCol()];
+        if(mover instanceof Player && nextTile.checkValidMove((Player) mover) || mover instanceof Bug)
+                mover.setPosition(Math.min(24, mover.getRow() + 1), mover.getCol());
     }
 
     @Override
@@ -19,14 +23,4 @@ public class moveDown implements Move {
         return "down";
     }
 
-    //todo object does not have fields to check hence the weird equals and hashcode
-    @Override
-    public boolean equals(Object obj) {
-        return obj.getClass() == getClass();
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
 }

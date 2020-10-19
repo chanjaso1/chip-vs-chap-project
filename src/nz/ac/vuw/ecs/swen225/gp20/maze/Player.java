@@ -13,12 +13,10 @@ import java.util.HashSet;
 /**
  * Player class to keep track of the player's position, inventory and stages.
  */
-public class Player { //implements Actor
+public class Player extends Actor {
     private HashSet<Key> keys = new HashSet<>();
     private int treasures = 0;
-    private int row, col;
     private int level = 1;
-    private Game game;
 
     /**
      * Player constructor created by using row and column the player is.
@@ -26,39 +24,12 @@ public class Player { //implements Actor
      * @param col -- column that the player is
      */
     public Player(int row, int col){
-        this.row = row;
-        this.col = col;
+        super(row, col);
     }
 
     @Override
     public String toString() {
         return "P";
-    }
-
-    /**
-     * Set the player position to the given row and column.
-     * @param row -- new row that the player is
-     * @param col -- new column that the player is
-     */
-    public void setPosition(int row , int col){
-        this.row = row;
-        this.col = col;
-    }
-
-    /**
-     * Return the player's current column.
-     * @return player's current column
-     */
-    public int getCol() {
-        return col;
-    }
-
-    /**
-     * Return player's current row.
-     * @return player's current row.
-     */
-    public int getRow() {
-        return row;
     }
 
     /**
@@ -89,6 +60,10 @@ public class Player { //implements Actor
         return treasures;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
     /**
      * move the player to the next level
      */
@@ -97,24 +72,8 @@ public class Player { //implements Actor
     }
 
     //@Override
-    public void move(Move move) {
-        move.apply(this);
-    }
 
-    /**
-     * Set the player's game to the given game.
-     * @param game -- the current game that the player's in.
-     */
-    public void setGame(Game game) {
-        this.game = game;
-    }
 
-    /**
-     * Return the current game that player's in.
-     * @return player's current Game object
-     */
-    public Game getGame() {
-        return game;
-    }
+
 }
 

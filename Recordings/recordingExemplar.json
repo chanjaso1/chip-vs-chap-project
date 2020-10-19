@@ -1,16 +1,16 @@
 {
 	"Actions": [
 		{
-			"movement": "left"
+			"P": "left"
 		},
 		{
-			"movement": "right"
+			"B": "right"
 		},
 		{
-			"movement": "up"
+			"B": "up"
 		},
 		{
-			"movement": "down"
+			"P": "down"
 		}
 	]
 }

@@ -56,13 +56,28 @@ public class Game {
         return this;
     }
 
+    public parseJSON getParser() {
+        return parser;
+    }
 
     public Player getPlayer() {
         return this.player;
     }
 
     public void moveActor(Move move){
-        move.apply(player);
+        move.apply();
+    }
+
+    public void saveGame(){
+        parser.saveGame(map,player);
+    }
+
+    public void loadLevel(){
+        parser = new parseJSON("levels/level" + player.getLevel() + ".json");
+        map = parser.getMap();
+        player = parser.getPlayer();
+
+        player.setGame(this);
     }
 
     /**

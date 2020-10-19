@@ -38,6 +38,9 @@ public class doorTile implements Tile{
         if(open) return true;
 
         //player can only move on to this tile if they have the correct color key
+        if(player instanceof Player){
+
+        }
         for(Key key : player.getKeys()){
             if(key.getColor().equalsIgnoreCase(color)){
                 open = true;
