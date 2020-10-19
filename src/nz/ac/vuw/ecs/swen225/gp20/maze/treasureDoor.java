@@ -11,7 +11,7 @@ public class treasureDoor implements Tile {
      * @param row -- The tile row position.
      * @param col -- The tile column position.
      */
-    treasureDoor(int row, int col){
+    public treasureDoor(int row, int col){
         this.row = row;
         this.col = col;
     }

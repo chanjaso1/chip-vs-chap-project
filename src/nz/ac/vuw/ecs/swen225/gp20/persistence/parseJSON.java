@@ -1,9 +1,12 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import com.google.gson.*;
+import com.google.gson.internal.$Gson$Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 
 /**
@@ -37,7 +40,7 @@ public class parseJSON{
             for(int row = 0; row < totalSize; row++){
                 for (int col = 0; col < totalSize; col++) {
                     String tileType = jmap.get((row * totalSize) + col).getAsString();
-
+                    //TODO put if statements inside a method
                     if(tileType.equals("_"))  map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
                     else if(tileType.equals("P"))  {                                              //Define the player's position on the board.
                         map[row][col]   = new floorTile(row, col, null);
@@ -59,15 +62,59 @@ public class parseJSON{
                     }else if(tileType.equals("X")){
                         map[row][col] = new floorTile(row, col, null);
                         ((floorTile) map[row][col]).setBugTile();
+                    }else if(tileType.equals("DC")){
+                        map[row][col] = new treasureDoor(row, col);
                     }
 
                 }
             }
-            
+
             System.out.println("File loaded!");
 
         }catch(FileNotFoundException e){
             System.out.println("This file doesn't exist!");
+        }
+    }
+
+    private static ClassLoader classLoader(String id) throws IOException, ClassNotFoundException{
+        $Gson$Preconditions.checkNotNull(id);
+
+        return URLClassLoader.newInstance(
+            new URL[]{new URL("")}
+                );
+
+
+
+    }
+
+    private void checkType(String type, Tile[][] map, int row, int col){
+        switch (type){
+            case "_":
+                map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
+            case "P":
+                map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
+                this.player = new Player(row, col);
+            case "▊":
+                map[row][col] = new wallTile(row, col);
+            case "T":
+                map[row][col] = new floorTile(row, col, new Treasure(map[row][col]));   //Define a floor tile with a treasure in it
+                this.treasures++;
+            case "W":
+                map[row][col] = new winTile(row, col);                                  //Define the win tile
+            case "B":
+                map[row][col]   = new floorTile(row, col, null);
+                ((floorTile) map[row][col]).setBugTile();              //Set this tile to be part of the bug's movement
+                this.bug = new Bug(row, col);                          //Define the bug.
+            case "X":
+                map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
+                ((floorTile) map[row][col]).setBugTile();              //Set this tile to be part of the bug's movement
+        }
+
+        if(type.substring(0,1).equals("D")){
+            map[row][col] = new doorTile(row, col, type.substring(1,2));  //define a coloured door.
+        }else if(type.substring(0,1).equals("K")) {
+            this.keys++;
+            map[row][col] = new floorTile(row, col, new Key(map[row][col],  type.substring(1,2)));  //define a coloured key
         }
     }
 

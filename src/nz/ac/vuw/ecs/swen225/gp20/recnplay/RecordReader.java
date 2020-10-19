@@ -6,13 +6,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class RecordReader {
@@ -70,31 +68,31 @@ public class RecordReader {
                             throw new NullPointerException("Move is not recognised");
                     }
                 }
-                else {
-                    Bug bug = new Bug(0,0);
-                    typeMove = jsonMove.getAsJsonObject().get("B").getAsString();
-                    switch (typeMove.toLowerCase()){
-                        case "left":
-                            move = new moveLeft(bug);
-                            break;
-                        case "right":
-                            move = new moveRight(bug);
-                            break;
-                        case "up":
-                            move = new moveUp(bug);
-                            break;
-                        case "down":
-                            move = new moveDown(bug);
-                            break;
-                        default:
-                            //should never happen
-                            //todo error
-                            throw new NullPointerException("Move is not recognised");
-                    }
-                }
-
-                //add move - made by whoever - to moves list to preserve order
-                moves.add(move);
+//                else {
+//                    nz.ac.vuw.ecs.swen225.gp20.persistence.Bug.Bug bug = new Bug.Bug(0,0);
+//                    typeMove = jsonMove.getAsJsonObject().get("B").getAsString();
+//                    switch (typeMove.toLowerCase()){
+//                        case "left":
+//                            move = new moveLeft(bug);
+//                            break;
+//                        case "right":
+//                            move = new moveRight(bug);
+//                            break;
+//                        case "up":
+//                            move = new moveUp(bug);
+//                            break;
+//                        case "down":
+//                            move = new moveDown(bug);
+//                            break;
+//                        default:
+//                            //should never happen
+//                            //todo error
+//                            throw new NullPointerException("Move is not recognised");
+//                    }
+//                }
+//
+//                //add move - made by whoever - to moves list to preserve order
+//                moves.add(move);
             }
         } catch (Exception e) {
             GUI.notifyError("Unsupported file format.");
