@@ -8,9 +8,11 @@ import nz.ac.vuw.ecs.swen225.gp20.render.RendererPanel;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -31,10 +33,10 @@ public class GUI {
     private JPanel gameStatsPanel;
     private RendererPanel board;
     private RecordReader recordReader;
-    private RecordSaver recordSaver;
     private Dimension screenSize;
     private InputMap inputMap;
     private ActionMap actionMap;
+    private BufferedImage redKey, greenKey;
     private ArrayList<Move> moveSequence = new ArrayList<>();
 
     private Game game;
@@ -47,6 +49,15 @@ public class GUI {
     public GUI() {
         game = new Game();
         board = new RendererPanel(game);
+
+        // creates red and green keys
+        try {
+            greenKey = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/greenKey.png"));
+            redKey = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/redKey.png"));
+        } catch(IOException e) {
+            System.out.println("Item image not found!");
+        }
+
         initialise(game.getTreasure(), 0);
     }
 
@@ -160,7 +171,8 @@ public class GUI {
         // creates board panel
 
         // creates game stats panel
-        gameStatsPanel = new JPanel(new GridLayout(5, 1, 10, 30));
+//        gameStatsPanel = new JPanel(new GridLayout(5, 1, 10, 30));
+        gameStatsPanel = new JPanel(new GridLayout(4, 1, 0, 15));
         displayGameStatsPanel(gameStatsPanel);
 
         // creates panel containing user controls
@@ -312,6 +324,8 @@ public class GUI {
      */
     public void displayGameStatsPanel(JPanel gameStats) {
         gameStats.setBorder(BorderFactory.createEmptyBorder(50, 90, 50, 90));
+//        gameStats.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+//        gameStats.setBackground(Color.blue);
 
         // level panel
         JPanel levelPanel = createGameStat("LEVEL", 1);
@@ -323,10 +337,8 @@ public class GUI {
         JPanel keysLeftPanel = createGameStat("TREASURES\nLEFT", treasures);
 
         // inventory (keys collected) panel
-        JPanel inventoryPanel = createGameStat("KEYS COLLECTED", keysCollected);
-//
-//        //TODO: draw the actual keys
-
+        JPanel inventoryPanel = createKeysCollected("KEYS COLLECTED");
+//        inventoryPanel.setSize(100,600);
 
         // add all components to frame
         gameStats.add(levelPanel);
@@ -412,7 +424,6 @@ public class GUI {
             }
         });
 
-
         controlPanel.add(replayTitle);
         controlPanel.add(pauseButton);
         controlPanel.add(resumeButton);
@@ -495,8 +506,6 @@ public class GUI {
             }
         });
 
-
-//        actions.add(speed);
         actions.add(stepButton);
         actions.add(autoButton);
 
@@ -582,6 +591,35 @@ public class GUI {
         return panel;
     }
 
+    public JPanel createKeysCollected(String name) {
+        JPanel panel = new JPanel(new GridLayout(3,1));
+//        panel.setSize(500, 500);
+//        panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+        JLabel title = new JLabel(name, JLabel.CENTER);
+        title.setFont(TITLE_FONT);
+        title.setForeground(Color.RED);
+
+//        panel.setBackground(Color.GREEN);
+        JPanel keysPanel = new JPanel();
+        keysPanel.setLayout(new GridLayout(1, 3));
+
+        // draw keys
+//        JLabel rKey = new JLabel(new ImageIcon(redKey));
+        JLabel rKey = new JLabel(new ImageIcon(new ImageIcon(redKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
+        JLabel gKey = new JLabel(new ImageIcon(new ImageIcon(greenKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
+        keysPanel.add(rKey);
+        keysPanel.add(gKey);
+
+//        ImageIcon imageIcon = new ImageIcon(new ImageIcon("icon.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+
+        panel.add(title);
+        panel.add(keysPanel);
+//        panel.add(rKey);
+//        panel.add(gKey);
+
+        return panel;
+    }
+
     /**
      * Creates and executes the timer for each round.
      * Player wins a round if they succeed in collecting all the keys within the time limit.
@@ -653,10 +691,13 @@ public class GUI {
         game.moveActor(move);
     }
 
+
     /**
      * Abstract method that saves the movements.
      */
     public void saveMovements() {
+        new RecordSaver(moveSequence);
+//        game.saveMovements();
 
     }
 
