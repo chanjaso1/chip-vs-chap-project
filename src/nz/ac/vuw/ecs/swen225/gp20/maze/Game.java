@@ -24,8 +24,13 @@ public class Game {
     private parseJSON parser;
     private Bug bug = null;
 
+
     public Game()  {
-        loadLevel();
+        parser = new parseJSON("levels/level1.json");
+        map = parser.getMap();
+        player = parser.getPlayer();
+        player.setGame(this);
+        bug = parser.getBug();
     }
 
     public void runGame(){
