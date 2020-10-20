@@ -312,7 +312,7 @@ public class RendererPanel extends JComponent {
         }
 
         // Various events occurring after movement
-        if (itemMap[yPos][xPos] != null) {
+        if (itemMap[yPos][xPos] != null && !(itemMap[yPos][xPos] instanceof Enemy)) {
             // Picked up item
             itemMap[yPos][xPos] = null;
             pickupSound.playSound();
