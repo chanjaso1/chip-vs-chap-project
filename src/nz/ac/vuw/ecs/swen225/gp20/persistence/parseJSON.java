@@ -23,6 +23,7 @@ public class parseJSON{
     private Tile[][] map;
     private int treasures = 0, keys = 0;
     public int totalSize = 30;
+    public ClassLoader cl = null;
 
     /**
      * This constructor reads a JSON file from a given directory. This object is able to return the map, player and the number of treasures the map has.
@@ -30,6 +31,7 @@ public class parseJSON{
      */
     public parseJSON(String directory){
         try {
+            if(!directory.substring(12, 13).equals("1")) cl = loadClass(directory.substring(12, 13));
 
             JsonObject jobject = new Gson().fromJson(new FileReader(directory), JsonObject.class);   //directory: levels/level1.json
             JsonArray jmap = jobject.getAsJsonArray("map");
@@ -46,6 +48,7 @@ public class parseJSON{
                         map[row][col]   = new floorTile(row, col, null);
                         this.player = new Player(row, col);
                     }else if(tileType.equals("▊"))   map[row][col] = new wallTile(row, col);                            //define a wall tile.
+                    else if(tileType.equals("DC"))   map[row][col] = new treasureDoor(row, col);
                     else if(tileType.substring(0,1).equals("D"))          map[row][col] = new doorTile(row, col, tileType.substring(1,2));  //define a coloured door.
                     else if(tileType.substring(0,1).equals("K"))        {
                         this.keys++;
@@ -62,8 +65,6 @@ public class parseJSON{
                     }else if(tileType.equals("X")){
                         map[row][col] = new floorTile(row, col, null);
                         ((floorTile) map[row][col]).setBugTile();
-                    }else if(tileType.equals("DC")){
-                        map[row][col] = new treasureDoor(row, col);
                     }
 
                 }
@@ -73,14 +74,18 @@ public class parseJSON{
 
         }catch(FileNotFoundException e){
             System.out.println("This file doesn't exist!");
+        } catch (IOException e) {
+            System.out.println("IO Exception!");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Class not found!");
         }
     }
 
-    private static ClassLoader classLoader(String id) throws IOException, ClassNotFoundException{
+    private static ClassLoader loadClass(String id) throws IOException, ClassNotFoundException{
         $Gson$Preconditions.checkNotNull(id);
 
         return URLClassLoader.newInstance(
-            new URL[]{new URL("")}
+            new URL[]{new URL("levels/level" + id + ".jar")}
                 );
 
 
