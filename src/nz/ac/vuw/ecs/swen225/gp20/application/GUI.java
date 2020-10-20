@@ -132,7 +132,7 @@ public class GUI {
                         "CTRL-X:\t Exit the game. The current game state will be lost, the next time the game is started, it will resume from the last unfinished level.\n" +
                         "CTRL-S:\t Exit the game, saves the game state, game will resume next time application is started.\n" +
                         "CTRL R:\t Resume a saved game.\n" +
-                        "CTRL-P:\t Start a new game a the last unfinished level.\n" +
+                        "CTRL-P:\t Start a new game a the last unfinished level (restart level).\n" +
                         "CTRL-1:\t Start a new game at level 1.\n" +
                         "SPACE:\t\t Pause the game and displays a 'game is paused' dialog.\n" +
                         "ESC:\t\t\tClose the 'game is paused' dialog and resume the game.";
@@ -199,8 +199,10 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveUp(game.getPlayer()));
-//                board.renderMove(0);
-//                checkWinTile();
+                if (game.getLevel() == 2) {
+                    game.updatePlayerBugStatus();
+                }
+
             }
         });
 
@@ -210,8 +212,10 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveDown(game.getPlayer()));
-//                board.renderMove(2);
-//                checkWinTile();
+                if (game.getLevel() == 2) {
+                    game.updatePlayerBugStatus();
+                }
+
             }
         });
 
@@ -221,8 +225,10 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveLeft(game.getPlayer()));
-//                board.renderMove(3);
-//                checkWinTile();
+                if (game.getLevel() == 2) {
+                    game.updatePlayerBugStatus();
+                }
+
             }
         });
 
@@ -232,8 +238,9 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveRight(game.getPlayer()));
-//                board.renderMove(1);
-//                checkWinTile();
+                if (game.getLevel() == 2) {
+                    game.updatePlayerBugStatus();
+                }
             }
         });
 
@@ -290,7 +297,6 @@ public class GUI {
         actionMap.put("PAUSE", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("pause");
                 pauseGame(true);
                 displayPauseFrame();
             }
@@ -643,6 +649,7 @@ public class GUI {
                 if (game.getLevel() == 2) {
                     try {
                         game.getParser().aClass.getMethod("moveBugSequence").invoke(game.getBug());
+                        game.updatePlayerBugStatus();
                     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
                         ex.printStackTrace();
                     }
