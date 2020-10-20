@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
 
 /**
@@ -11,7 +12,7 @@ public class Game {
     private Tile currentTile;
     private Tile[][] map;
     private parseJSON parser;
-    private Bug bug = null;
+    private nz.ac.vuw.ecs.swen225.gp20.persistence.Bug bug = null;
     private int level = 0;
 
     /**
