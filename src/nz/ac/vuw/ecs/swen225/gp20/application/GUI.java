@@ -125,9 +125,11 @@ public class GUI {
                 pauseGame(true);
                 String message = "HOW TO PLAY\n\n" +
                         "AIM OF THE GAME\n" +
-                        "- Collect all the treasures in the level and reach the finish tile before time runs out!\n\n" +
+                        "- Collect all the treasures in the level and reach the winning tile before time runs out!\n\n" +
                         "MOVEMENT\n" +
-                        "- Use the arrow keys to move Chap around the maze.\n\n" +
+                        "- Use the arrow keys to move Chap around the maze.\n" +
+                        "- Unlock doors by collecting their respective keys.\n" +
+                        "- You cannot progress to the next level until you collect all the treasures!\n\n" +
                         "SPECIAL KEYS\n" +
                         "CTRL-X:\t Exit the game. The current game state will be lost, the next time the game is started, it will resume from the last unfinished level.\n" +
                         "CTRL-S:\t Exit the game, saves the game state, game will resume next time application is started.\n" +
@@ -135,7 +137,11 @@ public class GUI {
                         "CTRL-P:\t Start a new game a the last unfinished level (restart level).\n" +
                         "CTRL-1:\t Start a new game at level 1.\n" +
                         "SPACE:\t\t Pause the game and displays a 'game is paused' dialog.\n" +
-                        "ESC:\t\t\tClose the 'game is paused' dialog and resume the game.";
+                        "ESC:\t\t\tClose the 'game is paused' dialog and resume the game.\n" +
+                        "You can also use the menu options and buttons below to execute actions.\n\n" +
+                        "SPECIAL TILES\n" +
+                        "INFO tile: Step on this tile to show instructions\n" +
+                        "TIME tile: Step on this tile to add 10 extra seconds to the timer.\n\n";
                 JOptionPane.showMessageDialog(frame, message, "HELP", JOptionPane.PLAIN_MESSAGE);
                 pauseGame(false);
             }
@@ -656,10 +662,6 @@ public class GUI {
                     board.moveBug();
                 }
 
-                //                if (roundFinished) {
-//                    roundFinished = false;
-//                    return;
-//                }
                 if (pauseGame || currentTime == 0) {
                     return;
                 }   // remove when code is added to reset level
@@ -670,6 +672,7 @@ public class GUI {
                 if (gameOver()) {
                     String message = "You didn't pass the level in time... GAME OVER!\nClick 'OK' to reset the game and restart the level.";
                     JOptionPane.showMessageDialog(frame, message, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+                    resetLevel(1, true);
                 }
 
                 // end of round (user lost)
@@ -687,6 +690,7 @@ public class GUI {
 
     /**
      * Checks if user has lost the game.
+     * The user loses a game if they fail to reach the winning tile before time runs out.
      *
      * @return true if user has lost. Otherwise, false.
      */
@@ -764,7 +768,7 @@ public class GUI {
      * assumes that the replay starts at level 1 as it will move
      * to level 2 when level 1 is passed with the same moves.
      *
-     * @param level -- the current level.
+     * @param level     -- the current level.
      * @param resetTime -- resets the timer. If true, reset time. Otherwise, false.
      */
     public void resetLevel(int level, boolean resetTime) {
@@ -784,6 +788,7 @@ public class GUI {
         currentTime = MAX_TIME;
         redisplayTimer();
     }
+
     /**
      * Gets a file from user via a {@link JFileChooser}4
      *
@@ -808,6 +813,7 @@ public class GUI {
 
     /**
      * Returns the bug.
+     *
      * @return the bug.
      */
     public Bug getBug() {
