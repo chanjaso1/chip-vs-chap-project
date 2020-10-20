@@ -32,7 +32,6 @@ public class GUI {
     private final double MAX_TIME = 60; // TODO: replace values with actual values from Jason's file
 
     private JFrame frame, replayFrame = new JFrame();
-    private Player player;
     private JPanel gameStatsPanel;
     private RendererPanel board;
     private RecordReader recordReader;
@@ -49,7 +48,6 @@ public class GUI {
     public GUI() {
         game = new Game(1);
         board = new RendererPanel(game);
-        player = game.getPlayer();
 
         // creates red and green keys
         try {
@@ -208,7 +206,7 @@ public class GUI {
         actionMap.put("MOVE_UP", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveUp(player));
+                movePlayer(new moveUp(game.getPlayer()));
 //                board.renderMove(0);
 //                checkWinTile();
             }
@@ -219,7 +217,7 @@ public class GUI {
         actionMap.put("MOVE_DOWN", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveDown(player));
+                movePlayer(new moveDown(game.getPlayer()));
 //                board.renderMove(2);
 //                checkWinTile();
             }
@@ -230,7 +228,7 @@ public class GUI {
         actionMap.put("MOVE_LEFT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveLeft(player));
+                movePlayer(new moveLeft(game.getPlayer()));
 //                board.renderMove(3);
 //                checkWinTile();
             }
@@ -241,7 +239,7 @@ public class GUI {
         actionMap.put("MOVE_RIGHT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new moveRight(player));
+                movePlayer(new moveRight(game.getPlayer()));
 //                board.renderMove(1);
 //                checkWinTile();
             }
@@ -338,7 +336,7 @@ public class GUI {
         JPanel timePanel = displayTimePanel();
 
         // treasures left panel
-        JPanel keysLeftPanel = createGameStat("TREASURES\nLEFT", player.getNumberTreasures());
+        JPanel keysLeftPanel = createGameStat("TREASURES\nLEFT", game.getPlayer().getNumberTreasures());
 
         // inventory (keys collected) panel
         JPanel inventoryPanel = createKeysCollected("KEYS COLLECTED");
@@ -623,13 +621,13 @@ public class GUI {
         keysPanel.setLayout(new GridLayout(1, 3));
 
         // draws red key
-        if (player.getKeys().containsKey("R")) {
+        if (game.getPlayer().getKeys().containsKey("R")) {
             JLabel rKey = new JLabel(new ImageIcon(new ImageIcon(redKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
             keysPanel.add(rKey);
         }
 
         // draws green key
-        if (player.getKeys().containsKey("G")) {
+        if (game.getPlayer().getKeys().containsKey("G")) {
             JLabel gKey = new JLabel(new ImageIcon(new ImageIcon(greenKey).getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT)), JLabel.CENTER);
             keysPanel.add(gKey);
         }
@@ -651,7 +649,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
 
                 // power-up that adds time //TODO: check this works!
-                if (player.playerIsRecharge()) {
+                if (game.getPlayer().playerIsRecharge()) {
                     currentTime += 10;
                     System.out.println("recharge power-up");
                     return;
@@ -695,11 +693,10 @@ public class GUI {
      * Executed after a player moves.
      */
     public void checkWinTile() {
-        if (game.getMap()[player.getRow()][player.getCol()] instanceof winTile) {
-            player.moveToNextLevel();
+        if (game.getMap()[game.getPlayer().getRow()][game.getPlayer().getCol()] instanceof winTile) {
+            game.getPlayer().moveToNextLevel();
             game.loadLevel();
             board.winLevel();
-            player = game.getPlayer();
         }
     }
 
