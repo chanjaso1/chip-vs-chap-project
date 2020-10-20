@@ -9,26 +9,36 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RecordReader {
     private final ArrayList<Move> moves = new ArrayList<>();
     private int lastMovePos;
+    private GUI gui;
+    private Timer timer = null;
 
     /**
      * This class reads a JSON file from file's path and stores the moves
      * that are read.
      * They are read as Actions > movement > *a move*
      */
-    public RecordReader() {
+    public RecordReader(GUI gui, Player player, Bug bug) {
+        this.gui = gui;
         //based on https://stackoverflow.com/questions/15571496/how-to-check-if-a-folder-exists
         File replayFile = GUI.getFile();
 
         //read path
         try {
             JsonObject jo = new Gson().fromJson(new FileReader(replayFile), JsonObject.class);
+//            jo.get("Header").get
+
             JsonArray jsonMoves = jo.getAsJsonArray("Actions");
 
 //            System.out.println(jsonMoves);
@@ -47,7 +57,6 @@ public class RecordReader {
                 String typeMove;
 
                 if (isPlayerMove){
-                    Player player = new Player(0, 0); //dummy todo change to deal with real player
                     typeMove = jsonMove.getAsJsonObject().get("P").getAsString();
                     switch (typeMove.toLowerCase()){
                         case "left":
@@ -68,31 +77,30 @@ public class RecordReader {
                             throw new NullPointerException("Move is not recognised");
                     }
                 }
-//                else {
-//                    nz.ac.vuw.ecs.swen225.gp20.persistence.Bug.Bug bug = new Bug.Bug(0,0);
-//                    typeMove = jsonMove.getAsJsonObject().get("B").getAsString();
-//                    switch (typeMove.toLowerCase()){
-//                        case "left":
-//                            move = new moveLeft(bug);
-//                            break;
-//                        case "right":
-//                            move = new moveRight(bug);
-//                            break;
-//                        case "up":
-//                            move = new moveUp(bug);
-//                            break;
-//                        case "down":
-//                            move = new moveDown(bug);
-//                            break;
-//                        default:
-//                            //should never happen
-//                            //todo error
-//                            throw new NullPointerException("Move is not recognised");
-//                    }
-//                }
-//
-//                //add move - made by whoever - to moves list to preserve order
-//                moves.add(move);
+                else {
+                    typeMove = jsonMove.getAsJsonObject().get("B").getAsString();
+                    switch (typeMove.toLowerCase()){
+                        case "left":
+                            move = new moveLeft(bug);
+                            break;
+                        case "right":
+                            move = new moveRight(bug);
+                            break;
+                        case "up":
+                            move = new moveUp(bug);
+                            break;
+                        case "down":
+                            move = new moveDown(bug);
+                            break;
+                        default:
+                            //should never happen
+                            //todo error
+                            throw new NullPointerException("Move is not recognised");
+                    }
+                }
+
+                //add move - made by whoever - to moves list to preserve order
+                moves.add(move);
             }
         } catch (Exception e) {
             GUI.notifyError("Unsupported file format.");
@@ -112,36 +120,48 @@ public class RecordReader {
      * Makes a move for player every amount of seconds specified in param.
      *
      * @param secsToWait amount of time to wait per move
-     * @param player making the move
      */
-    public void playAtSpeed(double secsToWait, Player player){
-        for (Move move: moves){
-//            move.apply(new Player(0, 0));
-            System.out.println("did move:" + move);
-            try {
-                Thread.sleep((long) (secsToWait*1000));
-            } catch (InterruptedException e) {
-                System.out.println("Could not wait");
-                e.printStackTrace();
+    public void playAtSpeed(double secsToWait){
+        timer = new Timer((int) secsToWait * 1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                playPerFrame();
             }
-        }
+        });
+
+        timer.start();
+
+//        for (Move move: moves){
+//
+//            gui.movePlayer(move);
+//            System.out.println("did move:" + move);
+//
+//            long time = System.currentTimeMillis() + (long)(secsToWait*1000);
+//            while (System.currentTimeMillis() < time){
+////                System.out.println("waiting");
+//                gui.getBoard().repaint();
+//                gui.getBoard().revalidate();
+//                System.out.flush();
+//            }
+//        }
     }
 
     /**
      * Runs one move per click. Button to be clicked is on GUI.
-     *
-     * @param player the player doing the move
      */
-    public void playPerFrame(Player player){
+    public void playPerFrame(){
         //do move
-//            move.apply(player);
-        System.out.println("move: "+moves.get(lastMovePos++));
+        gui.movePlayer(moves.get(lastMovePos));
+//        System.out.println("move: "+moves.get(lastMovePos++));
+        lastMovePos++;
 
         //last move
         if (moves.size() == lastMovePos){
             JOptionPane.showMessageDialog(null, "That was the last move, starting over!");
             lastMovePos = 0;
+            timer.stop();
         }
+
 
         // todo need to call move.apply() but it needs a player
         //  and this method is called from gui which does not have
@@ -165,9 +185,9 @@ public class RecordReader {
     }
 
     public static void main(String[] args) {
-        RecordReader rr = new RecordReader();
-        for (Move move : rr.moves) {
-            System.out.println(move.getMover() + " moved " + move); //testing
-        }
+//        RecordReader rr = new RecordReader();
+//        for (Move move : rr.moves) {
+//            System.out.println(move.getMover() + " moved " + move); //testing
+//        }
     }
 }

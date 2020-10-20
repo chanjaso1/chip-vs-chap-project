@@ -108,3 +108,19 @@ class ExitTile extends RenderTile {
         g.drawImage(gif, x, y, display);
     }
 }
+
+class ChipDoorTile extends RenderTile {
+    Image gif = null;
+    JComponent display = null;
+
+    public ChipDoorTile(int x, int y, Image g, JComponent display) {
+        super(x, y, null);
+        this.display = display;
+        this.gif = g;
+    }
+
+    @Override
+    public void drawTile(Graphics2D g, int x, int y) {
+        g.drawImage(gif, x, y, display);
+    }
+}

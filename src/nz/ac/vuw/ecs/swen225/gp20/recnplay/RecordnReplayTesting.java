@@ -25,7 +25,7 @@ public class RecordnReplayTesting {
     @Test
     public void testCanReadMovements(){
         //make RecordReader with manually generated file
-        RecordReader rr = new RecordReader(); //open playerMoveswithBugsReading.json
+        RecordReader rr = new RecordReader(null, null, null); //todo fix null null //open playerMoveswithBugsReading.json
 
         //store what the output of the movements should be
         ArrayList<Move> answer = new ArrayList<>();
@@ -41,7 +41,7 @@ public class RecordnReplayTesting {
             fail("ArrayList \"" + rr.getMoves() + "\" should be \"" + answer + "\"");
 
         //manually check time
-        rr.playAtSpeed(2.5, new Player(0, 0));
+        rr.playAtSpeed(2.5);
 
         /*
         https://stackoverflow.com/questions/326390/how-do-i-create-a-java-string-from-the-contents-of-a-file
@@ -75,7 +75,7 @@ public class RecordnReplayTesting {
         rs.save("testRecordingMovementsOutput");
 
         //compare moves from RecordReader with output file
-        RecordReader outputReader = new RecordReader(); //open playerMoveswithBugsReading.json
+        RecordReader outputReader = new RecordReader(null, null, null); //todo fix null null//open playerMoveswithBugsReading.json
         //check file exists
         if (!outputReader.getMoves().equals(answerMoves))
             fail("ArrayList \"" + outputReader.getMoves() + "\" should be \"" + answerMoves + "\"");
