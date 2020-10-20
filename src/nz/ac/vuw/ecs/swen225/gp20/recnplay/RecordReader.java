@@ -18,18 +18,19 @@ import java.util.ArrayList;
 public class RecordReader {
     private final ArrayList<Move> moves = new ArrayList<>();
     private int lastMovePos;
-    private GUI gui;
+    private final GUI gui;
     private Timer timer = null;
+    private final File replayFile;
 
     /**
      * This class reads a JSON file from file's path and stores the moves
      * that are read.
      * They are read as Actions > movement > *a move*
      */
-    public RecordReader(GUI gui, Player player, Bug bug) {
+    public RecordReader(GUI gui, File file, Player player, Bug bug) {
         this.gui = gui;
         //based on https://stackoverflow.com/questions/15571496/how-to-check-if-a-folder-exists
-        File replayFile = GUI.getFile();
+        replayFile = file;
 
         //read path
         try {
@@ -131,7 +132,9 @@ public class RecordReader {
         //don't play past last replay
         if (moves.size() == lastMovePos){
             JOptionPane.showMessageDialog(null, "That was the last move!");
-            timer.stop();
+
+            if (timer != null)
+                timer.stop();
             return;
         }
 

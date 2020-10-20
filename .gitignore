@@ -192,3 +192,5 @@ $RECYCLE.BIN/
 *.class
 
 .metadata/
+
+.idea/misc.xml

@@ -18,6 +18,7 @@ public class Player extends Actor {
     private HashMap<String,Key> keys = new HashMap<>();
     private int treasures = 0;
     private int startRow, startCol;
+    private boolean playerRecharge = false;
 
     /**
      * Player constructor created by using row and column the player is.
@@ -88,6 +89,23 @@ public class Player extends Actor {
      */
     public void setPlayerBackToStartPosition(){
         this.setPosition(startRow,startCol);
+    }
+
+    /**
+     * Set the player recharge field to true.
+     * When the player is recharge is means that player will get some extra time to finish the task.
+     */
+    public void rechargePlayer() {
+        this.playerRecharge = true;
+    }
+
+    /**
+     * Return the player recharge field.
+     * @return true -- player has been recharged.
+     *         false -- player has not been recharge.
+     */
+    public boolean playerIsRecharge() {
+        return playerRecharge;
     }
 }
 
