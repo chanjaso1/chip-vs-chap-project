@@ -4,6 +4,9 @@ import com.google.gson.internal.$Gson$Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Game create a new parser and initialized every object that will need to run a game.
  */
@@ -19,7 +22,7 @@ public class Game {
      * Game constructor to create a game object.
      * @param level -- level of the game.
      */
-    public Game(int level)  {
+    public Game(int level) {
         this.level = level;
         loadLevel();
     }
@@ -33,7 +36,7 @@ public class Game {
      * Create a new parser and initialised map, player and bug for the current level.
      * This function will be called every time the level is reload.
      */
-    public void loadLevel(){
+    public void loadLevel()  {
         parser = new parseJSON("levels/level" + level + ".json");
         map = parser.getMap();
         player = parser.getPlayer();
@@ -42,9 +45,16 @@ public class Game {
         player.setPosition(player.getRow(),player.getCol());
 
         bug = parser.getBug();
-        if(bug != null) {
-            bug.setGame(this);
+        try {
+            if (bug != null) {
+                parser.aClass.getMethod("setGame", Game.class).invoke(bug, this);
+            }
+        } catch (NoSuchMethodException ignored){
+
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
         }
+
     }
 
 
@@ -55,7 +65,7 @@ public class Game {
     public void updatePlayerBugStatus(){
         if(bug == null || player == null) return;
 
-        if(player.getCurrentTile().equals(bug.getCurrentTile())){
+        if(player.getCurrentTile().equals("")){
             player.setPlayerBackToStartPosition();
         }
     }
@@ -100,7 +110,7 @@ public class Game {
      * Return the current bug object in the game.
      * @return -- the current bug object in the game.
      */
-    public Bug getBug() {
+    public Object getBug() {
         return bug;
     }
 
