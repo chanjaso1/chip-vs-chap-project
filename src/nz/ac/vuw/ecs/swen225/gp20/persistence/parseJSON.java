@@ -1,6 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.internal.$Gson$Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
@@ -82,6 +84,7 @@ public class parseJSON{
 
         }catch(FileNotFoundException e){
             System.out.println("This file doesn't exist!");
+            e.printStackTrace();
         } catch (IOException e) {
             System.out.println("IO Exception!");
         } catch (ClassNotFoundException e) {
@@ -90,13 +93,20 @@ public class parseJSON{
         }
     }
 
+    /**
+     * loadClass will load a class from the level 2 jar file.
+     * @param id - The level number
+     * @return the given class
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private static Class loadClass(String id) throws IOException, ClassNotFoundException {
         $Gson$Preconditions.checkNotNull(id);
 
 
-        // ClassLoader cl = URLClassLoader.newInstance( new URL[]{new URL("jar:file:" + "levels/level" + id + ".jar" + "!/")});
+        //From stackoverflow.com/a/11016392
         JarFile jarFile = new JarFile("levels/level" + id + ".jar");
-        Enumeration<JarEntry> e = jarFile.entries();
+        var e = jarFile.entries();
 
         URL[] urls = {new URL("jar:file:" + "levels/level" + id + ".jar" + "!/")};
         URLClassLoader cl = URLClassLoader.newInstance(urls);
@@ -114,22 +124,45 @@ public class parseJSON{
         throw new ClassNotFoundException();
     }
 
-    private static JsonObject loadMap(String id) throws IOException {
+    /**
+     * load the Map from the JAR file
+     * @param id - The level number
+     * @return the JSON map.
+     * @throws IOException
+     */
+    private static JsonObject loadMap(String id) throws IOException, IndexOutOfBoundsException {
+        JsonObject jobject = null;
         JarFile jarFile = new JarFile("levels/level" + id + ".jar");
         Enumeration<JarEntry> e = jarFile.entries();
 
-        URL[] urls = {new URL("jar:file:" + "levels/level" + id + ".jar" + "!/")};
 
+        //Based on http://www.devx.com/tips/Tip/22124
         while (e.hasMoreElements()) {
-            JarEntry je = e.nextElement();
-            if (!je.getName().endsWith(".json")) continue;
-            System.out.println(je.getName());
-            return new Gson().fromJson(new FileReader("levels/" +je.getName()), JsonObject.class);
+            JarEntry entry = e.nextElement();
+            if (!entry.getName().endsWith(".json")) continue;   //Find the .json map.
+            System.out.println(entry.getName());
+
+            File file = new File(entry.getName());
+
+            InputStream inputStream = jarFile.getInputStream(entry);
+            FileOutputStream outputStream = new FileOutputStream(file);
+
+            while(inputStream.available() > 0){ //write the file
+                outputStream.write(inputStream.read());
+            }
+
+            outputStream.close();
+            inputStream.close();
+
+            jobject = new Gson().fromJson(new FileReader(file), JsonObject.class); //convert the file to be read into a JsonObject
+            file.deleteOnExit();
+
+            return jobject;
 
 
         }
+        throw new IndexOutOfBoundsException("No map in the JAR file!");
 
-        return null;
     }
 
     private void checkType(String type, Tile[][] map, int row, int col){
