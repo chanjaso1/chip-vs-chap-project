@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
-
+import com.google.gson.*;
+import com.google.gson.internal.$Gson$Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
 
@@ -48,7 +49,8 @@ public class Game {
      * The player position will be set to the start if the player is attack by bug.
      */
     public void updatePlayerBugStatus(){
-        if(player == null || bug == null) return;
+        if(bug == null || player == null) return;
+
         if(player.getCurrentTile().equals(bug.getCurrentTile())){
             player.setPlayerBackToStartPosition();
         }
