@@ -45,6 +45,10 @@ public class doorTile implements Tile{
         return false;
     }
 
+    /**
+     * Return the color of the key.
+     * @return -- color of the key.
+     */
     public String getColor() {
         return this.color;
     }

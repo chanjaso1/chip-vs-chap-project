@@ -40,7 +40,11 @@ public class Game {
         player.setGame(this);
         player.setTotalTreasures(parser.getTreasures());
         player.setPosition(player.getRow(),player.getCol());
+
         bug = parser.getBug();
+        if(bug != null) {
+            bug.setGame(this);
+        }
     }
 
 
