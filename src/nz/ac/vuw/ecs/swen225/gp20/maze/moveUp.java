@@ -16,11 +16,13 @@ public class moveUp extends Move {
     @Override
     public void apply() {
 
-
         Tile nextTile = mover.getGame().getMap()[Math.max(0,mover.getRow()-1)][mover.getCol()];
-        if(mover instanceof Player && nextTile.checkValidMove((Player) mover)) {
+        if((mover instanceof Player && nextTile.checkValidMove((Player) mover)) || mover instanceof Bug) {
             mover.setPosition(Math.max(0,mover.getRow()-1),mover.getCol());
         }
+
+        this.getMover().getGame().updatePlayerBugStatus();
+
     }
 
     @Override

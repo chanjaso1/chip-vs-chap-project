@@ -17,6 +17,7 @@ import java.util.HashSet;
 public class Player extends Actor {
     private HashMap<String,Key> keys = new HashMap<>();
     private int treasures = 0;
+    private int startRow, startCol;
 
     /**
      * Player constructor created by using row and column the player is.
@@ -49,6 +50,7 @@ public class Player extends Actor {
             keys.put(((Key) item).getColor(), ((Key) item));
         } else {
             treasures--;
+            System.out.println("treasures: " + treasures);
         }
     }
 
@@ -71,5 +73,21 @@ public class Player extends Actor {
         this.getGame().setLevel(this.getGame().getLevel()+1);
     }
 
+    /**
+     * Save the player start position, so when the player has to restart this position can be used.
+     * @param row -- the first row player start at.
+     * @param col -- the first column player start at.
+     */
+    public void setStartPosition(int row, int col) {
+        this.startRow = row;
+        this.startCol = col;
+    }
+
+    /**
+     * If the player is attack by a bug player would be set back to the start position.
+     */
+    public void setPlayerBackToStartPosition(){
+        this.setPosition(startRow,startCol);
+    }
 }
 

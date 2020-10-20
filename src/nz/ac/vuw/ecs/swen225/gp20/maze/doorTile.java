@@ -9,8 +9,6 @@ public class doorTile implements Tile{
     private String color;
     private boolean open;
 
-    //@TODO should we have two types or one types of doors ????
-
     /**
      * WallTile constructor.
      * @param row -- The tile row position.
@@ -38,9 +36,6 @@ public class doorTile implements Tile{
         if(open) return true;
 
         //player can only move on to this tile if they have the correct color key
-        if(player instanceof Player){
-
-        }
         for(Key key : player.getKeys().values()){
             if(key.getColor().equalsIgnoreCase(color)){
                 open = true;

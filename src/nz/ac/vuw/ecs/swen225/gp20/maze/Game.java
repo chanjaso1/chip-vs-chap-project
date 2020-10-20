@@ -9,7 +9,6 @@ import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
 public class Game {
     private int num;
     private Player player;
-    private Tile currentTile;
     private Tile[][] map;
     private parseJSON parser;
     private Bug bug = null;
@@ -39,7 +38,19 @@ public class Game {
         player = parser.getPlayer();
         player.setGame(this);
         player.setTotalTreasures(parser.getTreasures());
+        player.setPosition(player.getRow(),player.getCol());
         bug = parser.getBug();
+    }
+
+
+    /**
+     * Keep track of player status with the bug enemies.
+     * The player position will be set to the start if the player is attack by bug.
+     */
+    public void updatePlayerBugStatus(){
+        if(player.getCurrentTile().equals(bug.getCurrentTile())){
+            player.setPlayerBackToStartPosition();
+        }
     }
 
     /**

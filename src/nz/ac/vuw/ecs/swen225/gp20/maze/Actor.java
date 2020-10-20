@@ -7,6 +7,7 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 public class Actor {
     private Game game;
     private int row, col;
+    private Tile currentTile;
 
     /**
      * Actor constructor use to create all the actor in the game that has movement.
@@ -16,7 +17,6 @@ public class Actor {
     public Actor(int row, int col){
         this.row = row;
         this.col = col;
-
     }
 
     /**
@@ -27,6 +27,7 @@ public class Actor {
     public void setPosition(int row , int col){
         this.row = row;
         this.col = col;
+        this.currentTile = game.getMap()[row][col];
     }
 
     /**
@@ -61,6 +62,13 @@ public class Actor {
         return game;
     }
 
+    /**
+     * Return the current tile that the actor is on.
+     * @return -- current tile the actor is on.
+     */
+    public Tile getCurrentTile() {
+        return currentTile;
+    }
 
     /**
      * Set the player's game to the given game.

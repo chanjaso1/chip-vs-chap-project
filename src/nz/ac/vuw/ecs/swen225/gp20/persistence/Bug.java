@@ -10,8 +10,7 @@ public class Bug extends Actor {
         super(row, col);
     }
 
-    @Override
-    public void move(Move move) {
+    public void moveBugSequence(Move move) {
 
         //check if next move path of the bug, then either move it or change direction.
         if(moveDownFirst && ((floorTile) this.getGame().getMap()[getRow()+1][getCol()]).isBugPath()){

@@ -15,9 +15,12 @@ public class moveRight extends Move {
     @Override
     public void apply() {
         Tile nextTile = mover.getGame().getMap()[mover.getRow()][Math.min(mover.getCol() + 1, 24)];
-        if(mover instanceof Player && nextTile.checkValidMove((Player) mover)){
+        System.out.println(nextTile.getClass());
+        if(mover instanceof Player && nextTile.checkValidMove((Player) mover) || mover instanceof Bug){
             mover.setPosition(mover.getRow(), Math.min(mover.getCol() + 1, 24));
         }
+
+        this.getMover().getGame().updatePlayerBugStatus();
     }
 
     @Override

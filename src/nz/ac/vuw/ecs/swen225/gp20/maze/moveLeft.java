@@ -18,6 +18,8 @@ public class moveLeft extends Move {
         if(mover instanceof Player && nextTile.checkValidMove((Player) mover) || mover instanceof Bug) {
             mover.setPosition(mover.getRow(), Math.max(mover.getCol() - 1, 0));
         }
+
+        this.getMover().getGame().updatePlayerBugStatus();
     }
 
     @Override
