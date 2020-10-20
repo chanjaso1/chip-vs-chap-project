@@ -39,7 +39,7 @@ public class GUI {
     private Timer timer;
 
     private Game game;
-    private double replaySpeed, currentTime = MAX_TIME;
+    private double replaySpeed, currentTime = MAX_TIME, prevTime;
     private boolean pauseGame;
 
 
@@ -140,7 +140,9 @@ public class GUI {
                         "You can also use the menu options and buttons below to execute actions.\n\n" +
                         "SPECIAL TILES\n" +
                         "INFO tile: Step on this tile to show instructions\n" +
-                        "TIME tile: Step on this tile to add 10 extra seconds to the timer.\n\n";
+                        "TIME tile: Step on this tile to add 10 extra seconds to the timer.\n\n" +
+                        "REPLAY MODE\n" +
+                        "";
                 JOptionPane.showMessageDialog(frame, message, "HELP", JOptionPane.PLAIN_MESSAGE);
                 pauseGame(false);
             }
@@ -250,7 +252,8 @@ public class GUI {
         });
 
         // CTRL-X (exit)
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.META_DOWN_MASK), "EXIT");
+//        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.META_DOWN_MASK), "EXIT");           // mac only
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "EXIT");
         actionMap.put("EXIT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -259,7 +262,8 @@ public class GUI {
         });
 
         // CTRL-S (save)
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_DOWN_MASK), "SAVE");
+//        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_DOWN_MASK), "SAVE");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "SAVE");
         actionMap.put("SAVE", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -268,7 +272,8 @@ public class GUI {
         });
 
         // CTRL-R (resume a saved game)
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.META_DOWN_MASK), "RESUME");
+//        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.META_DOWN_MASK), "RESUME");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK), "RESUME");
         actionMap.put("RESUME", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -280,20 +285,22 @@ public class GUI {
         });
 
         // CTRL-P (start new game at last unfinished level)
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.META_DOWN_MASK), "NEW_GAME");
+//        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.META_DOWN_MASK), "NEW_GAME");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK), "NEW_GAME");
         actionMap.put("NEW_GAME", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                resetLevel(game.getLevel(), true);
+                resetLevel(game.getLevel());
             }
         });
 
         // CTRL-1 (start new game at level 1)
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.META_DOWN_MASK), "NEW_GAME_1");
+//        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.META_DOWN_MASK), "NEW_GAME_1");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK), "NEW_GAME_1");
         actionMap.put("NEW_GAME_1", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                resetLevel(1, true);
+                resetLevel(1);
             }
         });
 
@@ -436,14 +443,16 @@ public class GUI {
      * The replay speed is displayed as a JComboBox so users can select a speed within the specified range.
      */
     public void displayReplayFrame() {
-        timer.stop();
+//        timer.stop();
 
         // get replay file
         File file = getFile();
         if (file == null) return;
 
-        resetLevel(1, false);
+        resetLevel(1);
         recordReader = new RecordReader(this, file, game.getPlayer(), game.getBug());
+        resetTime();
+
 
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
@@ -523,7 +532,9 @@ public class GUI {
                     replayFrame.setVisible(false);
                     pauseGame = false;
 //                    redisplayTimer();
-                    timer.start();
+//                    timer.start();
+//                    currentTime = prevTime;
+                    redisplayTimer();
                 } else {
                     displayReplayFrame();
                 }
@@ -671,7 +682,7 @@ public class GUI {
                 if (gameOver()) {
                     String message = "You didn't pass the level in time... GAME OVER!\nClick 'OK' to reset the game and restart the level.";
                     JOptionPane.showMessageDialog(frame, message, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
-                    resetLevel(1, true);
+                    resetLevel(1);
                 }
 
                 // end of round (user lost)
@@ -734,6 +745,7 @@ public class GUI {
         game.moveActor(move);
         board.renderMove(move.getDir());
         checkWinTile();
+        redisplayTimer();
     }
 
     /**
@@ -750,7 +762,7 @@ public class GUI {
      * Abstract method that saves the movements.
      */
     public void saveMovements() {
-        new RecordSaver(moveSequence);
+        new RecordSaver(moveSequence, currentTime);
     }
 
     /**
@@ -767,17 +779,18 @@ public class GUI {
      * assumes that the replay starts at level 1 as it will move
      * to level 2 when level 1 is passed with the same moves.
      *
-     * @param level     -- the current level.
-     * @param resetTime -- resets the timer. If true, reset time. Otherwise, false.
+     * @param level -- the current level.
      */
-    public void resetLevel(int level, boolean resetTime) {
+    public void resetLevel(int level) {
         game.setLevel(level);
         game.loadLevel();
         board.updateLevel(game.getMap());
         board.updateRenderMaps();
 
-        if (resetTime)
-            resetTime();
+//        if (saveTime)
+//            prevTime = currentTime;
+
+        resetTime();
     }
 
     /**
@@ -786,6 +799,7 @@ public class GUI {
     public void resetTime() {
         currentTime = MAX_TIME;
         redisplayTimer();
+//        createTimer();
     }
 
     /**

@@ -14,7 +14,8 @@ import java.util.ArrayList;
 
 public class RecordReader {
     private final ArrayList<Move> moves = new ArrayList<>();
-    private int lastMovePos, level;
+    private int lastMovePos;
+    private double time;
     private final GUI gui;
     private Timer timer = null;
     private final File replayFile;
@@ -34,7 +35,7 @@ public class RecordReader {
         try {
             assert replayFile != null;
             JsonObject jo = new Gson().fromJson(new FileReader(replayFile), JsonObject.class);
-//            jo.get("Header").get
+            time = jo.get("Header").getAsJsonObject().get("time").getAsDouble();
 
             JsonArray jsonMoves = jo.getAsJsonArray("Actions");
 
