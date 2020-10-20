@@ -135,6 +135,8 @@ public class RendererPanel extends JComponent {
         xPos = game.getPlayer().getCol();
         yPos = game.getPlayer().getRow();
 
+        // Empty out RenderItems
+        itemMap = new RenderItem[30][30];
 
         for (int i = 0; i < levelTiles.length; i++) {
             for (int j = 0; j < levelTiles[0].length; j++) {
