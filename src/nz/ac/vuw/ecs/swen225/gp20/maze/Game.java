@@ -65,8 +65,16 @@ public class Game {
     public void updatePlayerBugStatus(){
         if(bug == null || player == null) return;
 
-        if(player.getCurrentTile().equals("")){
-            player.setPlayerBackToStartPosition();
+        try {
+            if(player.getCurrentTile().equals(parser.aClass.getMethod("getCurrentTile").invoke(bug))){
+                player.setPlayerBackToStartPosition();
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
     }
 
