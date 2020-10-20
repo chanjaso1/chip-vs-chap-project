@@ -362,6 +362,7 @@ public class RendererPanel extends JComponent {
 
         // Move the bug from old pos to new pos
         itemMap[yBug][xBug] = itemMap[yBugLast][xBugLast];
+
         // Delete bug from old pos
         itemMap[yBugLast][xBugLast] = null;
         yBugLast = yBug;
