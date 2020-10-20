@@ -27,7 +27,8 @@ public class RecordReader {
      * that are read.
      * They are read as Actions > movement > *a move*
      */
-    public RecordReader(GUI gui, File file, Player player, Bug bug) {
+    public RecordReader(GUI gui, File file, Player player, Object bugObj) {
+        Actor bug = (Actor)bugObj;
         this.gui = gui;
         //based on https://stackoverflow.com/questions/15571496/how-to-check-if-a-folder-exists
         replayFile = file;
@@ -146,7 +147,7 @@ public class RecordReader {
     /**
      * New level, new Player - update moves with new Player.
      */
-    public void updateMovesWith(){
+    public void updateMovesForActors(){
         for (Move move: moves)
             move.setMover(gui.getPlayer());
     }
