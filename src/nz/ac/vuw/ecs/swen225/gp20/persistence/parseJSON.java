@@ -43,7 +43,7 @@ public class parseJSON{
                 jContents = loadMap(directory.substring(12,13));
 
             }else jContents = new Gson().fromJson(new FileReader(directory), JsonObject.class);
-            
+
             assert jContents != null : "The map was not correctly loaded!";
 
             JsonArray jmap = jContents.getAsJsonArray("map");
@@ -166,7 +166,7 @@ public class parseJSON{
                 break;
             case "B":
                 map[row][col]   = new floorTile(row, col, null);
-                assert aClass != null;
+                assert aClass != null : "This level does not have a valid class to load the bug!";
                 System.out.println(aClass);
                 this.bug = aClass.getDeclaredConstructor(int.class, int.class).newInstance(row, col);
                 break;
