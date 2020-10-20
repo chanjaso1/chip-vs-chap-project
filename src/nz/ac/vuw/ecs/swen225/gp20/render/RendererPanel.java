@@ -21,11 +21,12 @@ public class RendererPanel extends JComponent {
     public RenderItem[][] itemMap = new RenderItem[30][30];
     public Tile[][] levelTiles;
     public int xPos, yPos;
+    public int xBugLast, yBugLast;
     public int frameWidth, frameHeight;
 
     public BufferedImage chip = null, redKey = null, greenKey = null;
     public BufferedImage wall = null, gDoor = null, rDoor = null, floor = null, unlocked = null;
-    Image win, cDoor;
+    Image win, cDoor, swarm;
 
     // ALL SOUND EFFECTS GENERATED/ EDITED/ PRODUCED USING THE WEBSITE:
     // https://jfxr.frozenfractal.com/
@@ -49,6 +50,8 @@ public class RendererPanel extends JComponent {
             chip = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/chip.png"));
             greenKey = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/greenKey.png"));
             redKey = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/redKey.png"));
+            // Enemy/ Swarm/ Bug is different as it is a gif
+            swarm = new ImageIcon(getClass().getResource("data/swarm.gif")).getImage();
         } catch (IOException e) {
             System.out.println("Item image not found!");
         }
@@ -132,6 +135,7 @@ public class RendererPanel extends JComponent {
         xPos = game.getPlayer().getCol();
         yPos = game.getPlayer().getRow();
 
+
         for (int i = 0; i < levelTiles.length; i++) {
             for (int j = 0; j < levelTiles[0].length; j++) {
                 if (levelTiles[i][j] instanceof floorTile) {
@@ -160,6 +164,14 @@ public class RendererPanel extends JComponent {
                     tile = new ChipDoorTile(i, j, cDoor, this);
                 }
                 tileMap[i][j] = tile;
+
+                if(game.getBug() != null) {
+                    if (i == game.getBug().getRow() && j == game.getBug().getCol()) {
+                        yBugLast = i;
+                        xBugLast = j;
+                        item = new Enemy(i, j, swarm, this);
+                    }
+                }
             }
         }
     }
@@ -169,7 +181,7 @@ public class RendererPanel extends JComponent {
         Graphics2D g2d = (Graphics2D) g;
         g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
         renderTiles(g2d);
-        drawKeys(g2d);
+        drawItems(g2d);
         drawPlayer(g2d, this);
     }
 
@@ -204,7 +216,7 @@ public class RendererPanel extends JComponent {
      * Draws all keys/ Treasures visible on the rendering clip
      * @param g the graphics object that draws on the RenderPanel
      */
-    public void drawKeys(Graphics2D g) {
+    public void drawItems(Graphics2D g) {
         for(int i = -4; i < 5; i++) {
             for(int j = -4; j < 5; j++) {
                 if (itemMap[yPos + i][xPos + j] != null) {
@@ -305,6 +317,20 @@ public class RendererPanel extends JComponent {
         winSound.playSound();
         updateLevel(game.getMap());
         updateRenderMaps();
+        this.repaint();
+    }
+
+    /**
+     * Method for updating the render bug's location
+     */
+    public void moveBug() {
+        int xBug = game.getParser().getBug().getCol();
+        int yBug = game.getParser().getBug().getRow();
+
+        // Move the bug from old pos to new pos
+        itemMap[yBug][xBug] = itemMap[yBugLast][xBugLast];
+        // Delete bug from old pos
+        itemMap[yBugLast][xBugLast] = null;
         this.repaint();
     }
 }
