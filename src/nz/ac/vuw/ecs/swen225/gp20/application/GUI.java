@@ -482,7 +482,7 @@ public class GUI {
                 System.out.println("next step");
 
                 //play next step
-                recordReader.playPerFrame(); //todo give player an object not null
+                recordReader.playNextFrame(); //todo give player an object not null
             }
         });
 
