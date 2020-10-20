@@ -7,19 +7,13 @@
 			"P": "left"
 		},
 		{
-			"P": "right"
-		},
-		{
-			"P": "right"
-		},
-		{
-			"P": "right"
-		},
-		{
-			"P": "right"
-		},
-		{
 			"P": "up"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "down"
 		},
 		{
 			"P": "right"

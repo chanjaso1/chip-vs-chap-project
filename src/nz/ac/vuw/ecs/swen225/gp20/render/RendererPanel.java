@@ -326,13 +326,20 @@ public class RendererPanel extends JComponent {
      * Method for updating the render bug's location
      */
     public void moveBug() {
-        int xBug = game.getParser().getBug().getCol();
-        int yBug = game.getParser().getBug().getRow();
+        int xBug = game.getBug().getCol();
+        int yBug = game.getBug().getRow();
+        System.out.println("xBug: " + xBug + "yBug: " + yBug);
 
         // Move the bug from old pos to new pos
         itemMap[yBug][xBug] = itemMap[yBugLast][xBugLast];
+
         // Delete bug from old pos
         itemMap[yBugLast][xBugLast] = null;
+
+
+        yBugLast = yBug;
+        xBugLast = xBug;
+        System.out.println("ybuglast: " + yBugLast + "xBugLast:  " + xBugLast);
         this.repaint();
     }
 }

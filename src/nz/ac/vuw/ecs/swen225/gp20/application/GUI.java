@@ -40,7 +40,6 @@ public class GUI {
 
     private Game game;
     private double replaySpeed, currentTime = MAX_TIME;
-    //    private int keysCollected;
     private boolean pauseGame;
 
 
@@ -63,8 +62,6 @@ public class GUI {
      * Initialises and displays the GUI on the screen.
      */
     public void initialise() {
-//        keysCollected = numOfKeys;
-
         // creates main frame
         frame = new JFrame("Chip's Challenge");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,9 +80,6 @@ public class GUI {
         saveButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //TODO: ADD TIAN'S SAVING CODE
-//                String message = "Your game has successfully been saved.";
-//                JOptionPane.showMessageDialog(frame, message, "SAVE", JOptionPane.INFORMATION_MESSAGE);
                 saveMovements();
             }
         });
@@ -97,8 +91,6 @@ public class GUI {
             public void mouseClicked(MouseEvent e) {
                 pauseGame(true);
                 displayPauseFrame();
-                //TODO: ADD PAUSE CODE
-
             }
         });
 
@@ -107,9 +99,10 @@ public class GUI {
         resumeButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                displayResumeFrame();
-                pauseGame(false);
-                //TODO: ADD RESUME CODE
+                if (pauseGame) {
+                    displayResumeFrame();
+                    pauseGame(false);
+                }
             }
         });
 
@@ -119,7 +112,6 @@ public class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 pauseGame(true);
-//                System.out.println("calling from menu");
                 displayReplayFrame();
             }
         });
@@ -258,7 +250,7 @@ public class GUI {
         actionMap.put("SAVE", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("save works");
+                saveMovements();
             }
         });
 
@@ -267,8 +259,10 @@ public class GUI {
         actionMap.put("RESUME", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                displayResumeFrame();
-                pauseGame(false);
+                if (pauseGame) {
+                    displayResumeFrame();
+                    pauseGame(false);
+                }
             }
         });
 
@@ -277,9 +271,7 @@ public class GUI {
         actionMap.put("NEW_GAME", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("new game at unfinished");
-
-                //TODO: Implement code
+                resetLevel(game.getLevel(), true);
             }
         });
 
@@ -288,8 +280,7 @@ public class GUI {
         actionMap.put("NEW_GAME_1", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("level 1");
-                //TODO: Implement code
+                resetLevel(1, true);
             }
         });
 
@@ -328,7 +319,7 @@ public class GUI {
     public void displayGameStatsPanel(JPanel gameStats) {
         gameStats.setBorder(BorderFactory.createEmptyBorder(50, 90, 50, 90));
 
-        JPanel levelPanel = createGameStat("LEVEL", 1);
+        JPanel levelPanel = createGameStat("LEVEL", game.getLevel());
         JPanel timePanel = displayTimePanel();
         JPanel treasuresLeftPanel = createGameStat("TREASURES\nLEFT", game.getPlayer().getNumberTreasures());
         JPanel keysCollectedPanel = createKeysCollected("KEYS COLLECTED");
@@ -386,7 +377,6 @@ public class GUI {
         pauseButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("pausing in controls");
                 pauseGame(true);
                 displayPauseFrame();
             }
@@ -398,8 +388,10 @@ public class GUI {
         resumeButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                displayResumeFrame();
-                pauseGame(false);
+                if (pauseGame) {
+                    displayResumeFrame();
+                    pauseGame(false);
+                }
             }
         });
 
@@ -438,7 +430,7 @@ public class GUI {
         File file = getFile();
         if (file == null) return;
 
-        resetLevel();
+        resetLevel(1, false);
         recordReader = new RecordReader(this, file, game.getPlayer(), null);
 
         // formats frame
@@ -646,6 +638,12 @@ public class GUI {
                     return;
                 }
 
+                // moves bug
+                if (game.getLevel() == 2) {
+                    game.getBug().moveBugSequence();
+                    board.moveBug();
+                }
+
                 //                if (roundFinished) {
 //                    roundFinished = false;
 //                    return;
@@ -703,6 +701,8 @@ public class GUI {
             game.getPlayer().moveToNextLevel();
             game.loadLevel();
             board.winLevel();
+            resetTime();
+
             if (recordReader != null)
                 recordReader.updateMovesWith();
         }
@@ -751,18 +751,31 @@ public class GUI {
      * Resets the level once replay mode is executed. Replay mode
      * assumes that the replay starts at level 1 as it will move
      * to level 2 when level 1 is passed with the same moves.
+     *
+     * @param level -- the current level.
+     * @param resetTime -- resets the timer. If true, reset time. Otherwise, false.
      */
-    public void resetLevel() {
-        game.setLevel(1);
+    public void resetLevel(int level, boolean resetTime) {
+        game.setLevel(level);
         game.loadLevel();
         board.updateLevel(game.getMap());
         board.updateRenderMaps();
+
+        if (resetTime)
+            resetTime();
     }
 
     /**
-     * Gets a file from user via a {@link JFileChooser}
+     * Resets the time to the maximum time.
+     */
+    public void resetTime() {
+        currentTime = MAX_TIME;
+        redisplayTimer();
+    }
+    /**
+     * Gets a file from user via a {@link JFileChooser}4
      *
-     * @return the selected file
+     * @return the selected file.
      */
     public static File getFile() {
         JFileChooser fileChooser = new JFileChooser("Recordings/");
@@ -781,6 +794,10 @@ public class GUI {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * Returns the bug.
+     * @return the bug.
+     */
     public Bug getBug() {
         return null; //todo use game.getBug() when it's made
     }
