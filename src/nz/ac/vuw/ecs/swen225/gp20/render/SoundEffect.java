@@ -7,6 +7,7 @@ import java.io.File;
 
 /**
  * This class is for the handling of sound effects. Sound effects usually occur after certain events.
+ * Tutorial was followed to create this class. Link: https://www.youtube.com/watch?v=qPVkRtuf9CQ
  * @author John Eleigio Cecilio (cecilijohn - 300485264)
  */
 public class SoundEffect {
