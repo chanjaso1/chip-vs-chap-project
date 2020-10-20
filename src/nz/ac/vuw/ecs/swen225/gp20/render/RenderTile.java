@@ -37,9 +37,9 @@ public class RenderTile {
 /**
  * The wall tile to render in
  */
-class Wall extends RenderTile {
+class WallRender extends RenderTile {
 
-    public Wall(int x, int y, BufferedImage i) {
+    public WallRender(int x, int y, BufferedImage i) {
         super(x, y, i);
     }
 }
@@ -47,9 +47,9 @@ class Wall extends RenderTile {
 /**
  * The floor tile to render in
  */
-class Floor extends RenderTile {
+class FloorRender extends RenderTile {
 
-    public Floor(int x, int y, BufferedImage i) {
+    public FloorRender(int x, int y, BufferedImage i) {
         super(x, y, i);
     }
 }
@@ -57,10 +57,10 @@ class Floor extends RenderTile {
 /**
  * The red door tile to render in
  */
-class RedDoor extends RenderTile {
+class RedDoorRender extends RenderTile {
     BufferedImage unlocked;
 
-    public RedDoor(int x, int y, BufferedImage i, BufferedImage u) {
+    public RedDoorRender(int x, int y, BufferedImage i, BufferedImage u) {
         super(x, y, i);
         this.unlocked = u;
     }
@@ -75,10 +75,10 @@ class RedDoor extends RenderTile {
 /**
  * The green door tile to render in
  */
-class GreenDoor extends RenderTile {
+class GreenDoorRender extends RenderTile {
     BufferedImage unlocked;
 
-    public GreenDoor(int x, int y, BufferedImage i, BufferedImage u) {
+    public GreenDoorRender(int x, int y, BufferedImage i, BufferedImage u) {
         super(x, y, i);
         this.unlocked = u;
     }
@@ -93,11 +93,11 @@ class GreenDoor extends RenderTile {
 /**
  * The exit tile to render in
  */
-class ExitTile extends RenderTile {
+class ExitTileRender extends RenderTile {
     Image gif = null;
     JComponent display = null;
 
-    public ExitTile(int x, int y, Image g, JComponent display) {
+    public ExitTileRender(int x, int y, Image g, JComponent display) {
         super(x, y, null);
         this.display = display;
         this.gif = g;
@@ -109,11 +109,11 @@ class ExitTile extends RenderTile {
     }
 }
 
-class ChipDoorTile extends RenderTile {
+class ChipDoorRender extends RenderTile {
     Image gif = null;
     JComponent display = null;
 
-    public ChipDoorTile(int x, int y, Image g, JComponent display) {
+    public ChipDoorRender(int x, int y, Image g, JComponent display) {
         super(x, y, null);
         this.display = display;
         this.gif = g;
@@ -122,5 +122,12 @@ class ChipDoorTile extends RenderTile {
     @Override
     public void drawTile(Graphics2D g, int x, int y) {
         g.drawImage(gif, x, y, display);
+    }
+}
+
+class InfoRender extends RenderTile {
+
+    public InfoRender(int x, int y, BufferedImage i) {
+        super(x, y, i);
     }
 }

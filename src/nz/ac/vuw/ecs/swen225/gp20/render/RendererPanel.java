@@ -26,8 +26,8 @@ public class RendererPanel extends JComponent {
     public int frameWidth, frameHeight;
 
     public BufferedImage chip = null, redKey = null, greenKey = null;
-    public BufferedImage wall = null, gDoor = null, rDoor = null, floor = null, unlocked = null;
-    Image win, cDoor, swarm;
+    public BufferedImage wall = null, gDoor = null, rDoor = null, floor = null, unlocked = null, iTile = null;
+    Image win, cDoor, cOpen, swarm;
 
     // ALL SOUND EFFECTS GENERATED/ EDITED/ PRODUCED USING THE WEBSITE:
     // https://jfxr.frozenfractal.com/
@@ -64,6 +64,7 @@ public class RendererPanel extends JComponent {
             rDoor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/redDoor.png"));
             floor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/floor.png"));
             unlocked = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/unlocked.png"));
+            iTile = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/infoTile.png"));
             // winTile and cDoorTile different because it's a gif
             win = new ImageIcon(getClass().getResource("data/winTile.gif")).getImage();
             cDoor = new ImageIcon(getClass().getResource("data/chipDoor.gif")).getImage();
@@ -142,7 +143,7 @@ public class RendererPanel extends JComponent {
         for (int i = 0; i < levelTiles.length; i++) {
             for (int j = 0; j < levelTiles[0].length; j++) {
                 if (levelTiles[i][j] instanceof floorTile) {
-                    tile = new Floor(i, j, floor);
+                    tile = new FloorRender(i, j, floor);
                     floorTile f = (floorTile)levelTiles[i][j];
                     if (f.getItem() instanceof Key) {
                         if (((Key) f.getItem()).getColor().equals("R")) {
@@ -156,16 +157,19 @@ public class RendererPanel extends JComponent {
                         itemMap[i][j] = item;
                     }
                 } else if (levelTiles[i][j] instanceof wallTile) {
-                    tile = new Wall(i, j, wall);
+                    tile = new WallRender(i, j, wall);
                 } else if (levelTiles[i][j] instanceof doorTile) {
                     doorTile d = (doorTile)levelTiles[i][j];
-                    if (d.getColor().equals("R")) tile = new RedDoor(i, j, rDoor, unlocked);
-                    else if (d.getColor().equals("G")) tile = new GreenDoor(i, j, gDoor, unlocked);
+                    if (d.getColor().equals("R")) tile = new RedDoorRender(i, j, rDoor, unlocked);
+                    else if (d.getColor().equals("G")) tile = new GreenDoorRender(i, j, gDoor, unlocked);
                 } else if (levelTiles[i][j] instanceof winTile) {
-                    tile = new ExitTile(i, j, win, this);
+                    tile = new ExitTileRender(i, j, win, this);
                 } else if (levelTiles[i][j] instanceof treasureDoor) {
-                    tile = new ChipDoorTile(i, j, cDoor, this);
+                    tile = new ChipDoorRender(i, j, cDoor, this);
+                } else if (levelTiles[i][j] instanceof infoTile) {
+                    tile = new InfoRender(i, j, iTile);
                 }
+
                 tileMap[i][j] = tile;
 
                 int colB = -1;
@@ -316,7 +320,7 @@ public class RendererPanel extends JComponent {
             // Picked up item
             itemMap[yPos][xPos] = null;
             pickupSound.playSound();
-        } else if ((tileMap[yPos][xPos] instanceof GreenDoor || tileMap[yPos][xPos] instanceof RedDoor) && !tileMap[yPos][xPos].open) {
+        } else if ((tileMap[yPos][xPos] instanceof GreenDoorRender || tileMap[yPos][xPos] instanceof RedDoorRender) && !tileMap[yPos][xPos].open) {
             // Unlocked door
             tileMap[yPos][xPos].setOpen();
             doorSound.playSound();
