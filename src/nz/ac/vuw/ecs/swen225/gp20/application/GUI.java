@@ -60,7 +60,7 @@ public class GUI {
         // starts game from
 
         resetLevel(1);
-        recordReader = new RecordReader(this, new File("/Recordings/UserData/lastgame.json"), game.getPlayer(), game.getBug());
+        recordReader = new RecordReader(this, new File("Recordings/UserData/lastgame.json"), game.getPlayer(), game.getBug());
         resetTime();
         recordReader.playAtSpeed(0);
     }

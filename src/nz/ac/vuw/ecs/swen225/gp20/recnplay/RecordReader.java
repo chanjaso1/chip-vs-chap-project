@@ -105,7 +105,7 @@ public class RecordReader {
             return;
         }
 
-        if (moves.isEmpty())
+        if (moves.isEmpty() && !replayFile.getName().equals("lastgame.json"))
             //let user know file is empty
             //based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
             JOptionPane.showMessageDialog(null, "Please try again and select a different file. ", "Your file was empty", JOptionPane.ERROR_MESSAGE);
@@ -129,7 +129,7 @@ public class RecordReader {
      */
     public void playNextFrame(){
         //don't play past last replay
-        if (moves.size() == lastMovePos){
+        if (moves.size() == lastMovePos && !replayFile.getName().equals("lastgame.json")){
             JOptionPane.showMessageDialog(null, "That was the last move!");
 
             if (timer != null)
