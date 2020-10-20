@@ -24,6 +24,10 @@ public abstract class Move {
         return dir;
     }
 
+    public void setMover(Actor mover) {
+        this.mover = mover;
+    }
+
     @Override
     public int hashCode() {
         return super.hashCode();
