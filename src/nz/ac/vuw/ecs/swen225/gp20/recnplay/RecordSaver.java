@@ -7,10 +7,12 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class RecordSaver {
-    private ArrayList<Move> moves;
+    private final ArrayList<Move> moves;
+    private final int level;
 
-    public RecordSaver(ArrayList<Move> moves) {
+    public RecordSaver(ArrayList<Move> moves, int level) {
         this.moves = moves;
+        this.level=level;
         save(null);
     }
 
@@ -24,7 +26,8 @@ public class RecordSaver {
         StringBuilder jsonRecording = new StringBuilder();
 
         //make text to store in json format
-        jsonRecording.append("{\n\t\"Actions\": [\n");
+        jsonRecording.append("\"{\\n\\t\\\"Header\\\": {\n\t\t\"level\": ").append(level).append("\n\t},");
+        jsonRecording.append("\n\n\t\"Actions\": [\n");
         for (int i = 0; i < moves.size(); i++) {
             jsonRecording.append("\t\t{\n");
 

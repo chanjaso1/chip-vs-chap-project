@@ -36,7 +36,7 @@ public class RecordReader {
         try {
             assert replayFile != null;
             JsonObject jo = new Gson().fromJson(new FileReader(replayFile), JsonObject.class);
-//            jo.get("Header").get
+            level = jo.get("Header").getAsJsonObject().get("level").getAsInt();
 
             JsonArray jsonMoves = jo.getAsJsonArray("Actions");
 

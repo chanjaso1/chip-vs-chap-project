@@ -431,8 +431,9 @@ public class GUI {
         File file = getFile();
         if (file == null) return;
 
-        resetLevel(1, false);
         recordReader = new RecordReader(this, file, game.getPlayer(), null);
+        resetLevel(1, false);
+        recordReader.updateMovesWith();
 
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
@@ -740,7 +741,7 @@ public class GUI {
      * Abstract method that saves the movements.
      */
     public void saveMovements() {
-        new RecordSaver(moveSequence);
+        new RecordSaver(moveSequence, game.getLevel());
     }
 
     /**

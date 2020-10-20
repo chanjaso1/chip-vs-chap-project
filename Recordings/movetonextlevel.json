@@ -1,10 +1,13 @@
 {
+	"Header": {
+		"level": 1
+	},
 	"Actions": [
 		{
-			"P": "left"
+			"P": "down"
 		},
 		{
-			"P": "down"
+			"P": "left"
 		},
 		{
 			"P": "right"
@@ -34,43 +37,37 @@
 			"P": "left"
 		},
 		{
-			"P": "down"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "left"
-		},
-		{
 			"P": "left"
 		},
 		{
 			"P": "down"
 		},
 		{
-			"P": "down"
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
 		},
 		{
 			"P": "down"
@@ -85,28 +82,34 @@
 			"P": "down"
 		},
 		{
-			"P": "left"
+			"P": "down"
 		},
 		{
 			"P": "down"
 		},
 		{
-			"P": "right"
-		},
-		{
 			"P": "down"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "left"
 		},
 		{
 			"P": "up"
 		},
 		{
 			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "up"
 		},
 		{
 			"P": "left"
