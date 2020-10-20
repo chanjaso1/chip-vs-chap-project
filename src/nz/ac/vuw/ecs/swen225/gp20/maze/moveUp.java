@@ -21,8 +21,6 @@ public class moveUp extends Move {
             mover.setPosition(Math.max(0,mover.getRow()-1),mover.getCol());
         }
 
-        this.getMover().getGame().updatePlayerBugStatus();
-
     }
 
     @Override

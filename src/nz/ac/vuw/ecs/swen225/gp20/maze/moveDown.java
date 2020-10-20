@@ -18,8 +18,6 @@ public class moveDown extends Move {
         Tile nextTile = mover.getGame().getMap()[Math.min(24, mover.getRow() + 1)][mover.getCol()];
         if(mover instanceof Player && nextTile.checkValidMove((Player) mover) || mover instanceof Bug)
                 mover.setPosition(Math.min(24, mover.getRow() + 1), mover.getCol());
-
-        this.getMover().getGame().updatePlayerBugStatus();
     }
 
     @Override

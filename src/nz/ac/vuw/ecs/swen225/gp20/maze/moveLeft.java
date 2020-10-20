@@ -19,7 +19,6 @@ public class moveLeft extends Move {
             mover.setPosition(mover.getRow(), Math.max(mover.getCol() - 1, 0));
         }
 
-        this.getMover().getGame().updatePlayerBugStatus();
     }
 
     @Override
