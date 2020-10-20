@@ -36,6 +36,7 @@ public class GUI {
     private RecordReader recordReader;
     private BufferedImage redKey, greenKey;
     private ArrayList<Move> moveSequence = new ArrayList<>();
+    private Timer timer;
 
     private Game game;
     private double replaySpeed, currentTime = MAX_TIME;
@@ -441,7 +442,12 @@ public class GUI {
     public void displayReplayFrame() {
         //get replay file
         game.loadLevel();
-        recordReader = new RecordReader(this, game.getPlayer(), null);
+        timer.stop();
+
+        File file = getFile();
+        if (file == null) return;
+
+        recordReader = new RecordReader(this, file, game.getPlayer(), null);
         resetLevel();
 
         // formats frame
@@ -518,13 +524,20 @@ public class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String message = "Exited Replay mode. Click 'OK' to return to game.";
-                JOptionPane.showMessageDialog(frame, message, "BACK TO GAME", JOptionPane.INFORMATION_MESSAGE);
-                // TODO: make sure replay mode is exited correctly and game is resumed
-                replayFrame.setVisible(false);
-                pauseGame = false;
+//                JOptionPane.showMessageDialog(frame, message, "BACK TO GAME", JOptionPane.INFORMATION_MESSAGE);
+                int input = JOptionPane.showOptionDialog(frame, message, "BACK TO GAME", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+                if (input == JOptionPane.OK_OPTION) {
+                    replayFrame.setVisible(false);
+                    pauseGame = false;
+                    timer.start();
+                } else {
+                    displayReplayFrame();
+                }
             }
         });
         exitPanel.add(exitReplay);
+
 
         replayFrame.getContentPane().add(BorderLayout.NORTH, descriptionPanel);
         replayFrame.getContentPane().add(BorderLayout.CENTER, actions);
@@ -635,7 +648,7 @@ public class GUI {
      * Otherwise, the player has failed and loses the game.
      */
     public void createTimer() {
-        Timer timer = new Timer(1000, new ActionListener() {
+        timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //                if (roundFinished) {
@@ -745,7 +758,7 @@ public class GUI {
     /**
      * Resets the level once replay mode is executed.
      */
-    public void resetLevel(){
+    public void resetLevel() {
 //        game.loadLevel();
         board.updateLevel(game.getMap());
         board.updateRenderMaps();
@@ -760,7 +773,7 @@ public class GUI {
         JFileChooser fileChooser = new JFileChooser("Recordings/");
         if (fileChooser.showOpenDialog(new JButton("Open")) == JFileChooser.APPROVE_OPTION)
             return fileChooser.getSelectedFile();
-        return getFile();
+        return null;
     }
 
     public static void notifyError(String message) {
