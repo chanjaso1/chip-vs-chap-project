@@ -442,14 +442,13 @@ public class GUI {
      */
     public void displayReplayFrame() {
         //get replay file
-        game.loadLevel();
         timer.stop();
 
         File file = getFile();
         if (file == null) return;
 
-        recordReader = new RecordReader(this, file, game.getPlayer(), null);
         resetLevel();
+        recordReader = new RecordReader(this, file, game.getPlayer(), null);
 
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
@@ -736,8 +735,8 @@ public class GUI {
      * to level 2 when level 1 is passed with the same moves.
      */
     public void resetLevel() {
-//        game.setLevel(1);
-//        game.loadLevel();
+        game.setLevel(1);
+        game.loadLevel();
         board.updateLevel(game.getMap());
         board.updateRenderMaps();
     }
