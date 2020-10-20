@@ -12,6 +12,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -638,9 +639,9 @@ public class GUI {
                     return;
                 }
 
-                // moves bug
+                // retrieves and moves bug
                 if (game.getLevel() == 2) {
-                    game.getBug().moveBugSequence();
+                   
                     board.moveBug();
                 }
 
