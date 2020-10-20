@@ -40,7 +40,7 @@ public class GUI {
 
     private Game game;
     private double replaySpeed, currentTime = MAX_TIME;
-    private int keysCollected;
+    //    private int keysCollected;
     private boolean pauseGame;
 
 
@@ -56,14 +56,14 @@ public class GUI {
             System.out.println("Item image not found!");
         }
 
-        initialise(0);
+        initialise();
     }
 
     /**
      * Initialises and displays the GUI on the screen.
      */
-    public void initialise(int numOfKeys) {
-        keysCollected = numOfKeys;
+    public void initialise() {
+//        keysCollected = numOfKeys;
 
         // creates main frame
         frame = new JFrame("Chip's Challenge");
@@ -328,23 +328,16 @@ public class GUI {
     public void displayGameStatsPanel(JPanel gameStats) {
         gameStats.setBorder(BorderFactory.createEmptyBorder(50, 90, 50, 90));
 
-        // level panel
         JPanel levelPanel = createGameStat("LEVEL", 1);
-
-        // time panel
         JPanel timePanel = displayTimePanel();
-
-        // treasures left panel
-        JPanel keysLeftPanel = createGameStat("TREASURES\nLEFT", game.getPlayer().getNumberTreasures());
-
-        // inventory (keys collected) panel
-        JPanel inventoryPanel = createKeysCollected("KEYS COLLECTED");
+        JPanel treasuresLeftPanel = createGameStat("TREASURES\nLEFT", game.getPlayer().getNumberTreasures());
+        JPanel keysCollectedPanel = createKeysCollected("KEYS COLLECTED");
 
         // add all components to frame
         gameStats.add(levelPanel);
         gameStats.add(timePanel);
-        gameStats.add(keysLeftPanel);
-        gameStats.add(inventoryPanel);
+        gameStats.add(treasuresLeftPanel);
+        gameStats.add(keysCollectedPanel);
 
     }
 
@@ -413,7 +406,6 @@ public class GUI {
         // REPLAY button
         JButton replayButton = new JButton("REPLAY");
         replayButton.getInputMap().put(KeyStroke.getKeyStroke("SPACE"), "none"); // ignores space key
-        GUI tempGUI = this; // used to pass GUI
         replayButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -440,10 +432,7 @@ public class GUI {
      * The replay speed is displayed as a JComboBox so users can select a speed within the specified range.
      */
     public void displayReplayFrame() {
-        // save and reset timer
         timer.stop();
-//        double prevTime = currentTime;
-//        currentTime = MAX_TIME;
 
         // get replay file
         File file = getFile();
@@ -508,7 +497,6 @@ public class GUI {
                 //TODO: ADD AUTO-REPLAY CODE
                 JOptionPane.showMessageDialog(replayFrame, speed, "AUTO-REPLAY", JOptionPane.INFORMATION_MESSAGE);
                 replaySpeed = Double.parseDouble((String) combobox.getSelectedItem());
-                System.out.println("speed: " + replaySpeed);
                 recordReader.playAtSpeed(replaySpeed);
             }
         });
@@ -527,10 +515,10 @@ public class GUI {
                 int input = JOptionPane.showOptionDialog(frame, message, "BACK TO GAME", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
                 if (input == JOptionPane.OK_OPTION) {
-                    System.out.println("restart timer");
+//                    System.out.println("restart timer");
                     replayFrame.setVisible(false);
                     pauseGame = false;
-//                    currentTime = prevTime;
+//                    redisplayTimer();
                     timer.start();
                 } else {
                     displayReplayFrame();
@@ -663,23 +651,38 @@ public class GUI {
 //                    return;
 //                }
                 if (pauseGame || currentTime == 0) {
-//                    System.out.println("game paused");
                     return;
                 }   // remove when code is added to reset level
                 currentTime--;
                 redisplayTimer();
 
-                // end of round (user lost)
-                if (currentTime <= 0 && keysCollected != 0) { // TODO: add condition to check if user has won/lost round
-                    String message = "You didn't collect the keys in time... GAME OVER!\nClick 'OK' to reset the game and restart the level";
+                // game over
+                if (gameOver()) {
+                    String message = "You didn't pass the level in time... GAME OVER!\nClick 'OK' to reset the game and restart the level.";
                     JOptionPane.showMessageDialog(frame, message, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
-                    // TODO: add code which restarts level
-                    currentTime = 0;
-
                 }
+
+                // end of round (user lost)
+//                if (currentTime <= 0 && keysCollected != 0) { // TODO: add condition to check if user has won/lost round
+//                    String message = "You didn't collect the keys in time... GAME OVER!\nClick 'OK' to reset the game and restart the level";
+//                    JOptionPane.showMessageDialog(frame, message, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+//                    // TODO: add code which restarts level
+//                    currentTime = 0;
+//
+//                }
             }
         });
         timer.start();
+    }
+
+    /**
+     * Checks if user has lost the game.
+     *
+     * @return true if user has lost. Otherwise, false.
+     */
+    public boolean gameOver() {
+//        return currentTime <= 0 && (game.getPlayer().getNumberTreasures() != game.getTreasure() || game.getPlayer().getKeys().size() != game.getParser().getNumberOfKeys());
+        return currentTime <= 0 && !(game.getPlayer().getCurrentTile() instanceof winTile);
     }
 
     /**
@@ -700,7 +703,8 @@ public class GUI {
             game.getPlayer().moveToNextLevel();
             game.loadLevel();
             board.winLevel();
-            recordReader.updateMovesWith();
+            if (recordReader != null)
+                recordReader.updateMovesWith();
         }
     }
 
