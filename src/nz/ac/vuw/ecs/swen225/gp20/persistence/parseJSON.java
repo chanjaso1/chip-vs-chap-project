@@ -31,7 +31,7 @@ public class parseJSON{
      */
     public parseJSON(String directory){
         try {
-            if(!directory.substring(12, 13).equals("1")) cl = loadClass(directory.substring(12, 13));
+           // if(!directory.substring(12, 13).equals("1")) cl = loadClass(directory.substring(12, 13));
 
             JsonObject jobject = new Gson().fromJson(new FileReader(directory), JsonObject.class);   //directory: levels/level1.json
             JsonArray jmap = jobject.getAsJsonArray("map");
@@ -76,8 +76,6 @@ public class parseJSON{
             System.out.println("This file doesn't exist!");
         } catch (IOException e) {
             System.out.println("IO Exception!");
-        } catch (ClassNotFoundException e) {
-            System.out.println("Class not found!");
         }
     }
 
