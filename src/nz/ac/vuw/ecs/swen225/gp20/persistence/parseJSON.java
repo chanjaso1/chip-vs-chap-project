@@ -38,7 +38,7 @@ public class parseJSON{
     public parseJSON(String directory){
         try {
             JsonObject jContents;
-            if(!directory.substring(12, 13).equals("1")) {
+            if(directory.contains("level2.json")) {
                 this.aClass = loadClass(directory.substring(12, 13));
                 jContents = loadMap(directory.substring(12,13));
 
@@ -65,6 +65,7 @@ public class parseJSON{
             e.printStackTrace();
         } catch (IOException e) {
             System.out.println("IO Exception!");
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             System.out.println("Class not found!");
