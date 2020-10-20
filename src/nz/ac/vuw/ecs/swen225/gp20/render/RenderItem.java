@@ -72,7 +72,7 @@ class Enemy extends RenderItem {
         this.display = d;
     }
 
-    public void drawEnemy(Graphics2D g, int x, int y) {
+    public void drawItem(Graphics2D g, int x, int y) {
         g.drawImage(gif, x, y, display);
     }
 

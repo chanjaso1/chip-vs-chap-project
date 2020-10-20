@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
@@ -167,11 +168,30 @@ public class RendererPanel extends JComponent {
                 }
                 tileMap[i][j] = tile;
 
+                int colB = -1;
+                int rowB = -1;
+
                 if(game.getBug() != null) {
-                    if (i == game.getBug().getRow() && j == game.getBug().getCol()) {
+
+                    try {
+                        colB = (int) game.getParser().aClass.getMethod("getCol").invoke(game.getBug());
+                        rowB = (int) game.getParser().aClass.getMethod("getRow").invoke(game.getBug());
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (i == rowB && j == colB) {
+                        System.out.println("Bug found");
+                        System.out.println(i + " " + j);
                         yBugLast = i;
                         xBugLast = j;
+                        System.out.println("Lasts: " + yBugLast + " "+ xBugLast);
                         item = new Enemy(i, j, swarm, this);
+                        itemMap[i][j] = item;
                     }
                 }
             }
@@ -326,20 +346,27 @@ public class RendererPanel extends JComponent {
      * Method for updating the render bug's location
      */
     public void moveBug() {
-        int xBug = game.getBug().getCol();
-        int yBug = game.getBug().getRow();
-        System.out.println("xBug: " + xBug + "yBug: " + yBug);
+
+        int xBug = 0;
+        int yBug = 0;
+        try {
+            xBug = (int) game.getParser().aClass.getMethod("getCol").invoke(game.getBug());
+            yBug = (int) game.getParser().aClass.getMethod("getRow").invoke(game.getBug());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
 
         // Move the bug from old pos to new pos
         itemMap[yBug][xBug] = itemMap[yBugLast][xBugLast];
 
         // Delete bug from old pos
         itemMap[yBugLast][xBugLast] = null;
-
-
         yBugLast = yBug;
         xBugLast = xBug;
-        System.out.println("ybuglast: " + yBugLast + "xBugLast:  " + xBugLast);
         this.repaint();
     }
 }
