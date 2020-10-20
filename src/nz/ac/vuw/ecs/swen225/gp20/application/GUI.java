@@ -734,9 +734,12 @@ public class GUI {
     }
 
     /**
-     * Resets the level once replay mode is executed.
+     * Resets the level once replay mode is executed. Replay mode
+     * assumes that the replay starts at level 1 as it will move
+     * to level 2 when level 1 is passed with the same moves.
      */
     public void resetLevel() {
+//        game.setLevel(1);
 //        game.loadLevel();
         board.updateLevel(game.getMap());
         board.updateRenderMaps();

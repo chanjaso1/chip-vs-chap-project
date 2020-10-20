@@ -132,7 +132,9 @@ public class RecordReader {
         //don't play past last replay
         if (moves.size() == lastMovePos){
             JOptionPane.showMessageDialog(null, "That was the last move!");
-            timer.stop();
+
+            if (timer != null)
+                timer.stop();
             return;
         }
 
