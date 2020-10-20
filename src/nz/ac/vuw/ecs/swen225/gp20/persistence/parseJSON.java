@@ -43,6 +43,7 @@ public class parseJSON{
                 jContents = loadMap(directory.substring(12,13));
 
             }else jContents = new Gson().fromJson(new FileReader(directory), JsonObject.class);
+            
             assert jContents != null : "The map was not correctly loaded!";
 
             JsonArray jmap = jContents.getAsJsonArray("map");
@@ -53,33 +54,7 @@ public class parseJSON{
             for(int row = 0; row < totalSize; row++){
                 for (int col = 0; col < totalSize; col++) {
                     String tileType = jmap.get((row * totalSize) + col).getAsString();
-                    //TODO put if statements inside a method
-                    if(tileType.equals("_"))  map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
-                    else if(tileType.equals("P"))  {                                              //Define the player's position on the board.
-                        map[row][col]   = new floorTile(row, col, null);
-                        this.player = new Player(row, col);
-                    }else if(tileType.equals("▊"))   map[row][col] = new wallTile(row, col);                            //define a wall tile.
-                    else if(tileType.equals("DC"))   map[row][col] = new treasureDoor(row, col);
-                    else if(tileType.substring(0,1).equals("D"))          map[row][col] = new doorTile(row, col, tileType.substring(1,2));  //define a coloured door.
-                    else if(tileType.substring(0,1).equals("K"))        {
-                        this.keys++;
-                        map[row][col] = new floorTile(row, col, new Key(map[row][col],  tileType.substring(1,2)));  //define a coloured key
-                    }
-                    else if(tileType.equals("T")){
-                        Treasure treasure = new Treasure(map[row][col]);
-                        map[row][col] = new floorTile(row, col, treasure);
-                        this.treasures++;                                                  //Add 1 to the total number of treasures/chips.
-                    }else if(tileType.equals("W"))                      map[row][col] = new winTile(row, col);
-                    else if(tileType.equals("B"))  {
-                        map[row][col]   = new floorTile(row, col, null);
-                        assert aClass != null;
-                        this.bug = aClass.getDeclaredConstructor(int.class, int.class).newInstance(row, col);
-
-                    }else if(tileType.equals("X")){
-                        map[row][col] = new floorTile(row, col, null);
-                        ((floorTile) map[row][col]).setBugTile();
-                    }else if(tileType.equals("I")) map[row][col] = new infoTile(row, col);
-
+                    defineType(tileType, map, row, col); //Define this tile, at row and col, as a certain object to be stored in the map.
                 }
             }
 
@@ -170,32 +145,45 @@ public class parseJSON{
 
     }
 
-    private void checkType(String type, Tile[][] map, int row, int col){
+    private void defineType(String type, Tile[][] map, int row, int col) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         switch (type){
             case "_":
                 map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
+                break;
             case "P":
                 map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
                 this.player = new Player(row, col);
+                break;
             case "▊":
                 map[row][col] = new wallTile(row, col);
+                break;
             case "T":
                 map[row][col] = new floorTile(row, col, new Treasure(map[row][col]));   //Define a floor tile with a treasure in it
                 this.treasures++;
+                break;
             case "W":
                 map[row][col] = new winTile(row, col);                                  //Define the win tile
+                break;
             case "B":
                 map[row][col]   = new floorTile(row, col, null);
-                ((floorTile) map[row][col]).setBugTile();              //Set this tile to be part of the bug's movement
-                //Object bug = this.aClass.
-                this.bug = new Bug(row, col);                          //Define the bug.
-
+                assert aClass != null;
+                System.out.println(aClass);
+                this.bug = aClass.getDeclaredConstructor(int.class, int.class).newInstance(row, col);
+                break;
             case "X":
                 map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
                 ((floorTile) map[row][col]).setBugTile();              //Set this tile to be part of the bug's movement
+                break;
+            case "DC":
+                map[row][col] = new treasureDoor(row, col);
+                break;
+            case "I":
+                map[row][col] = new infoTile(row, col);
+                break;
+
         }
 
-        if(type.substring(0,1).equals("D")){
+        if(type.substring(0,1).equals("D") && !type.equals("DC")){
             map[row][col] = new doorTile(row, col, type.substring(1,2));  //define a coloured door.
         }else if(type.substring(0,1).equals("K")) {
             this.keys++;
