@@ -24,8 +24,10 @@ public class Bug extends Actor {
         //check if next move path of the bug, then either move it or change direction.
         if(moveDownFirst && ((floorTile) this.getGame().getMap()[getRow()+1][getCol()]).isBugPath()){
             moveDown down = new moveDown(this);
+            down.apply();
         }else if(!moveDownFirst && ((floorTile) this.getGame().getMap()[getRow()-1][getCol()]).isBugPath()){
             moveUp up = new moveUp(this);
+            up.apply();
         }else {
             moveDownFirst = !moveDownFirst;
         }

@@ -12,7 +12,7 @@ public class Game {
     private Player player;
     private Tile[][] map;
     private parseJSON parser;
-    private nz.ac.vuw.ecs.swen225.gp20.persistence.Bug bug = null;
+    private Object bug = null;
     private int level = 0;
 
     /**

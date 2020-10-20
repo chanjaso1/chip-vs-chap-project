@@ -7,6 +7,7 @@ import com.google.gson.internal.$Gson$Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
@@ -24,27 +25,27 @@ public class parseJSON{
     private static int currentGameSave = 1;
 
     private Player player;
-    private Bug bug;
+    private Object bug;
     private Tile[][] map;
     private int treasures = 0, keys = 0;
     public int totalSize = 30;
-    public ClassLoader cl = null;
-
+    public Class<Object> aClass = null;
+    
     /**
      * This constructor reads a JSON file from a given directory. This object is able to return the map, player and the number of treasures the map has.
      * @param directory - The file directory.
      */
     public parseJSON(String directory){
         try {
-            JsonObject jobject = null;
+            JsonObject jContents;
             if(!directory.substring(12, 13).equals("1")) {
-                Class aClass = loadClass(directory.substring(12, 13));
-                if(aClass.getSimpleName().equals("Bug")) jobject = loadMap(directory.substring(12,13));
+                this.aClass = loadClass(directory.substring(12, 13));
+                jContents = loadMap(directory.substring(12,13));
 
-            }else jobject = new Gson().fromJson(new FileReader(directory), JsonObject.class);
-            assert jobject != null : "The map was not correctly loaded!";
+            }else jContents = new Gson().fromJson(new FileReader(directory), JsonObject.class);
+            assert jContents != null : "The map was not correctly loaded!";
 
-            JsonArray jmap = jobject.getAsJsonArray("map");
+            JsonArray jmap = jContents.getAsJsonArray("map");
 
             this.map = new Tile[totalSize][totalSize];
 
@@ -71,7 +72,9 @@ public class parseJSON{
                     }else if(tileType.equals("W"))                      map[row][col] = new winTile(row, col);
                     else if(tileType.equals("B"))  {
                         map[row][col]   = new floorTile(row, col, null);
-                        this.bug = new Bug(row, col);
+                        assert aClass != null;
+                        this.bug = aClass.getDeclaredConstructor(int.class, int.class).newInstance(row, col);
+
                     }else if(tileType.equals("X")){
                         map[row][col] = new floorTile(row, col, null);
                         ((floorTile) map[row][col]).setBugTile();
@@ -90,6 +93,8 @@ public class parseJSON{
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             System.out.println("Class not found!");
+        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
         }
     }
 
@@ -100,7 +105,7 @@ public class parseJSON{
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private static Class loadClass(String id) throws IOException, ClassNotFoundException {
+    private static Class<Object> loadClass(String id) throws IOException, ClassNotFoundException {
         $Gson$Preconditions.checkNotNull(id);
 
 
@@ -117,7 +122,7 @@ public class parseJSON{
 
             String className = je.getName().substring(0, je.getName().length()-".class".length());
             className = className.replace('/', '.');
-            Class c = cl.loadClass(className);
+            Class<Object> c = (Class<Object>) cl.loadClass(className);
             if(className.contains("Bug"))
                 return c;
         }
@@ -182,7 +187,9 @@ public class parseJSON{
             case "B":
                 map[row][col]   = new floorTile(row, col, null);
                 ((floorTile) map[row][col]).setBugTile();              //Set this tile to be part of the bug's movement
+                //Object bug = this.aClass.
                 this.bug = new Bug(row, col);                          //Define the bug.
+
             case "X":
                 map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
                 ((floorTile) map[row][col]).setBugTile();              //Set this tile to be part of the bug's movement
@@ -251,7 +258,7 @@ public class parseJSON{
         return this.treasures;
     }
 
-    public Bug getBug(){
+    public Object getBug(){
         return this.bug;
     }
 
