@@ -12,7 +12,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -441,9 +440,12 @@ public class GUI {
      * The replay speed is displayed as a JComboBox so users can select a speed within the specified range.
      */
     public void displayReplayFrame() {
-        //get replay file
+        // save and reset timer
         timer.stop();
+//        double prevTime = currentTime;
+//        currentTime = MAX_TIME;
 
+        // get replay file
         File file = getFile();
         if (file == null) return;
 
@@ -528,6 +530,7 @@ public class GUI {
                     System.out.println("restart timer");
                     replayFrame.setVisible(false);
                     pauseGame = false;
+//                    currentTime = prevTime;
                     timer.start();
                 } else {
                     displayReplayFrame();
@@ -689,14 +692,15 @@ public class GUI {
     }
 
     /**
-     * Checks if the player has landed on the win tile.
-     * Executed after a player moves.
+     * Moves the player to the next level if they land on a win tile.
+     * Executed after a player moves and moves the player to the next level.
      */
     public void checkWinTile() {
         if (game.getMap()[game.getPlayer().getRow()][game.getPlayer().getCol()] instanceof winTile) {
             game.getPlayer().moveToNextLevel();
             game.loadLevel();
             board.winLevel();
+            recordReader.updateMovesWith();
         }
     }
 
@@ -763,6 +767,11 @@ public class GUI {
         return null;
     }
 
+    /**
+     * Used by RecordReader class to display error messages.
+     *
+     * @param message -- the error message to be displayed.
+     */
     public static void notifyError(String message) {
         // based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
