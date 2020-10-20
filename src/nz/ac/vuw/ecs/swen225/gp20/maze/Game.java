@@ -99,7 +99,8 @@ public class Game {
     }
 
     public void saveGame(){
-        parser.saveGame(map,player);
+        //TODO @Tian to save the game
+        //parser.saveGame(map,player);
     }
 
     /**

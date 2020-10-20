@@ -8,7 +8,15 @@ import java.util.ArrayList;
 
 public class RecordSaver {
     private final ArrayList<Move> moves;
-    private double time;
+    private final double time;
+    private boolean notForUser = false;
+
+    public RecordSaver(ArrayList<Move> moves, double time, boolean notForUser) {
+        this.notForUser = notForUser;
+        this.moves = moves;
+        this.time = time;
+        save("lastgame");
+    }
 
     public RecordSaver(ArrayList<Move> moves, double time) {
         this.moves = moves;
@@ -26,8 +34,8 @@ public class RecordSaver {
         StringBuilder jsonRecording = new StringBuilder();
 
         //make text to store in json format
-        jsonRecording.append("{\n\t\"Header\": {\n\t\t\"level\": ").append(time).append("\n\t},");
-        jsonRecording.append("\n\n\t\"Actions\": [\n");
+        jsonRecording.append("{\n\t\"Header\": {\n\t\t\"time\": ").append(time).append("\n\t},");
+        jsonRecording.append("\n\t\"Actions\": [\n");
         for (int i = 0; i < moves.size(); i++) {
             jsonRecording.append("\t\t{\n");
 
@@ -40,14 +48,12 @@ public class RecordSaver {
 
         //save to file
 
-        File savingFile = new File("Recordings/"+fileName);
-        if (savingFile.exists()){
+        File savingFile = new File("Recordings/"+(notForUser ? "UserData/":"")+fileName);
+        if (savingFile.exists() && !notForUser){
             //check if file exists and ask user if they want
             //to override existing file based on https://stackoverflow.com/questions/1816673/how-do-i-check-if-a-file-exists-in-java
             int wantTo = JOptionPane.showConfirmDialog(null, "Are you sure you want to override "+fileName+"?");
             if (wantTo != JOptionPane.YES_OPTION){
-                //try again
-                save("Please enter a name for the recording file (without extension):");
                 return;
             }
         }

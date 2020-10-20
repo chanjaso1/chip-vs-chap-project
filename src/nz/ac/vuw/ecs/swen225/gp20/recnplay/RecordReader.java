@@ -6,11 +6,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -167,5 +164,9 @@ public class RecordReader {
      */
     public ArrayList<Move> getMoves() {
         return moves;
+    }
+
+    public double getTime() {
+        return time;
     }
 }

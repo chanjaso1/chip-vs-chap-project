@@ -38,9 +38,9 @@ public class parseJSON{
     public parseJSON(String directory){
         try {
             JsonObject jContents;
-            if(directory.contains("level2.json")) {
-                this.aClass = loadClass(directory.substring(12, 13));
-                jContents = loadMap(directory.substring(12,13));
+            if(directory.contains("2")) {
+                this.aClass = loadClass(directory);
+                jContents = loadMap(directory);
 
             }else jContents = new Gson().fromJson(new FileReader(directory), JsonObject.class);
 
@@ -76,20 +76,21 @@ public class parseJSON{
 
     /**
      * loadClass will load a class from the level 2 jar file.
-     * @param id - The level number
+     * @param directory - The directory to the .json file
      * @return the given class
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private static Class<Object> loadClass(String id) throws IOException, ClassNotFoundException {
-        $Gson$Preconditions.checkNotNull(id);
+    private static Class<Object> loadClass(String directory) throws IOException, ClassNotFoundException {
+        $Gson$Preconditions.checkNotNull(directory);
 
-
+        String pathToJAR = directory.substring(0, directory.length() - ".json".length()) +".jar";
         //From stackoverflow.com/a/11016392
-        JarFile jarFile = new JarFile("levels/level" + id + ".jar");
+        JarFile jarFile = new JarFile(pathToJAR);
+
         var e = jarFile.entries();
 
-        URL[] urls = {new URL("jar:file:" + "levels/level" + id + ".jar" + "!/")};
+        URL[] urls = {new URL("jar:file:" + pathToJAR + "!/")};
         URLClassLoader cl = URLClassLoader.newInstance(urls);
 
         while (e.hasMoreElements()) {
@@ -107,13 +108,15 @@ public class parseJSON{
 
     /**
      * load the Map from the JAR file
-     * @param id - The level number
+     * @param directory - The level number
      * @return the JSON map.
      * @throws IOException
      */
-    private static JsonObject loadMap(String id) throws IOException, IndexOutOfBoundsException {
-        JsonObject jobject = null;
-        JarFile jarFile = new JarFile("levels/level" + id + ".jar");
+    private static JsonObject loadMap(String directory) throws IOException, IndexOutOfBoundsException {
+        JsonObject jobject;
+        String pathToJAR = directory.substring(0, directory.length() - ".json".length()) +".jar";
+
+        JarFile jarFile = new JarFile(pathToJAR);
         Enumeration<JarEntry> e = jarFile.entries();
 
 
@@ -121,7 +124,6 @@ public class parseJSON{
         while (e.hasMoreElements()) {
             JarEntry entry = e.nextElement();
             if (!entry.getName().endsWith(".json")) continue;   //Find the .json map.
-            System.out.println(entry.getName());
 
             File file = new File(entry.getName());
 
@@ -168,7 +170,6 @@ public class parseJSON{
             case "B":
                 map[row][col]   = new floorTile(row, col, null);
                 assert aClass != null : "This level does not have a valid class to load the bug!";
-                System.out.println(aClass);
                 this.bug = aClass.getDeclaredConstructor(int.class, int.class).newInstance(row, col);
                 break;
             case "X":
@@ -193,47 +194,47 @@ public class parseJSON{
     }
 
 
-    /**
-     * Save the current state of the game to a JSON file
-     * @param board - The current state of the board.
-     */
-        public void saveGame(Tile[][] board, Player player){
-        String fileName = "save" + currentGameSave++ + ".json";
-        StringBuilder stringFile = new StringBuilder();
-
-        //Read the current state of the board into a string.
-        stringFile.append("{\n" +
-                "  \"map\" : [\n");
-        for(int row = 0; row < totalSize; row++){
-            stringFile.append("   ");
-            for (int col = 0; col < totalSize; col++) {
-                    if(row == player.getRow() && col == player.getCol())    stringFile.append("\""+player.toString()+"\",");
-                    else if(row == totalSize - 1 && col == totalSize - 1)   {
-                        stringFile.append("\""+board[row][col].toString()+"\"");
-                        break;
-                    } else
-                        stringFile.append("\""+board[row][col].toString()+"\",");
-                }
-            stringFile.append("  \n");
-            }
-
-
-
-
-        stringFile.append("  ]\n" +
-                "}");
-
-        //Create a new save
-        File file = new File("saves/" + fileName);
-
-        try {
-            BufferedWriter newFile = new BufferedWriter(new FileWriter(file));
-            newFile.write(stringFile.toString());
-            newFile.close();
-        } catch (IOException e) {
-            System.out.println("File cannot be saved!");
-        }
-    }
+//    /**
+//     * Save the current state of the game to a JSON file
+//     * @param board - The current state of the board.
+//     */
+//        public void saveGame(Tile[][] board, Player player){
+//        String fileName = "save" + currentGameSave++ + ".json";
+//        StringBuilder stringFile = new StringBuilder();
+//
+//        //Read the current state of the board into a string.
+//        stringFile.append("{\n" +
+//                "  \"map\" : [\n");
+//        for(int row = 0; row < totalSize; row++){
+//            stringFile.append("   ");
+//            for (int col = 0; col < totalSize; col++) {
+//                    if(row == player.getRow() && col == player.getCol())    stringFile.append("\""+player.toString()+"\",");
+//                    else if(row == totalSize - 1 && col == totalSize - 1)   {
+//                        stringFile.append("\""+board[row][col].toString()+"\"");
+//                        break;
+//                    } else
+//                        stringFile.append("\""+board[row][col].toString()+"\",");
+//                }
+//            stringFile.append("  \n");
+//            }
+//
+//
+//
+//
+//        stringFile.append("  ]\n" +
+//                "}");
+//
+//        //Create a new save
+//        File file = new File("saves/" + fileName);
+//
+//        try {
+//            BufferedWriter newFile = new BufferedWriter(new FileWriter(file));
+//            newFile.write(stringFile.toString());
+//            newFile.close();
+//        } catch (IOException e) {
+//            System.out.println("File cannot be saved!");
+//        }
+//    }
 
     public Player getPlayer(){
         return this.player;
