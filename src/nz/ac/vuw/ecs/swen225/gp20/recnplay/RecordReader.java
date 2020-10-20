@@ -6,18 +6,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 
 public class RecordReader {
     private final ArrayList<Move> moves = new ArrayList<>();
-    private int lastMovePos, level;
+    private int lastMovePos;
+    private double time;
     private final GUI gui;
     private Timer timer = null;
     private final File replayFile;
@@ -37,7 +35,7 @@ public class RecordReader {
         try {
             assert replayFile != null;
             JsonObject jo = new Gson().fromJson(new FileReader(replayFile), JsonObject.class);
-//            jo.get("Header").get
+            time = jo.get("Header").getAsJsonObject().get("time").getAsDouble();
 
             JsonArray jsonMoves = jo.getAsJsonArray("Actions");
 
@@ -166,5 +164,9 @@ public class RecordReader {
      */
     public ArrayList<Move> getMoves() {
         return moves;
+    }
+
+    public double getTime() {
+        return time;
     }
 }

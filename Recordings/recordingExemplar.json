@@ -1,16 +1,10 @@
 {
 	"Header": {
-		"level": 1 //todo make sure player and bug are loaded
+		"time": 33.0
 	},
 	"Actions": [
 		{
 			"P": "left"
-		},
-		{
-			"B": "right"
-		},
-		{
-			"B": "up"
 		},
 		{
 			"P": "down"
