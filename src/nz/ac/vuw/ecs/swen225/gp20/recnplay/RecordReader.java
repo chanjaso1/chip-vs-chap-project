@@ -168,4 +168,8 @@ public class RecordReader {
     public ArrayList<Move> getMoves() {
         return moves;
     }
+
+    public double getTime() {
+        return time;
+    }
 }
