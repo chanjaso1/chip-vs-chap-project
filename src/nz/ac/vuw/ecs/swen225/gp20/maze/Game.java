@@ -48,6 +48,7 @@ public class Game {
      * The player position will be set to the start if the player is attack by bug.
      */
     public void updatePlayerBugStatus(){
+        if(player == null || bug == null) return;
         if(player.getCurrentTile().equals(bug.getCurrentTile())){
             player.setPlayerBackToStartPosition();
         }

@@ -13,9 +13,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class RecordReader {
     private final ArrayList<Move> moves = new ArrayList<>();
@@ -35,6 +32,7 @@ public class RecordReader {
 
         //read path
         try {
+            assert replayFile != null;
             JsonObject jo = new Gson().fromJson(new FileReader(replayFile), JsonObject.class);
 //            jo.get("Header").get
 
@@ -49,7 +47,6 @@ public class RecordReader {
             for (JsonElement jsonMove: jsonMoves){
                 boolean isPlayerMove;
                 isPlayerMove = jsonMove.getAsJsonObject().has("P");
-//                moveType = jsonMove.getAsJsonObject().get("movement").getAsString();
 
                 Move move;
                 //switch to move type
@@ -121,50 +118,25 @@ public class RecordReader {
      * @param secsToWait amount of time to wait per move
      */
     public void playAtSpeed(double secsToWait){
-        timer = new Timer((int) secsToWait * 1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                playPerFrame();
-            }
-        });
-
+        //execute playNextFrame every secsToWait
+        timer = new Timer((int) (secsToWait * 1000), e -> playNextFrame());
         timer.start();
-
-//        for (Move move: moves){
-//
-//            gui.movePlayer(move);
-//            System.out.println("did move:" + move);
-//
-//            long time = System.currentTimeMillis() + (long)(secsToWait*1000);
-//            while (System.currentTimeMillis() < time){
-////                System.out.println("waiting");
-//                gui.getBoard().repaint();
-//                gui.getBoard().revalidate();
-//                System.out.flush();
-//            }
-//        }
     }
 
     /**
      * Runs one move per click. Button to be clicked is on GUI.
      */
-    public void playPerFrame(){
-        //do move
-        gui.movePlayer(moves.get(lastMovePos));
-//        System.out.println("move: "+moves.get(lastMovePos++));
-        lastMovePos++;
-
-        //last move
+    public void playNextFrame(){
+        //don't play past last replay
         if (moves.size() == lastMovePos){
-            JOptionPane.showMessageDialog(null, "That was the last move, starting over!");
-            lastMovePos = 0;
+            JOptionPane.showMessageDialog(null, "That was the last move!");
             timer.stop();
+            return;
         }
 
-
-        // todo need to call move.apply() but it needs a player
-        //  and this method is called from gui which does not have
-        //  a player object
+        //do move
+        gui.movePlayer(moves.get(lastMovePos));
+        lastMovePos++;
     }
 
     /*
@@ -181,12 +153,5 @@ public class RecordReader {
      */
     public ArrayList<Move> getMoves() {
         return moves;
-    }
-
-    public static void main(String[] args) {
-//        RecordReader rr = new RecordReader();
-//        for (Move move : rr.moves) {
-//            System.out.println(move.getMover() + " moved " + move); //testing
-//        }
     }
 }

@@ -44,7 +44,7 @@ public class GUI {
 
 
     public GUI() {
-        game = new Game(2);
+        game = new Game(1);
         board = new RendererPanel(game);
 
         // creates red and green keys
@@ -55,7 +55,7 @@ public class GUI {
             System.out.println("Item image not found!");
         }
 
-        initialise( 0);
+        initialise(0);
     }
 
     /**
@@ -308,8 +308,11 @@ public class GUI {
         actionMap.put("ESCAPE", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                displayResumeFrame();
-                pauseGame(false);
+                // only displays if game is on pause
+                if (pauseGame) {
+                    displayResumeFrame();
+                    pauseGame(false);
+                }
             }
         });
 
@@ -415,10 +418,6 @@ public class GUI {
             public void mouseClicked(MouseEvent e) {
                 pauseGame(true);
                 displayReplayFrame();
-
-                System.out.println("RECORDREADER CALLED");
-//                recordReader = new RecordReader();
-                recordReader = new RecordReader(tempGUI, game.getPlayer(), null);
             }
         });
 
@@ -441,7 +440,9 @@ public class GUI {
      */
     public void displayReplayFrame() {
         //get replay file
+        game.loadLevel();
         recordReader = new RecordReader(this, game.getPlayer(), null);
+        resetLevel();
 
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
@@ -481,7 +482,7 @@ public class GUI {
                 System.out.println("next step");
 
                 //play next step
-                recordReader.playPerFrame(); //todo give player an object not null
+                recordReader.playNextFrame(); //todo give player an object not null
             }
         });
 
@@ -707,13 +708,12 @@ public class GUI {
      * Also checks if the player has landed on the winTile.
      *
      * @param move -- the player's most recent move.
-     * @param dir  -- the direction to move the player in.
      */
     public void movePlayer(Move move) {
         moveSequence.add(move);
         game.moveActor(move);
         board.renderMove(move.getDir());
-        System.out.println("render by tian");
+//        System.out.println("render by tian");
         checkWinTile();
     }
 
@@ -733,13 +733,22 @@ public class GUI {
     public void pauseGame(boolean pause) {
         pauseGame = pause;
     }
-    
+
 
     /**
      * Increases the number of keys player has collected.
      */
     public void increaseKeys() {
         keysCollected++;
+    }
+
+    /**
+     * Resets the level once replay mode is executed.
+     */
+    public void resetLevel(){
+//        game.loadLevel();
+        board.updateLevel(game.getMap());
+        board.updateRenderMaps();
     }
 
     /**
