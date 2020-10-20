@@ -6,6 +6,10 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 public class Bug extends Actor {
     boolean moveDownFirst = true;
 
+    public static void main(String[] args) {
+
+    }
+
     public Bug(int row, int col) {
         super(row, col);
     }
