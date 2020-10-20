@@ -444,7 +444,7 @@ public class GUI {
         if (file == null) return;
 
         resetLevel(1, false);
-        recordReader = new RecordReader(this, file, game.getPlayer(), null);
+        recordReader = new RecordReader(this, file, game.getPlayer(), game.getBug());
 
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
@@ -811,14 +811,6 @@ public class GUI {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    /**
-     * Returns the bug.
-     *
-     * @return the bug.
-     */
-    public Bug getBug() {
-        return null; //todo use game.getBug() when it's made
-    }
 
     public static void main(String[] args) {
         GUI gui = new GUI();
