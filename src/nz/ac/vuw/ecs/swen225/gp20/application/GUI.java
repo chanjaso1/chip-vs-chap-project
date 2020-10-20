@@ -762,7 +762,7 @@ public class GUI {
      * Abstract method that saves the movements.
      */
     public void saveMovements() {
-        new RecordSaver(moveSequence);
+        new RecordSaver(moveSequence, currentTime);
     }
 
     /**
