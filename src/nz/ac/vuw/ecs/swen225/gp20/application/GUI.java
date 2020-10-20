@@ -56,6 +56,13 @@ public class GUI {
         }
 
         initialise();
+
+        // starts game from
+
+        resetLevel(1);
+        recordReader = new RecordReader(this, new File("/Recordings/UserData/lastgame.json"), game.getPlayer(), game.getBug());
+        resetTime();
+        recordReader.playAtSpeed(0);
     }
 
     /**
@@ -267,7 +274,7 @@ public class GUI {
         actionMap.put("SAVE", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                saveMovements();
+                new RecordSaver(moveSequence, currentTime, true);
             }
         });
 
@@ -452,8 +459,7 @@ public class GUI {
         resetLevel(1);
         recordReader = new RecordReader(this, file, game.getPlayer(), game.getBug());
         resetTime();
-
-
+        
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
         replayFrame.setSize(600, 270);
@@ -531,6 +537,7 @@ public class GUI {
 //                    System.out.println("restart timer");
                     replayFrame.setVisible(false);
                     pauseGame = false;
+                    currentTime = recordReader.getTime();
 //                    redisplayTimer();
 //                    timer.start();
 //                    currentTime = prevTime;
@@ -666,6 +673,8 @@ public class GUI {
                     try {
                         game.getParser().aClass.getMethod("moveBugSequence").invoke(game.getBug());
                         game.updatePlayerBugStatus();
+//                        board.repaint();
+//                        board.revalidate();
                     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
                         ex.printStackTrace();
                     }
@@ -786,10 +795,6 @@ public class GUI {
         game.loadLevel();
         board.updateLevel(game.getMap());
         board.updateRenderMaps();
-
-//        if (saveTime)
-//            prevTime = currentTime;
-
         resetTime();
     }
 
@@ -799,7 +804,6 @@ public class GUI {
     public void resetTime() {
         currentTime = MAX_TIME;
         redisplayTimer();
-//        createTimer();
     }
 
     /**
