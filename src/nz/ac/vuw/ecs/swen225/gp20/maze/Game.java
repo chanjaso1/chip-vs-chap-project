@@ -1,10 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
-import com.google.gson.*;
-import com.google.gson.internal.$Gson$Preconditions;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -25,11 +21,6 @@ public class Game {
     public Game(int level) {
         this.level = level;
         loadLevel();
-    }
-
-    public void runGame(){
-
-
     }
 
     /**

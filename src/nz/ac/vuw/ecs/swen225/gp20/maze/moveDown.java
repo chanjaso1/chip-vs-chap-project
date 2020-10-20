@@ -1,7 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
-
 /**
  * This class is created to move the player down
  */
@@ -16,7 +14,7 @@ public class moveDown extends Move {
     public void apply() {
         //the next tile that player is moving to
         Tile nextTile = mover.getGame().getMap()[Math.min(24, mover.getRow() + 1)][mover.getCol()];
-        if(mover instanceof Player && nextTile.checkValidMove((Player) mover) || mover instanceof Bug)
+        if(!(mover instanceof Player) || nextTile.checkValidMove((Player) mover))
                 mover.setPosition(Math.min(24, mover.getRow() + 1), mover.getCol());
     }
 
