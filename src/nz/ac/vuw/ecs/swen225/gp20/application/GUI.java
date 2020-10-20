@@ -641,7 +641,11 @@ public class GUI {
 
                 // retrieves and moves bug
                 if (game.getLevel() == 2) {
-                   
+                    try {
+                        game.getParser().aClass.getMethod("moveBugSequence").invoke(game.getBug());
+                    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+                        ex.printStackTrace();
+                    }
                     board.moveBug();
                 }
 
