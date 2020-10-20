@@ -3,14 +3,6 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 import java.util.HashMap;
 import java.util.HashSet;
 
-//public interface Actor {
-//    /**
-//     * Move the player in the chosen direction.
-//     * @param move move class applies according to the players choices in directions
-//     */
-//    public void move(Move move);
-//}
-
 /**
  * Player class to keep track of the player's position, inventory and stages.
  */
@@ -63,6 +55,10 @@ public class Player extends Actor {
         return treasures;
     }
 
+    /**
+     * Set total treasure to the total treasure in the game.
+     * @param treasures -- total treasures in the game.
+     */
     public void setTotalTreasures(int treasures) {
         this.treasures = treasures;
     }
