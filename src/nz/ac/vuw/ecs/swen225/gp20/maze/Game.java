@@ -43,6 +43,7 @@ public class Game {
         player.setGame(this);
         player.setTotalTreasures(parser.getTreasures());
         player.setPosition(player.getRow(),player.getCol());
+        player.setStartPosition(player.getRow(),player.getCol());
 
         bug = parser.getBug();
         try {
@@ -69,11 +70,7 @@ public class Game {
             if(player.getCurrentTile().equals(parser.aClass.getMethod("getCurrentTile").invoke(bug))){
                 player.setPlayerBackToStartPosition();
             }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
     }

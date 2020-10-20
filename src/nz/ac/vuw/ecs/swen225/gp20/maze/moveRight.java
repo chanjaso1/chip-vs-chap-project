@@ -18,8 +18,6 @@ public class moveRight extends Move {
         if(mover instanceof Player && nextTile.checkValidMove((Player) mover) || mover instanceof Bug){
             mover.setPosition(mover.getRow(), Math.min(mover.getCol() + 1, 24));
         }
-
-        this.getMover().getGame().updatePlayerBugStatus();
     }
 
     @Override
