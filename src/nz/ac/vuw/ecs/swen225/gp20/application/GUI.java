@@ -525,6 +525,7 @@ public class GUI {
                 int input = JOptionPane.showOptionDialog(frame, message, "BACK TO GAME", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
                 if (input == JOptionPane.OK_OPTION) {
+                    System.out.println("restart timer");
                     replayFrame.setVisible(false);
                     pauseGame = false;
                     timer.start();
@@ -710,6 +711,15 @@ public class GUI {
         game.moveActor(move);
         board.renderMove(move.getDir());
         checkWinTile();
+    }
+
+    /**
+     * Returns the current player.
+     *
+     * @return the current player.
+     */
+    public Player getPlayer() {
+        return game.getPlayer();
     }
 
 
