@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class RecordReader {
     private final ArrayList<Move> moves = new ArrayList<>();
-    private int lastMovePos;
+    private int lastMovePos, level;
     private final GUI gui;
     private Timer timer = null;
     private final File replayFile;
@@ -141,6 +141,14 @@ public class RecordReader {
         //do move
         gui.movePlayer(moves.get(lastMovePos));
         lastMovePos++;
+    }
+
+    /**
+     * New level, new Player - update moves with new Player.
+     */
+    public void updateMovesWith(){
+        for (Move move: moves)
+            move.setMover(gui.getPlayer());
     }
 
     /*
