@@ -7,6 +7,9 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import java.io.*;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 
 /**
@@ -31,9 +34,14 @@ public class parseJSON{
      */
     public parseJSON(String directory){
         try {
-           // if(!directory.substring(12, 13).equals("1")) cl = loadClass(directory.substring(12, 13));
+            JsonObject jobject = null;
+            if(!directory.substring(12, 13).equals("1")) {
+                Class aClass = loadClass(directory.substring(12, 13));
+                if(aClass.getSimpleName().equals("Bug")) jobject = loadMap(directory.substring(12,13));
 
-            JsonObject jobject = new Gson().fromJson(new FileReader(directory), JsonObject.class);   //directory: levels/level1.json
+            }else jobject = new Gson().fromJson(new FileReader(directory), JsonObject.class);
+            assert jobject != null : "The map was not correctly loaded!";
+
             JsonArray jmap = jobject.getAsJsonArray("map");
 
             this.map = new Tile[totalSize][totalSize];
@@ -65,7 +73,7 @@ public class parseJSON{
                     }else if(tileType.equals("X")){
                         map[row][col] = new floorTile(row, col, null);
                         ((floorTile) map[row][col]).setBugTile();
-                    }
+                    }else if(tileType.equals("I")) map[row][col] = new infoTile(row, col);
 
                 }
             }
@@ -76,18 +84,52 @@ public class parseJSON{
             System.out.println("This file doesn't exist!");
         } catch (IOException e) {
             System.out.println("IO Exception!");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Class not found!");
         }
     }
 
-    private static ClassLoader loadClass(String id) throws IOException, ClassNotFoundException{
+    private static Class loadClass(String id) throws IOException, ClassNotFoundException {
         $Gson$Preconditions.checkNotNull(id);
 
-        return URLClassLoader.newInstance(
-            new URL[]{new URL("levels/level" + id + ".jar")}
-                );
+
+        // ClassLoader cl = URLClassLoader.newInstance( new URL[]{new URL("jar:file:" + "levels/level" + id + ".jar" + "!/")});
+        JarFile jarFile = new JarFile("levels/level" + id + ".jar");
+        Enumeration<JarEntry> e = jarFile.entries();
+
+        URL[] urls = {new URL("jar:file:" + "levels/level" + id + ".jar" + "!/")};
+        URLClassLoader cl = URLClassLoader.newInstance(urls);
+
+        while (e.hasMoreElements()) {
+            JarEntry je = e.nextElement();
+            if (je.isDirectory() || !je.getName().endsWith(".class")) continue;
+
+            String className = je.getName().substring(0, je.getName().length()-".class".length());
+            className = className.replace('/', '.');
+            Class c = cl.loadClass(className);
+            if(className.contains("Bug"))
+                return c;
+        }
+        throw new ClassNotFoundException();
+    }
+
+    private static JsonObject loadMap(String id) throws IOException {
+        JarFile jarFile = new JarFile("levels/level" + id + ".jar");
+        Enumeration<JarEntry> e = jarFile.entries();
+
+        URL[] urls = {new URL("jar:file:" + "levels/level" + id + ".jar" + "!/")};
+
+        while (e.hasMoreElements()) {
+            JarEntry je = e.nextElement();
+            if (!je.getName().endsWith(".json")) continue;
+            System.out.println(je.getName());
+            return new Gson().fromJson(new FileReader("levels/" +je.getName()), JsonObject.class);
 
 
+        }
 
+        return null;
     }
 
     private void checkType(String type, Tile[][] map, int row, int col){

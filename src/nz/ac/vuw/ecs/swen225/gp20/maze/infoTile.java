@@ -11,7 +11,7 @@ public class infoTile implements Tile{
      * @param row -- the tile row position.
      * @param col -- the tile column position.
      */
-    infoTile(int row, int col){
+    public infoTile(int row, int col){
         this.row = row;
         this.col = col;
     }
