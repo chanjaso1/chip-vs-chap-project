@@ -18,6 +18,7 @@ public class Player extends Actor {
     private HashMap<String,Key> keys = new HashMap<>();
     private int treasures = 0;
     private int startRow, startCol;
+    private boolean playerRecharge = false;
 
     /**
      * Player constructor created by using row and column the player is.
@@ -88,6 +89,21 @@ public class Player extends Actor {
      */
     public void setPlayerBackToStartPosition(){
         this.setPosition(startRow,startCol);
+    }
+
+    /**
+     *
+     */
+    public void rechargePlayer() {
+        this.playerRecharge = true;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public boolean playerIsRecharge() {
+        return playerRecharge;
     }
 }
 
