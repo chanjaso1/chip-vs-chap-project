@@ -352,6 +352,7 @@ public class RendererPanel extends JComponent {
         try {
             xBug = (int) game.getParser().aClass.getMethod("getCol").invoke(game.getBug());
             yBug = (int) game.getParser().aClass.getMethod("getRow").invoke(game.getBug());
+            System.out.println("Bug Pos " + xBug + " " + yBug);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -364,7 +365,7 @@ public class RendererPanel extends JComponent {
         itemMap[yBug][xBug] = itemMap[yBugLast][xBugLast];
 
         // Delete bug from old pos
-        itemMap[yBugLast][xBugLast] = null;
+        if (yBugLast != yBug) itemMap[yBugLast][xBugLast] = null;
         yBugLast = yBug;
         xBugLast = xBug;
         this.repaint();
