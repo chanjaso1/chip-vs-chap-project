@@ -62,12 +62,9 @@ public class parseJSON{
 
         }catch(FileNotFoundException e){
             System.out.println("This file doesn't exist!");
-            e.printStackTrace();
         } catch (IOException e) {
             System.out.println("IO Exception!");
-            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
             System.out.println("Class not found!");
         } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
@@ -182,6 +179,8 @@ public class parseJSON{
             case "I":
                 map[row][col] = new infoTile(row, col);
                 break;
+            case "R":
+                map[row][col] = new rechargeTile(row, col);
 
         }
 

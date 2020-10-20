@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
+import com.google.gson.JsonParser;
 import org.junit.Test;
 
 public class parseJSONTesting {
@@ -68,6 +69,15 @@ public class parseJSONTesting {
         assert test.getBug() != null;
          test = new parseJSON("tests/test1.json");
         assert test.getBug() == null;
+    }
+
+    /**
+     *
+     */
+    @Test
+    public void checkFailedParser(){
+        parseJSON test = new parseJSON("levels/level-1.json");
+        assert test.getPlayer() == null && test.getBug() ==  null && test.getMap() == null;
     }
 
 
