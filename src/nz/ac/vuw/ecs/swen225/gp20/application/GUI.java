@@ -690,15 +690,6 @@ public class GUI {
         timer.start();
     }
 
-    /**
-     * Checks if user has lost the game.
-     * The user loses a game if they fail to reach the winning tile before time runs out.
-     *
-     * @return true if user has lost. Otherwise, false.
-     */
-    public boolean gameOver() {
-        return currentTime <= 0 && !(game.getPlayer().getCurrentTile() instanceof winTile);
-    }
 
     /**
      * Abstract method that saves the movements.
@@ -810,6 +801,16 @@ public class GUI {
     }
 
     /**
+     * Checks if user has lost the game.
+     * The user loses a game if they fail to reach the winning tile before time runs out.
+     *
+     * @return true if user has lost. Otherwise, false.
+     */
+    public boolean gameOver() {
+        return currentTime <= 0 && !(game.getPlayer().getCurrentTile() instanceof winTile);
+    }
+
+    /**
      * Returns the current player.
      *
      * @return the current player.
@@ -826,6 +827,36 @@ public class GUI {
     }
 
     /**
+     * Used by RecordReader class to display error messages.
+     *
+     * @param message -- the error message to be displayed.
+     */
+    public static void notifyError(String message) {
+        // based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    /**
+     * Creates a pop-up which displays the passed in message.
+     * Used by RecordSaver.
+     *
+     * @param message -- the specified message.
+     */
+    public static void showMessage(String message) {
+        JOptionPane.showMessageDialog(null, message);
+    }
+
+    /**
+     * Creates a pop-up which checks if user wants to overwrite a file.
+     *
+     * @param message -- the specified message.
+     * @return int value which determines whether or not user wawnts to overwrite the file.
+     */
+    public static int inputDialogue(String message) {
+        return JOptionPane.showConfirmDialog(null, message);
+    }
+
+    /**
      * Gets a file from user via a {@link JFileChooser}4
      *
      * @return the selected file.
@@ -838,16 +869,17 @@ public class GUI {
     }
 
     /**
-     * //todo cancel null
-     * @param message
-     * @return
+     * Gets the file name the user wants to save the file under.
+     *
+     * @param message -- the message displayed to the user.
+     * @return the inputted file name.
      */
-    public static String getFileName(String message){
+    public static String getFileName(String message) {
         String fileName = "";
-        while (fileName.isEmpty() || fileName.isBlank()){
+        while (fileName.isEmpty() || fileName.isBlank()) {
             try {
                 fileName = JOptionPane.showInputDialog(message); //todo error checking
-            } catch (NullPointerException ignored){
+            } catch (NullPointerException ignored) {
                 JOptionPane.showMessageDialog(null, "File save cancelled.");
                 return null;
             }
@@ -856,24 +888,6 @@ public class GUI {
         }
 
         return fileName;
-    }
-
-    /**
-     * Used by RecordReader class to display error messages.
-     *
-     * @param message -- the error message to be displayed.
-     */
-    public static void notifyError(String message) {
-        // based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
-        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    public static void showMessage(String message){
-        JOptionPane.showMessageDialog(null, message);
-    }
-
-    public static int inputDialogue(String message){
-        return JOptionPane.showConfirmDialog(null, message);
     }
 
     public static void main(String[] args) {
