@@ -111,17 +111,21 @@ class ExitTileRender extends RenderTile {
 
 class ChipDoorRender extends RenderTile {
     Image gif = null;
+    Image unlocked = null;
     JComponent display = null;
 
-    public ChipDoorRender(int x, int y, Image g, JComponent display) {
+    public ChipDoorRender(int x, int y, Image g, Image o, JComponent display) {
         super(x, y, null);
         this.display = display;
         this.gif = g;
+        this.unlocked = o;
     }
 
     @Override
     public void drawTile(Graphics2D g, int x, int y) {
-        g.drawImage(gif, x, y, display);
+
+        if (!open) g.drawImage(gif, x, y, display);
+        else g.drawImage(unlocked, x, y, display);
     }
 }
 
