@@ -4,6 +4,7 @@ import com.google.gson.internal.$Gson$Preconditions;
 
 public class rechargeTile implements Tile {
     private int row,col;
+    boolean recharge = false;
 
     /**
      * Recharge tile constructor.
@@ -20,7 +21,8 @@ public class rechargeTile implements Tile {
     public boolean checkValidMove(Player player) {
         $Gson$Preconditions.checkNotNull(player);
         //player will only be recharge once
-        if(!player.playerIsRecharge()){
+        if(!recharge){
+            recharge = true;
             player.setPlayerRecharge(true);
         }
 
