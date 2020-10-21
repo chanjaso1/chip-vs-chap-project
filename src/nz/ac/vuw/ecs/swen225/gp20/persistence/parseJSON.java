@@ -6,9 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.internal.$Gson$Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -197,24 +195,25 @@ public class parseJSON{
         }
     }
 
+    /**
+     * Load an image from a JAR file.
+     * @param imgName - The name of the image.
+     * @return the image, otherwise throw an exception and catch it.
+     */
     public Image loadImage(String imgName) {
-        JsonObject jobject;
         String pathToJAR = directory.substring(0, directory.length() - ".json".length()) + ".jar";
         try {
             JarFile jarFile = new JarFile(pathToJAR);
             Enumeration<JarEntry> e = jarFile.entries();
 
-
             //Based on http://www.devx.com/tips/Tip/22124
             while (e.hasMoreElements()) {
                 JarEntry entry = e.nextElement();
-                if (!entry.equals(imgName)) continue;   //Find the image
 
-
-//                InputStream inputStream = jarFile.getInputStream(entry);
-//                FileOutputStream outputStream = new FileOutputStream(file);
-
-                return new ImageIcon(Toolkit.getDefaultToolkit().createImage(ClassLoader.getSystemResource(imgName))).getImage();
+                if (entry.getName().equals(imgName)) {
+                    InputStream inputStream = jarFile.getInputStream(entry);
+                    return Toolkit.getDefaultToolkit().createImage(inputStream.readAllBytes());
+                }
             }
         }catch(Exception e){
             System.out.println("There was an error in loading an image");
