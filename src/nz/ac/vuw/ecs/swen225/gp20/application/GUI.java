@@ -35,7 +35,7 @@ public class GUI {
     private RendererPanel board;
     private RecordReader recordReader;
     private BufferedImage redKey, greenKey;
-    private ArrayList<Move> moveSequence = new ArrayList<>();
+    private ArrayList[] moveSequence = new ArrayList[3]; //empty, level1moves, level2moves
     private Timer timer;
 
     private Game game;
@@ -46,6 +46,8 @@ public class GUI {
     public GUI() {
         game = new Game(2);
         board = new RendererPanel(game);
+        moveSequence[1] = new ArrayList<Move>();
+        moveSequence[2] = new ArrayList<Move>();
 
         // creates red and green keys
         try {
@@ -72,13 +74,15 @@ public class GUI {
         // starts game from recently saved file
         if (lastGameToken.equalsIgnoreCase("L")) {
             //start with last game sequence
-            resetLevel(startScan.nextInt());
-            recordReader = new RecordReader(this, new File("Recordings/UserData/lastgame.json"), game.getPlayer(), game.getBug());
+            int level = startScan.nextInt();
+            resetLevel(level);
+            recordReader = new RecordReader(this, new File("Recordings/UserData/lastgame.json"), game.getPlayer());
+            recordReader.updateMovesForActors(level);
             currentTime = recordReader.getTime();
             recordReader.playAtSpeed(0);
 
             //clear lastgame
-            writeToFile("Recordings/UserData/lastgame.json", RecordSaver.EMPTY_RECORDING);
+//            writeToFile("Recordings/UserData/lastgame.json", RecordSaver.EMPTY_RECORDING);
         } else {
             //start from last unfinished level
             int lastLevel = Integer.parseInt(lastGameToken);
@@ -444,7 +448,7 @@ public class GUI {
         if (file == null) return;
 
         resetLevel(1);
-        recordReader = new RecordReader(this, file, game.getPlayer(), game.getBug());
+        recordReader = new RecordReader(this, file, game.getPlayer());
         resetTime();
 
         // formats frame
@@ -695,7 +699,7 @@ public class GUI {
                         game.updatePlayerBugStatus();
 
                         if (bugMove != null)
-                            moveSequence.add(bugMove);
+                            moveSequence[game.getLevel()].add(bugMove);
                     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
                         ex.printStackTrace();
                     }
@@ -768,7 +772,7 @@ public class GUI {
 
             // updates actor's move between levels
             if (recordReader != null)
-                recordReader.updateMovesForActors();
+                recordReader.updateMovesForActors(game.getLevel());
         }
     }
 
@@ -779,7 +783,7 @@ public class GUI {
      * @param move -- the player's most recent move.
      */
     public void movePlayer(Move move) {
-        moveSequence.add(move);
+        moveSequence[game.getLevel()].add(move);
         game.moveActor(move);
         board.renderMove(move.getDir());
         checkWinTile();

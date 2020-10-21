@@ -12,8 +12,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 public class RecordReader {
-    private final ArrayList<Move> moves = new ArrayList<>();
-    private int lastMovePos; //move counter that ends at last move
+    private final ArrayList[] moves = new ArrayList[3];
+    private int lastMovePos, //move counter that ends at last move
+    currentLevel; //level currently being played
     private double time; //time that replay ends at
     private final GUI gui;
     private Timer timer = null; //timer for auto replay
@@ -27,12 +28,14 @@ public class RecordReader {
      * @param gui - the only gui being used that gives access to game
      * @param file - the file that is being read
      * @param player - the current player of the current game
-     * @param bugObj - bug in Object format as it's not possible to use it fully in Bug format
      */
-    public RecordReader(GUI gui, File file, Player player, Object bugObj) {
+    public RecordReader(GUI gui, File file, Player player) {
         this.gui = gui;
         //based on https://stackoverflow.com/questions/15571496/how-to-check-if-a-folder-exists
         replayFile = file;
+        moves[1] = new ArrayList<Move>();
+        moves[2] = new ArrayList<Move>();
+        currentLevel = 1;
 
         //read path
         try {
@@ -40,62 +43,67 @@ public class RecordReader {
             JsonObject jo = new Gson().fromJson(new FileReader(replayFile), JsonObject.class);
             time = jo.get("Header").getAsJsonObject().get("time").getAsDouble();
 
-            JsonArray jsonMoves = jo.getAsJsonArray("Actions");
+            for (int level = 1; level < 3; level++) {
+                if (!jo.has("Level"+level))
+                    continue;
 
-            //for every move in actions
-            for (JsonElement jsonMove: jsonMoves){
-                boolean isPlayerMove = jsonMove.getAsJsonObject().has("P"); //is player or bug
-                Move move = null; //move to be added
+                JsonArray jsonMoves = jo.getAsJsonArray("Level"+level);
 
-                //switch to move type
-                String typeMove;
+                //for every move in actions
+                for (JsonElement jsonMove: jsonMoves){
+                    boolean isPlayerMove = jsonMove.getAsJsonObject().has("P"); //is player or bug
+                    Move move = null; //move to be added
 
-                //is a Player move
-                if (isPlayerMove){
-                    typeMove = jsonMove.getAsJsonObject().get("P").getAsString();
-                    switch (typeMove.toLowerCase()){
-                        case "left":
-                            move = new moveLeft(player);
-                            break;
-                        case "right":
-                            move = new moveRight(player);
-                            break;
-                        case "up":
-                            move = new moveUp(player);
-                            break;
-                        case "down":
-                            move = new moveDown(player);
-                            break;
-                        default:
-                            //not recognised
-                            throw new NullPointerException("Move is not recognised");
+                    //switch to move type
+                    String typeMove;
+
+                    //is a Player move
+                    if (isPlayerMove){
+                        typeMove = jsonMove.getAsJsonObject().get("P").getAsString();
+                        switch (typeMove.toLowerCase()){
+                            case "left":
+                                move = new moveLeft(player);
+                                break;
+                            case "right":
+                                move = new moveRight(player);
+                                break;
+                            case "up":
+                                move = new moveUp(player);
+                                break;
+                            case "down":
+                                move = new moveDown(player);
+                                break;
+                            default:
+                                //not recognised
+                                throw new NullPointerException("Move is not recognised");
+                        }
                     }
-                }
-                //is a Bug move
-                else {
-                    typeMove = jsonMove.getAsJsonObject().get("B").getAsString();
-                    Bug dummyBug = new Bug(0, 0); //moves don't allow null actors
-                    switch (typeMove.toLowerCase()){
-                        case "left":
-                            move = new moveLeft(dummyBug);
-                            break;
-                        case "right":
-                            move = new moveRight(dummyBug);
-                            break;
-                        case "up":
-                            move = new moveUp(dummyBug);
-                            break;
-                        case "down":
-                            move = new moveDown(dummyBug);
-                            break;
-                        default:
-                            //not recognised
-                            throw new NullPointerException("Move is not recognised");
+                    //is a Bug move
+                    else {
+                        typeMove = jsonMove.getAsJsonObject().get("B").getAsString();
+                        Bug dummyBug = new Bug(0, 0); //moves don't allow null actors
+                        switch (typeMove.toLowerCase()){
+                            case "left":
+                                move = new moveLeft(dummyBug);
+                                break;
+                            case "right":
+                                move = new moveRight(dummyBug);
+                                break;
+                            case "up":
+                                move = new moveUp(dummyBug);
+                                break;
+                            case "down":
+                                move = new moveDown(dummyBug);
+                                break;
+                            default:
+                                //not recognised
+                                throw new NullPointerException("Move is not recognised");
+                        }
                     }
-                }
 
-                //add move - made by whoever - to moves list to preserve order
-                moves.add(move);
+                    //add move - made by whoever - to moves list to preserve order
+                    moves[level].add(move);
+                }
             }
         } catch (Exception e) {
             GUI.notifyError("Unsupported file format.");
@@ -103,7 +111,7 @@ public class RecordReader {
         }
 
         //if there aren't any moves in a regular replay
-        if (moves.isEmpty() && !replayFile.getName().equals("lastgame.json"))
+        if (moves[1].isEmpty() && moves[2].isEmpty() && !replayFile.getName().equals("lastgame.json"))
             //let user know file is empty
             //based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
             GUI.notifyError("Your file was empty. Please try again and select a different file.");
@@ -127,10 +135,48 @@ public class RecordReader {
      * Runs one move per click. Button to be clicked is on GUI.
      */
     public void playNextFrame(){
+        System.out.println("lm"+lastMovePos);
         gui.setDisplayInfoTile(false); //don't display the popups during replay
 
-        //don't play past last replay
-        if (moves.size() == lastMovePos){
+        //play
+        //do Player move
+        if (lastMovePos < moves[currentLevel].size()){
+            //do Player move
+            if (((Move)moves[currentLevel].get(lastMovePos)).getMover().getClass() == Player.class){
+                gui.movePlayer((Move)moves[currentLevel].get(lastMovePos));
+            }
+            //do Bug move
+            else{
+                //play using reflection
+                try {
+                    gui.getGame().getParser().aClass.getMethod("moveBugSequence").invoke(gui.getGame().getBug());
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+                gui.getGame().updatePlayerBugStatus();
+                gui.getBoard().moveBug();
+            }
+
+            //increment
+            lastMovePos++;
+        }
+        else {
+            //don't notify if playing starting game replay
+            if (!replayFile.getName().equals("lastgame.json")){
+                GUI.showMessage("That was the last move!");
+            }
+
+            //step-by-step dont stop timer that doesnt exist
+            if (timer != null)
+                timer.stop();
+
+            //gui display the "help" popup on InfoTile after starting game done
+            gui.setDisplayInfoTile(true);
+        }
+
+
+        /*//don't play past last replay
+        if (moves[gui.getGame().getLevel()].size() >= lastMovePos){
             //don't notify if playing starting game replay
             if (!replayFile.getName().equals("lastgame.json"))
                 GUI.showMessage("That was the last move!");
@@ -141,35 +187,43 @@ public class RecordReader {
 
             //gui display the "help" popup on InfoTile after starting game done
             gui.setDisplayInfoTile(true);
+            lastMovePos = 0;
             return;
         }
 
-        //do Player move
-        if (moves.get(lastMovePos).getMover().getClass() == Player.class){
-            gui.movePlayer(moves.get(lastMovePos));
-        }
-        //do Bug move
-        else{
-            //play using reflection
-            try {
-                gui.getGame().getParser().aClass.getMethod("moveBugSequence").invoke(gui.getGame().getBug());
-            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                e.printStackTrace();
+        //if not last move
+        if (lastMovePos < moves[gui.getGame().getLevel()].size()){
+            //do Player move
+            if (((Move)moves[gui.getGame().getLevel()].get(lastMovePos)).getMover().getClass() == Player.class){
+                gui.movePlayer((Move)moves[gui.getGame().getLevel()].get(lastMovePos));
             }
-            gui.getGame().updatePlayerBugStatus();
-            gui.getBoard().moveBug();
+            //do Bug move
+            else{
+                //play using reflection
+                try {
+                    gui.getGame().getParser().aClass.getMethod("moveBugSequence").invoke(gui.getGame().getBug());
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+                gui.getGame().updatePlayerBugStatus();
+                gui.getBoard().moveBug();
+            }
         }
 
         //move on to next move
-        lastMovePos++;
+        lastMovePos++;*/
     }
 
     /**
      * New levels have new Bugs and Players - update moves with new Player/Bug.
      */
-    public void updateMovesForActors(){
+    public void updateMovesForActors(int level){
+        currentLevel = level;
+        lastMovePos = 0;
+
         //update all the moves
-        for (Move move: moves){
+        for (Object obj: moves[level]){
+            Move move = (Move) obj;
             //update the player
             if (move.getMover().getClass() == Player.class)
                 move.setMover(gui.getPlayer());
@@ -182,7 +236,7 @@ public class RecordReader {
     /**
      * @return the moves that this RecordReader has read.
      */
-    public ArrayList<Move> getMoves() {
+    public ArrayList[] getMoves() {
         return moves;
     }
 

@@ -1,0 +1,93 @@
+{
+	"Header": {
+		"time": 50.0
+	},
+	"Level1": [
+		{
+			"P": "left"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "up"
+		},
+		{
+			"P": "up"
+		},
+		{
+			"P": "up"
+		},
+		{
+			"P": "up"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "up"
+		},
+		{
+			"P": "up"
+		}
+	],
+	"Level2": [
+	]
+}
