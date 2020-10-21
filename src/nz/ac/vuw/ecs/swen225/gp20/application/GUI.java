@@ -67,10 +67,11 @@ public class GUI {
             System.out.println("Could not load file.");
         }
 
+        setDisplayInfoTile(true);
+
         // starts game from recently saved file
-        if (lastGameToken.equalsIgnoreCase("L")){
+        if (lastGameToken.equalsIgnoreCase("L")) {
             //start with last game sequence
-            setDisplayInfoTile(true);
             resetLevel(startScan.nextInt());
             recordReader = new RecordReader(this, new File("Recordings/UserData/lastgame.json"), game.getPlayer(), game.getBug());
             currentTime = recordReader.getTime();
@@ -78,8 +79,7 @@ public class GUI {
 
             //clear lastgame
             writeToFile("Recordings/UserData/lastgame.json", RecordSaver.EMPTY_RECORDING);
-        }
-        else {
+        } else {
             //start from last unfinished level
             int lastLevel = Integer.parseInt(lastGameToken);
             resetLevel(lastLevel);
@@ -262,7 +262,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 timer.stop();
                 new RecordSaver(moveSequence, currentTime, true);
-                writeToFile("Recordings/UserData/exitinfo.txt", "L "+game.getLevel());
+                writeToFile("Recordings/UserData/exitinfo.txt", "L " + game.getLevel());
 
                 System.exit(0);
             }
@@ -689,10 +689,13 @@ public class GUI {
                 }
 
                 // retrieves and moves bug
-                if (game.getLevel() == 2) {
+                if (game.getLevel() == 2 && displayInfoTile) {
                     try {
-                        game.getParser().aClass.getMethod("moveBugSequence").invoke(game.getBug());
+                        Move bugMove = (Move) game.getParser().aClass.getMethod("moveBugSequence").invoke(game.getBug());
                         game.updatePlayerBugStatus();
+
+                        if (bugMove != null)
+                            moveSequence.add(bugMove);
                     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
                         ex.printStackTrace();
                     }
@@ -854,6 +857,14 @@ public class GUI {
     }
 
     /**
+     * Returns the current board.
+     * @return
+     */
+    public RendererPanel getBoard() {
+        return board;
+    }
+
+    /**
      * Used by RecordReader class to display error messages.
      *
      * @param message -- the error message to be displayed.
@@ -917,7 +928,14 @@ public class GUI {
         return fileName;
     }
 
-    public static void writeToFile(String filePath, String content){
+    /**
+     * Writes the passed in content to the filepath.
+     * Used when ctrl-x and ctrl-s are invoked.
+     *
+     * @param filePath -- the file path the file will be saved to.
+     * @param content -- the content to be saved.
+     */
+    public static void writeToFile(String filePath, String content) {
         try {
             //write contents to file or make new file
             // - based on https://stackoverflow.com/questions/52581404/java-create-a-new-file-or-override-the-existing-file
