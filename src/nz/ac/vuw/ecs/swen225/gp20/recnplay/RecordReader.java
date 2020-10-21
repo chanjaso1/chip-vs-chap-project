@@ -128,12 +128,19 @@ public class RecordReader {
      * Runs one move per click. Button to be clicked is on GUI.
      */
     public void playNextFrame(){
+        gui.setDisplayInfoTile(false);
         //don't play past last replay
-        if (moves.size() == lastMovePos && !replayFile.getName().equals("lastgame.json")){
-            JOptionPane.showMessageDialog(null, "That was the last move!");
+        if (moves.size() == lastMovePos){
+            //don't notify if playing starting game replay
+            if (!replayFile.getName().equals("lastgame.json"))
+                JOptionPane.showMessageDialog(null, "That was the last move!");
 
+            //step-by-step dont stop timer that doesnt exist
             if (timer != null)
                 timer.stop();
+
+            //gui display the "help" popup on InfoTile after starting game done
+            gui.setDisplayInfoTile(true);
             return;
         }
 
