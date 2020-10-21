@@ -38,6 +38,7 @@ public class RendererPanel extends JComponent {
     // 2 - South
     // 3 - West
     int direction = 2;
+    boolean hit = false;
 
     Game game;
 
@@ -65,9 +66,10 @@ public class RendererPanel extends JComponent {
             floor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/floor.png"));
             unlocked = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/unlocked.png"));
             iTile = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/infoTile.png"));
-            // winTile and cDoorTile different because it's a gif
+            // These are different because it's a gif
             win = new ImageIcon(getClass().getResource("data/winTile.gif")).getImage();
             cDoor = new ImageIcon(getClass().getResource("data/chipDoor.gif")).getImage();
+            cOpen = new ImageIcon(getClass().getResource("data/chipOpen.gif")).getImage();
         } catch (IOException e) {
             System.out.println("Tile image not found!");
         }
@@ -204,11 +206,16 @@ public class RendererPanel extends JComponent {
 
     @Override
     public void paintComponent(Graphics g) {
+        System.out.println("WidthHeight: " + this.getWidth() + " " + this.getHeight());
         Graphics2D g2d = (Graphics2D) g;
         g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
         renderTiles(g2d);
         drawItems(g2d);
         drawPlayer(g2d, this);
+        if (hit) {
+            g2d.setColor(Color.red);
+            g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+        }
     }
 
     /**
@@ -285,6 +292,7 @@ public class RendererPanel extends JComponent {
         // (In event of invalid movement)
         int xTemp = xPos;
         int yTemp = yPos;
+        hit = false;
 
         if(dir == 1) {
             System.out.println("Right");
@@ -320,6 +328,8 @@ public class RendererPanel extends JComponent {
             // Picked up item
             itemMap[yPos][xPos] = null;
             pickupSound.playSound();
+        } else if (itemMap[yPos][xPos] != null && (itemMap[yPos][xPos] instanceof Enemy)) {
+            hit = true;
         } else if ((tileMap[yPos][xPos] instanceof GreenDoorRender || tileMap[yPos][xPos] instanceof RedDoorRender) && !tileMap[yPos][xPos].open) {
             // Unlocked door
             tileMap[yPos][xPos].setOpen();
@@ -372,6 +382,10 @@ public class RendererPanel extends JComponent {
         if (yBugLast != yBug) itemMap[yBugLast][xBugLast] = null;
         yBugLast = yBug;
         xBugLast = xBug;
+
+        if (yBug == yPos && xBug == xPos) {
+            hit = true;
+        }
         this.repaint();
     }
 }

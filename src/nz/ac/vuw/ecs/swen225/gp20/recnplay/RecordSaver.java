@@ -68,7 +68,10 @@ public class RecordSaver {
             e.printStackTrace();
         }
 
-        JOptionPane.showMessageDialog(null, "File saved to Recordings folder.");
+        if (notForUser)
+            JOptionPane.showMessageDialog(null, "Your progress has been saved. Next time you open the game, you will start from this point.");
+        else
+            JOptionPane.showMessageDialog(null, "File saved to Recordings folder.");
     }
 
     public static String getFileName(String message){

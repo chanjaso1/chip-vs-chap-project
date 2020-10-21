@@ -56,6 +56,13 @@ public class GUI {
         }
 
         initialise();
+
+        // starts game from
+
+        resetLevel(1);
+        recordReader = new RecordReader(this, new File("Recordings/UserData/lastgame.json"), game.getPlayer(), game.getBug());
+        resetTime();
+        recordReader.playAtSpeed(0);
     }
 
     /**
@@ -122,28 +129,7 @@ public class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 pauseGame(true);
-                String message = "HOW TO PLAY\n\n" +
-                        "AIM OF THE GAME\n" +
-                        "- Collect all the treasures in the level and reach the winning tile before time runs out!\n\n" +
-                        "MOVEMENT\n" +
-                        "- Use the arrow keys to move Chap around the maze.\n" +
-                        "- Unlock doors by collecting their respective keys.\n" +
-                        "- You cannot progress to the next level until you collect all the treasures!\n\n" +
-                        "SPECIAL KEYS\n" +
-                        "CTRL-X:\t Exit the game. The current game state will be lost, the next time the game is started, it will resume from the last unfinished level.\n" +
-                        "CTRL-S:\t Exit the game, saves the game state, game will resume next time application is started.\n" +
-                        "CTRL R:\t Resume a saved game.\n" +
-                        "CTRL-P:\t Start a new game a the last unfinished level (restart level).\n" +
-                        "CTRL-1:\t Start a new game at level 1.\n" +
-                        "SPACE:\t\t Pause the game and displays a 'game is paused' dialog.\n" +
-                        "ESC:\t\t\tClose the 'game is paused' dialog and resume the game.\n" +
-                        "You can also use the menu options and buttons below to execute actions.\n\n" +
-                        "SPECIAL TILES\n" +
-                        "INFO tile: Step on this tile to show instructions\n" +
-                        "TIME tile: Step on this tile to add 10 extra seconds to the timer.\n\n" +
-                        "REPLAY MODE\n" +
-                        "";
-                JOptionPane.showMessageDialog(frame, message, "HELP", JOptionPane.PLAIN_MESSAGE);
+                displayHelpFrame();
                 pauseGame(false);
             }
         });
@@ -206,9 +192,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveUp(game.getPlayer()));
-                if (game.getLevel() == 2) {
-                    game.updatePlayerBugStatus();
-                }
+
 
             }
         });
@@ -219,9 +203,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveDown(game.getPlayer()));
-                if (game.getLevel() == 2) {
-                    game.updatePlayerBugStatus();
-                }
+
 
             }
         });
@@ -232,9 +214,6 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveLeft(game.getPlayer()));
-                if (game.getLevel() == 2) {
-                    game.updatePlayerBugStatus();
-                }
 
             }
         });
@@ -245,9 +224,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveRight(game.getPlayer()));
-                if (game.getLevel() == 2) {
-                    game.updatePlayerBugStatus();
-                }
+
             }
         });
 
@@ -267,7 +244,7 @@ public class GUI {
         actionMap.put("SAVE", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                saveMovements();
+                new RecordSaver(moveSequence, currentTime, true);
             }
         });
 
@@ -453,7 +430,6 @@ public class GUI {
         recordReader = new RecordReader(this, file, game.getPlayer(), game.getBug());
         resetTime();
 
-
         // formats frame
         replayFrame = new JFrame("REPLAY CONTROLS");
         replayFrame.setSize(600, 270);
@@ -531,6 +507,7 @@ public class GUI {
 //                    System.out.println("restart timer");
                     replayFrame.setVisible(false);
                     pauseGame = false;
+                    currentTime = recordReader.getTime();
 //                    redisplayTimer();
 //                    timer.start();
 //                    currentTime = prevTime;
@@ -579,6 +556,35 @@ public class GUI {
         if (JOptionPane.showConfirmDialog(frame, message, "EXIT GAME", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
+    }
+
+    /**
+     * Displays the help frame which displays the game rules and instructions.
+     */
+    public void displayHelpFrame() {
+        String message = "HOW TO PLAY\n\n" +
+                "AIM OF THE GAME\n" +
+                "- Collect all the treasures in the level and reach the winning tile before time runs out!\n\n" +
+                "MOVEMENT\n" +
+                "- Use the arrow keys to move Chap around the maze.\n" +
+                "- Unlock doors by collecting their respective keys.\n" +
+                "- You cannot progress to the next level until you collect all the treasures!\n\n" +
+                "SPECIAL KEYS\n" +
+                "CTRL-X:\t Exit the game. The current game state will be lost, the next time the game is started, it will resume from the last unfinished level.\n" +
+                "CTRL-S:\t Exit the game, saves the game state, game will resume next time application is started.\n" +
+                "CTRL R:\t Resume a saved game.\n" +
+                "CTRL-P:\t Start a new game a the last unfinished level (restart level).\n" +
+                "CTRL-1:\t Start a new game at level 1.\n" +
+                "SPACE:\t\t Pause the game and displays a 'game is paused' dialog.\n" +
+                "ESC:\t\t\tClose the 'game is paused' dialog and resume the game.\n" +
+                "You can also use the menu options and buttons below to execute actions.\n\n" +
+                "SPECIAL TILES\n" +
+                "INFO tile: Step on this tile to show instructions\n" +
+                "TIME tile: Step on this tile to add 10 extra seconds to the timer.\n\n" +
+                "REPLAY MODE\n" +
+                "";
+        JOptionPane.showMessageDialog(frame, message, "HELP", JOptionPane.PLAIN_MESSAGE);
+
     }
 
     /**
@@ -666,6 +672,8 @@ public class GUI {
                     try {
                         game.getParser().aClass.getMethod("moveBugSequence").invoke(game.getBug());
                         game.updatePlayerBugStatus();
+//                        board.repaint();
+//                        board.revalidate();
                     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
                         ex.printStackTrace();
                     }
@@ -736,7 +744,7 @@ public class GUI {
 
     /**
      * This method moves the player in the specified direction and updates the board.
-     * Also checks if the player has landed on the winTile.
+     * Also checks if the player has landed on a winTile or infoTile.
      *
      * @param move -- the player's most recent move.
      */
@@ -746,6 +754,19 @@ public class GUI {
         board.renderMove(move.getDir());
         checkWinTile();
         redisplayTimer();
+
+        // displays bug
+        if (game.getLevel() == 2) {
+            game.updatePlayerBugStatus();
+        }
+
+        // checks if player is on info tile
+        if (game.getPlayer().getCurrentTile() instanceof infoTile) {
+            pauseGame(true);
+            displayHelpFrame();
+            pauseGame(false);
+        }
+
     }
 
     /**
@@ -786,10 +807,6 @@ public class GUI {
         game.loadLevel();
         board.updateLevel(game.getMap());
         board.updateRenderMaps();
-
-//        if (saveTime)
-//            prevTime = currentTime;
-
         resetTime();
     }
 
@@ -799,7 +816,6 @@ public class GUI {
     public void resetTime() {
         currentTime = MAX_TIME;
         redisplayTimer();
-//        createTimer();
     }
 
     /**
