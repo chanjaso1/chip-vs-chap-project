@@ -9,10 +9,10 @@ import nz.ac.vuw.ecs.swen225.gp20.render.RendererPanel;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -57,12 +57,34 @@ public class GUI {
 
         initialise();
 
-        // starts game from recent saved recording
-        setDisplayInfoTile(true);
-        resetLevel(1);
-        recordReader = new RecordReader(this, new File("Recordings/UserData/lastgame.json"), game.getPlayer(), game.getBug());
-        currentTime = recordReader.getTime();
-        recordReader.playAtSpeed(0);
+        // checks if game needs to start from last unfinished level or saved state
+        String lastGameToken = "";
+        Scanner startScan = null;
+        try {
+            startScan = new Scanner(new File("Recordings/UserData/exitinfo.txt"));
+            lastGameToken = startScan.next();
+        } catch (FileNotFoundException ignored) {
+            System.out.println("Could not load file.");
+        }
+
+        // starts game from recently saved file
+        if (lastGameToken.equalsIgnoreCase("L")){
+            //start with last game sequence
+            setDisplayInfoTile(true);
+            resetLevel(startScan.nextInt());
+            recordReader = new RecordReader(this, new File("Recordings/UserData/lastgame.json"), game.getPlayer(), game.getBug());
+            currentTime = recordReader.getTime();
+            recordReader.playAtSpeed(0);
+
+            //clear lastgame
+            writeToFile("Recordings/UserData/lastgame.json", RecordSaver.EMPTY_RECORDING);
+        }
+        else {
+            //start from last unfinished level
+            int lastLevel = Integer.parseInt(lastGameToken);
+            resetLevel(lastLevel);
+        }
+
     }
 
     /**
@@ -225,7 +247,10 @@ public class GUI {
         actionMap.put("EXIT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+//                new RecordSaver(game.getLevel());
+                writeToFile("Recordings/UserData/exitinfo.txt", String.valueOf(game.getLevel()));
                 displayExitFrame();
+
             }
         });
 
@@ -237,6 +262,8 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 timer.stop();
                 new RecordSaver(moveSequence, currentTime, true);
+                writeToFile("Recordings/UserData/exitinfo.txt", "L "+game.getLevel());
+
                 System.exit(0);
             }
         });
@@ -657,7 +684,7 @@ public class GUI {
 
                 // power-up that adds time
                 if (game.getPlayer().playerIsRecharge()) {
-                    currentTime += 10;
+                    currentTime += 11;
                     game.getPlayer().setPlayerRecharge(false);
                 }
 
@@ -888,6 +915,19 @@ public class GUI {
         }
 
         return fileName;
+    }
+
+    public static void writeToFile(String filePath, String content){
+        try {
+            //write contents to file or make new file
+            // - based on https://stackoverflow.com/questions/52581404/java-create-a-new-file-or-override-the-existing-file
+            BufferedWriter newFile = new BufferedWriter(new FileWriter(filePath));
+            newFile.write(content);
+            newFile.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
