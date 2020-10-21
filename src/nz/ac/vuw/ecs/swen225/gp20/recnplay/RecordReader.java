@@ -6,10 +6,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.FileReader;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 public class RecordReader {
@@ -31,6 +33,7 @@ public class RecordReader {
      * @param bugObj - bug in Object format as it's not possible to use it fully in Bug format
      */
     public RecordReader(GUI gui, File file, Player player, Object bugObj) {
+        System.out.println("RecordReader");
         Actor bug = (Actor)bugObj;
         this.gui = gui;
         //based on https://stackoverflow.com/questions/15571496/how-to-check-if-a-folder-exists
@@ -47,7 +50,7 @@ public class RecordReader {
             //for every move in actions
             for (JsonElement jsonMove: jsonMoves){
                 boolean isPlayerMove = jsonMove.getAsJsonObject().has("P"); //is player or bug
-                Move move; //move to be added
+                Move move = null; //move to be added
 
                 //switch to move type
                 String typeMove;
@@ -78,16 +81,16 @@ public class RecordReader {
                     typeMove = jsonMove.getAsJsonObject().get("B").getAsString();
                     switch (typeMove.toLowerCase()){
                         case "left":
-                            move = new moveLeft(bug);
+                            move = new moveLeft(new Bug(0, 0));
                             break;
                         case "right":
-                            move = new moveRight(bug);
+                            move = new moveRight(new Bug(0, 0));
                             break;
                         case "up":
-                            move = new moveUp(bug);
+                            move = new moveUp(new Bug(0, 0));
                             break;
                         case "down":
-                            move = new moveDown(bug);
+                            move = new moveDown(new Bug(0, 0));
                             break;
                         default:
                             //not recognised
@@ -99,6 +102,7 @@ public class RecordReader {
                 moves.add(move);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             GUI.notifyError("Unsupported file format.");
             return;
         }
@@ -146,7 +150,21 @@ public class RecordReader {
         }
 
         //do move
-        gui.movePlayer(moves.get(lastMovePos));
+        if (moves.get(lastMovePos).getMover().getClass() == Player.class){
+            gui.movePlayer(moves.get(lastMovePos));
+        }
+        //update bug
+        else{
+            //play using reflection
+            try {
+                gui.getGame().getParser().aClass.getMethod("moveBugSequence").invoke(gui.getGame().getBug());
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+            gui.getGame().updatePlayerBugStatus();
+            gui.getBoard().moveBug();
+        }
+
         lastMovePos++;
     }
 
@@ -157,22 +175,24 @@ public class RecordReader {
         //update all the moves
         for (Move move: moves){
             //update the player
-            if (move.getMover().getClass() == Player.class)
+            if (move.getMover().getClass() == Player.class){
+                System.out.println("setting player:" + gui.getPlayer());
                 move.setMover(gui.getPlayer());
+            }
             //update bug
-            else
+            else{
                 move.setMover((Actor) gui.getGame().getBug());
+                System.out.println("setting bug:"+((Actor) gui.getGame().getBug()));
+            }
         }
     }
 
-    /*
     public StringBuilder getMovesAsString(){
         StringBuilder movesString = new StringBuilder();
         for (Move m: moves)
             movesString.append(m).append(",");
         return movesString;
     }
-     */
 
     /**
      * @return the moves read from the file initialised with

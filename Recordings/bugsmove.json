@@ -1,0 +1,175 @@
+{
+	"Header": {
+		"time": 51.0
+	},
+	"Actions": [
+		{
+			"P": "down"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "up"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "up"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "up"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"B": "down"
+		},
+		{
+			"P": "up"
+		},
+		{
+			"B": "down"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"B": "down"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"B": "down"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"B": "down"
+		},
+		{
+			"P": "up"
+		},
+		{
+			"P": "up"
+		},
+		{
+			"B": "down"
+		},
+		{
+			"B": "down"
+		},
+		{
+			"B": "down"
+		},
+		{
+			"B": "up"
+		},
+		{
+			"B": "up"
+		},
+		{
+			"B": "up"
+		},
+		{
+			"B": "up"
+		}
+	]
+}

@@ -1,0 +1,25 @@
+{
+	"Header": {
+		"time": 56.0
+	},
+	"Actions": [
+		{
+			"P": "left"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "left"
+		}
+	]
+}
