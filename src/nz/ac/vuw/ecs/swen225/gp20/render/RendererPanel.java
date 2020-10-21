@@ -29,6 +29,7 @@ public class RendererPanel extends JComponent {
     public BufferedImage wall = null, gDoor = null, rDoor = null, floor = null, unlocked = null, iTile = null;
     public BufferedImage hitScreen = null;
     Image win, cDoor, cOpen, swarm;
+    int cDoorX = -1, cDoorY = -1;
 
     // ALL SOUND EFFECTS GENERATED/ EDITED/ PRODUCED USING THE WEBSITE:
     // https://jfxr.frozenfractal.com/
@@ -174,7 +175,9 @@ public class RendererPanel extends JComponent {
                 } else if (levelTiles[i][j] instanceof winTile) {
                     tile = new ExitTileRender(i, j, win, this);
                 } else if (levelTiles[i][j] instanceof treasureDoor) {
-                    tile = new ChipDoorRender(i, j, cDoor, this);
+                    tile = new ChipDoorRender(i, j, cDoor, cOpen, this);
+                    cDoorY = i;
+                    cDoorX = j;
                 } else if (levelTiles[i][j] instanceof infoTile) {
                     tile = new InfoRender(i, j, iTile);
                 }
@@ -325,6 +328,12 @@ public class RendererPanel extends JComponent {
             direction = 0;
         }
 
+        // Open chip doors once player has moved to pick up last treasure/ chip
+        if (game.getPlayer().getNumberTreasures() == 0) {
+            if (!tileMap[cDoorY][cDoorX].open) doorSound.playSound();
+            tileMap[cDoorY][cDoorX].open = true;
+        }
+
         // Various events occurring after movement
         if (itemMap[yPos][xPos] != null && !(itemMap[yPos][xPos] instanceof Enemy)) {
             // Picked up item
@@ -399,5 +408,9 @@ public class RendererPanel extends JComponent {
             hit = true;
         }
         this.repaint();
+    }
+
+    public void playWinSound() {
+        winSound.playSound();
     }
 }
