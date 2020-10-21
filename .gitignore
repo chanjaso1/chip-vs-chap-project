@@ -194,3 +194,5 @@ $RECYCLE.BIN/
 .metadata/
 
 .idea/misc.xml
+
+src/nz/ac/vuw/ecs/swen225/gp20/recnplay/RecordnReplayTesting.java
