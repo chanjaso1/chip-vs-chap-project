@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class RecordSaver {
-    public final String EMPTY_RECORDING = "{\n" +
+    public static final String EMPTY_RECORDING = "{\n" +
             "\t\"Header\": {\n" +
             "\t\t\"time\": 60.0\n" +
             "\t},\n" +
