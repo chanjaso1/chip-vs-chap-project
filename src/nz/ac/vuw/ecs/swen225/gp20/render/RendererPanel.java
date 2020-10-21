@@ -55,6 +55,9 @@ public class RendererPanel extends JComponent {
             chip = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/chip.png"));
             greenKey = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/greenKey.png"));
             redKey = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/redKey.png"));
+            // Enemy/ Swarm/ Bug is different as it is a gif
+            swarm = g.getParser().loadImage("swarm.gif");
+
         } catch (IOException e) {
             System.out.println("Item image not found!");
         }

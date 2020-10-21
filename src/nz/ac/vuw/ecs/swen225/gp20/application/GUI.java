@@ -44,7 +44,7 @@ public class GUI {
 
 
     public GUI() {
-        game = new Game(1);
+        game = new Game(2);
         board = new RendererPanel(game);
 
         // creates red and green keys

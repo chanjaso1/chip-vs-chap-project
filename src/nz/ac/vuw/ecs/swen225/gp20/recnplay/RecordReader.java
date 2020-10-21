@@ -141,7 +141,7 @@ public class RecordReader {
                 timer.stop();
 
             //gui display the "help" popup on InfoTile after starting game done
-            gui.setDisplayInfoTile(true);
+         //   gui.setDisplayInfoTile(true);
             return;
         }
 
