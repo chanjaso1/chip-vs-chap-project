@@ -4,7 +4,7 @@
     <root id="archive" name="level2.jar">
       <element id="module-output" name="chip-vs-chap-project" />
       <element id="file-copy" path="$PROJECT_DIR$/levels/level2.json" />
-      <element id="file-copy" path="$PROJECT_DIR$/src/nz/ac/vuw/ecs/swen225/gp20/render/data/swarm.gif" />
+      <element id="file-copy" path="$PROJECT_DIR$/levels/data/swarm.gif" />
     </root>
   </artifact>
 </component>

@@ -11,7 +11,7 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/javax.json-api-1.1.4.jar" path-in-jar="/" />
       <element id="file-copy" path="$PROJECT_DIR$/tests/test2.json" />
-      <element id="file-copy" path="$PROJECT_DIR$/src/nz/ac/vuw/ecs/swen225/gp20/render/data/swarm.gif" />
+      <element id="file-copy" path="$PROJECT_DIR$/levels/data/swarm.gif" />
     </root>
   </artifact>
 </component>
