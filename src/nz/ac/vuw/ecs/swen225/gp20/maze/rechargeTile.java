@@ -21,7 +21,7 @@ public class rechargeTile implements Tile {
         $Gson$Preconditions.checkNotNull(player);
         //player will only be recharge once
         if(!player.playerIsRecharge()){
-            player.rechargePlayer();
+            player.setPlayerRecharge(true);
         }
 
         //player can always walk on this tile
