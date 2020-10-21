@@ -839,7 +839,7 @@ public class GUI {
     }
 
     /**
-     *
+     * //todo cancel null
      * @param message
      * @return
      */

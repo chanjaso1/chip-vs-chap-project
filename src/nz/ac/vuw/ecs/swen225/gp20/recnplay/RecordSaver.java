@@ -28,6 +28,8 @@ public class RecordSaver {
 
         if (notForUser)
             save("lastgame");
+        else
+            save(null);
     }
 
     /**
