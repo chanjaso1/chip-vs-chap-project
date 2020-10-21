@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import com.google.gson.internal.$Gson$Preconditions;
+
 /**
  * Information Tile will display information when the player in on it.
  */
@@ -12,12 +14,14 @@ public class infoTile implements Tile{
      * @param col -- the tile column position.
      */
     public infoTile(int row, int col){
+        $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
         this.row = row;
         this.col = col;
     }
 
     @Override
     public boolean checkValidMove(Player player) {
+        $Gson$Preconditions.checkNotNull(player);
         //players can always move on info tile
         return true;
     }

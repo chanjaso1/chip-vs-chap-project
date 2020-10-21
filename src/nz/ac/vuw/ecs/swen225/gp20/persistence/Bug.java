@@ -25,14 +25,11 @@ public class Bug extends Actor {
         if (moveDownFirst && ((floorTile) this.getGame().getMap()[getRow() + 1][getCol()]).isBugPath()) {
             moveDown down = new moveDown(this);
             down.apply();
-            System.out.println("BU  GUP!! row: " + this.getRow() + "  col:  " + this.getCol());
         }else if(!moveDownFirst && ((floorTile) this.getGame().getMap()[getRow()-1][getCol()]).isBugPath()){
             moveUp up = new moveUp(this);
             up.apply();
-            System.out.println("BUG DOWN!! row: " + this.getRow() + "  col:  " + this.getCol());
         }else {
             moveDownFirst = !moveDownFirst;
-            System.out.println("else condition true");
         }
     }
 
