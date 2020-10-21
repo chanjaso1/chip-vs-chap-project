@@ -23,6 +23,10 @@ public class MazeTesting {
 
         //picking up the keys
         new moveDown(player).apply();
+
+        //checked that the left tile has a key
+        assertNotNull(((floorTile) game.getMap()[player.getRow()][player.getCol()-1]).getItem());
+
         new moveLeft(player).apply();
 
         //checked that the key is picked up
@@ -186,6 +190,7 @@ public class MazeTesting {
     public void playerMovingToNextLevel(){
         Game game = new Game(1);
         Player player = game.getPlayer();
+        int lv1Treasure = game.getTreasure();
 
         player.moveToNextLevel();
         //player is now in level 2
@@ -194,7 +199,12 @@ public class MazeTesting {
         player.getGame().loadLevel();
         //the should be a bug object in the next level if moving to the next level is successful
         assertNotNull(game.getBug());
+
+        //number of treasure that's is left is not 0
         assertNotEquals(player.getNumberTreasures(),0);
+
+        //number of total treasure changed
+        assertNotEquals(lv1Treasure,game.getTreasure());
     }
 
     /**
