@@ -1,8 +1,10 @@
 package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
-import com.google.gson.JsonParser;
 import org.junit.Test;
 
+/**
+ * This class will test every method in the parseJSON class
+ */
 public class parseJSONTesting {
 
     /**

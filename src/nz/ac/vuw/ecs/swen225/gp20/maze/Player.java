@@ -96,8 +96,8 @@ public class Player extends Actor {
      * Set the player recharge field to true.
      * When the player is recharge is means that player will get some extra time to finish the task.
      */
-    public void rechargePlayer() {
-        this.playerRecharge = true;
+    public void setPlayerRecharge(boolean state) {
+        this.playerRecharge = state;
     }
 
     /**

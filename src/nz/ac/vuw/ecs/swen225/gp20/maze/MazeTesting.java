@@ -15,6 +15,10 @@ import static org.junit.Assert.*;
  */
 public class MazeTesting {
 
+    /**
+     * Test that they player is able to pick up the key.
+     *  By checking the player keys map after the key is picked up.
+     */
     @Test
     public void checkKeyIsPickedUp(){
         Game game = new Game(1);
@@ -28,6 +32,9 @@ public class MazeTesting {
         assertEquals(1,player.getKeys().size());
     }
 
+    /**
+     * Check that player is able to walk through the same color door as the key that they picked up.
+     */
     @Test
     public void checkKeyDoorUnLocked(){
         Game game = new Game(1);
@@ -56,8 +63,11 @@ public class MazeTesting {
         assertEquals(door.getColor(),player.getKeys().get(door.getColor()).getColor());
     }
 
+    /**
+     * Check that the player cannot walk through wall.
+     */
     @Test
-    public void checkPlayerCannotWalkThroughDoor(){
+    public void checkPlayerCannotWalkThroughWall(){
         Game game = new Game(1);
         int currentRow,currentCol;
         Player player = game.getPlayer();
@@ -77,6 +87,9 @@ public class MazeTesting {
         assertFalse(game.getMap()[currentRow][currentCol+1].checkValidMove(player));
     }
 
+    /**
+     * Check that the player cannot walk through the door when they don't have the key.
+     */
     @Test
     public void testDoorKeyLocked(){
         Game game = new Game(1);
@@ -101,6 +114,9 @@ public class MazeTesting {
         assertFalse(game.getMap()[currentRow][currentCol+1].checkValidMove(player));
     }
 
+    /**
+     * Check that the numbers of treasure that is left decreased when player picked up the treasure.
+     */
     @Test
     public void checkTreasureIsPickedUp(){
         Game game = new Game(1);
@@ -114,10 +130,17 @@ public class MazeTesting {
             new moveRight(player).apply();
         }
 
+        int currentTreasure = player.getNumberTreasures();
+
         //pick up chip
         new moveUp(player).apply();
+        assertEquals(currentTreasure - 1 ,player.getNumberTreasures());
     }
 
+    /**
+     * Checked that the player has picked up all the treasures and the treasure door is unlocked.
+     * Checked that the player is able to move onto the win tile.
+     */
     @Test
     public void checkTreasureDoorAndWinTile(){
         Game game = new Game(1);
@@ -159,6 +182,9 @@ public class MazeTesting {
         assertTrue(game.getMap()[player.getRow()][player.getCol()].checkValidMove(player));
     }
 
+    /**
+     * Checked that player is able to move to the next level and the level us.
+     */
     @Test
     public void playerMovingToNextLevel(){
         Game game = new Game(1);
@@ -171,6 +197,7 @@ public class MazeTesting {
         player.getGame().loadLevel();
         //the should be a bug object in the next level if moving to the next level is successful
         assertNotNull(game.getBug());
+        assertNotEquals(player.getNumberTreasures(),0);
     }
 
     @Test
@@ -208,6 +235,20 @@ public class MazeTesting {
 
     @Test
     public void TestRechargeTile(){
+        Game game = new Game(2);
+        Player player = game.getPlayer();
+
+        new moveDown(player).apply();
+        new moveDown(player).apply();
+
+        for(int i =0; i < 10; i++){
+            new moveLeft(player).apply();
+        }
+
+        rechargeTile tile = (rechargeTile) game.getMap()[player.getRow()][player.getCol()];
+        tile.checkValidMove(player);
+
+        assertTrue(player.playerIsRecharge());
 
     }
 
