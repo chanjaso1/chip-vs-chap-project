@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
+import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Move;
 
 import javax.swing.*;
@@ -34,7 +35,7 @@ public class RecordSaver {
     public void save(String fileName){
         //get name of new file if not provided
         if (fileName == null || fileName.isBlank() || fileName.isEmpty()){
-            fileName = getFileName("Please enter a name for the recording file (without extension):");
+            fileName = GUI.getFileName("Please enter a name for the recording file (without extension):");
             if (fileName == null) return; //cancel
         }
         fileName += ".json";
@@ -58,7 +59,7 @@ public class RecordSaver {
         if (savingFile.exists() && !notForUser){
             //check if file exists and ask user if they want
             //to override existing file based on https://stackoverflow.com/questions/1816673/how-do-i-check-if-a-file-exists-in-java
-            int wantTo = JOptionPane.showConfirmDialog(null, "Are you sure you want to override "+fileName+"?");
+            int wantTo = GUI.inputDialogue("Are you sure you want to override "+fileName+"?");
             if (wantTo != JOptionPane.YES_OPTION){
                 return;
             }
@@ -77,31 +78,10 @@ public class RecordSaver {
         //say it's saved in the according fashion
         if (notForUser)
             //user did not select the name
-            JOptionPane.showMessageDialog(null, "Your progress has been saved. Next time you open the game, you will start from this point.");
+            GUI.showMessage( "Your progress has been saved. Next time you open the game, you will start from this point.");
         else
             //user selected name in recordings folder
-            JOptionPane.showMessageDialog(null, "File saved to Recordings folder.");
-    }
-
-    /**
-     *
-     * @param message
-     * @return
-     */
-    public static String getFileName(String message){
-        String fileName = "";
-        while (fileName.isEmpty() || fileName.isBlank()){
-            try {
-                fileName = JOptionPane.showInputDialog(message); //todo error checking
-            } catch (NullPointerException ignored){
-                JOptionPane.showMessageDialog(null, "File save cancelled.");
-                return null;
-            }
-
-            message = "Filename is empty. Please enter a valid filename.";
-        }
-
-        return fileName;
+            GUI.showMessage("File saved to Recordings folder.");
     }
 
     /**

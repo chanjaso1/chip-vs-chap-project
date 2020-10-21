@@ -403,7 +403,6 @@ public class GUI {
             controlPanel.add(new JLabel(""));
 
         return controlPanel;
-
     }
 
     /**
@@ -456,7 +455,7 @@ public class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("clicking next");
-                recordReader.playNextFrame(); //todo give player an object not null
+                recordReader.playNextFrame();
             }
         });
 
@@ -577,7 +576,7 @@ public class GUI {
 
     /**
      * Displays a "GAME WON" frame and exits the game.
-      */
+     */
     public void displayGameWon() {
         String message = "Woohoo!! You won the game!\nSee you next time :D";
         JOptionPane.showMessageDialog(frame, message, "GAME WON", JOptionPane.INFORMATION_MESSAGE);
@@ -706,7 +705,7 @@ public class GUI {
      * Abstract method that saves the movements.
      */
     public void saveMovements() {
-        new RecordSaver(moveSequence, currentTime);
+        new RecordSaver(moveSequence, currentTime, false);
     }
 
     /**
@@ -820,6 +819,9 @@ public class GUI {
         return game.getPlayer();
     }
 
+    /**
+     * Returns the current game.
+     */
     public Game getGame() {
         return game;
     }
@@ -837,6 +839,27 @@ public class GUI {
     }
 
     /**
+     *
+     * @param message
+     * @return
+     */
+    public static String getFileName(String message){
+        String fileName = "";
+        while (fileName.isEmpty() || fileName.isBlank()){
+            try {
+                fileName = JOptionPane.showInputDialog(message); //todo error checking
+            } catch (NullPointerException ignored){
+                JOptionPane.showMessageDialog(null, "File save cancelled.");
+                return null;
+            }
+
+            message = "Filename is empty. Please enter a valid filename.";
+        }
+
+        return fileName;
+    }
+
+    /**
      * Used by RecordReader class to display error messages.
      *
      * @param message -- the error message to be displayed.
@@ -846,8 +869,16 @@ public class GUI {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    public static void showMessage(String message){
+        JOptionPane.showMessageDialog(null, message);
+    }
+
+    public static int inputDialogue(String message){
+        return JOptionPane.showConfirmDialog(null, message);
+    }
+
     public static void main(String[] args) {
-        GUI gui = new GUI();
+        new GUI();
     }
 
 }
