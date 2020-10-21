@@ -18,19 +18,23 @@ public class Bug extends Actor {
 
     /**
      * This method moves the bug to the next valid tile
+     * @return the movement of the bug.
      */
-    public void moveBugSequence() {
-
+    public Move moveBugSequence() {
         //check if next move path of the bug, then either move it or change direction.
         if (moveDownFirst && ((floorTile) this.getGame().getMap()[getRow() + 1][getCol()]).isBugPath()) {
             moveDown down = new moveDown(this);
             down.apply();
+            return down;
+
         }else if(!moveDownFirst && ((floorTile) this.getGame().getMap()[getRow()-1][getCol()]).isBugPath()){
             moveUp up = new moveUp(this);
             up.apply();
+            return up;
         }else {
             moveDownFirst = !moveDownFirst;
         }
+        return null;
     }
 
     @Override
