@@ -7,6 +7,8 @@ import com.google.gson.internal.$Gson$Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -30,6 +32,7 @@ public class parseJSON{
     private Tile[][] map;
     private int treasures = 0, keys = 0;
     private int totalSize = 30;
+    private ClassLoader classLoader;
     public Class<Object> aClass = null;
     public String directory;
     
@@ -81,7 +84,7 @@ public class parseJSON{
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    private static Class<Object> loadClass(String directory) throws IOException, ClassNotFoundException {
+    private Class<Object> loadClass(String directory) throws IOException, ClassNotFoundException {
         $Gson$Preconditions.checkNotNull(directory);
 
         String pathToJAR = directory.substring(0, directory.length() - ".json".length()) +".jar";
@@ -91,7 +94,7 @@ public class parseJSON{
         var e = jarFile.entries();
 
         URL[] urls = {new URL("jar:file:" + pathToJAR + "!/")};
-        URLClassLoader cl = URLClassLoader.newInstance(urls);
+        this.classLoader = URLClassLoader.newInstance(urls);
 
         while (e.hasMoreElements()) {
             JarEntry je = e.nextElement();
@@ -99,7 +102,7 @@ public class parseJSON{
 
             String className = je.getName().substring(0, je.getName().length()-".class".length());
             className = className.replace('/', '.');
-            Class<Object> c = (Class<Object>) cl.loadClass(className);
+            Class<Object> c = (Class<Object>) classLoader.loadClass(className);
             if(className.contains("Bug"))
                 return c;
         }
@@ -194,40 +197,31 @@ public class parseJSON{
         }
     }
 
-//    public ImageIcon loadImage(String imgName) {
-//        JsonObject jobject;
-//        String pathToJAR = directory.substring(0, directory.length() - ".json".length()) + ".jar";
-//        try{
-//        JarFile jarFile = new JarFile(pathToJAR);
-//        Enumeration<JarEntry> e = jarFile.entries();
-//
-//
-//        //Based on http://www.devx.com/tips/Tip/22124
-//        while (e.hasMoreElements()) {
-//            JarEntry entry = e.nextElement();
-//            if (!entry.getName().endsWith(".json")) continue;   //Find the .json map.
-//
-//            File file = new File(entry.getName());
-//
-//            InputStream inputStream = jarFile.getInputStream(entry);
-//            FileOutputStream outputStream = new FileOutputStream(file);
-//
-//            while (inputStream.available() > 0) { //write the file
-//                outputStream.write(inputStream.read());
-//            }
-//
-//            outputStream.close();
-//            inputStream.close();
-//
-//            jobject = new Gson().fromJson(new FileReader(file), JsonObject.class); //convert the file to be read into a JsonObject
-//            file.deleteOnExit();
-//
-//            return jobject;
-//
-//
-//        }
-//        throw new IndexOutOfBoundsException("No map in the JAR file!");
-//    }
+    public Image loadImage(String imgName) {
+        JsonObject jobject;
+        String pathToJAR = directory.substring(0, directory.length() - ".json".length()) + ".jar";
+        try {
+            JarFile jarFile = new JarFile(pathToJAR);
+            Enumeration<JarEntry> e = jarFile.entries();
+
+
+            //Based on http://www.devx.com/tips/Tip/22124
+            while (e.hasMoreElements()) {
+                JarEntry entry = e.nextElement();
+                if (!entry.equals(imgName)) continue;   //Find the image
+
+
+//                InputStream inputStream = jarFile.getInputStream(entry);
+//                FileOutputStream outputStream = new FileOutputStream(file);
+
+                return new ImageIcon(Toolkit.getDefaultToolkit().createImage(ClassLoader.getSystemResource(imgName))).getImage();
+            }
+        }catch(Exception e){
+            System.out.println("There was an error in loading an image");
+        }
+
+        throw new IndexOutOfBoundsException(imgName + " was not found");
+    }
 
     public Player getPlayer(){
         return this.player;
