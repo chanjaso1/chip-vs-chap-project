@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import com.google.gson.internal.$Gson$Preconditions;
+
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -39,6 +41,7 @@ public class Player extends Actor {
      * @param item -- item that the player picked up.
      */
     public void pickUp(Item item){
+        $Gson$Preconditions.checkNotNull(item);
         if(item instanceof Key){
             keys.put(((Key) item).getColor(), ((Key) item));
         } else {
@@ -60,6 +63,7 @@ public class Player extends Actor {
      * @param treasures -- total treasures in the game.
      */
     public void setTotalTreasures(int treasures) {
+        $Gson$Preconditions.checkArgument(treasures > 0);
         this.treasures = treasures;
     }
 
@@ -76,6 +80,7 @@ public class Player extends Actor {
      * @param col -- the first column player start at.
      */
     public void setStartPosition(int row, int col) {
+        $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
         this.startRow = row;
         this.startCol = col;
     }

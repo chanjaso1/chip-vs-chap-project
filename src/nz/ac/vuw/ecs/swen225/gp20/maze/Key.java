@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import com.google.gson.internal.$Gson$Preconditions;
+
 import java.awt.*;
 
  /**
@@ -15,6 +17,8 @@ public class Key extends Item{
      */
     public Key(Tile tile, String color){
         super(tile);
+
+        $Gson$Preconditions.checkNotNull(color);
         this.color = color;
     }
 

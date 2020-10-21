@@ -57,13 +57,12 @@ public class GUI {
 
         initialise();
 
-        // starts game from
+        // starts game from recent saved recording
         setDisplayInfoTile(false);
         resetLevel(1);
         recordReader = new RecordReader(this, new File("Recordings/UserData/lastgame.json"), game.getPlayer(), game.getBug());
         currentTime = recordReader.getTime();
         recordReader.playAtSpeed(0);
-//        displayInfoTile = true;
     }
 
     /**
@@ -152,10 +151,7 @@ public class GUI {
         menuBar.add(helpButton);
         menuBar.add(exitButton);
 
-        // creates board panel
-
         // creates game stats panel
-//        gameStatsPanel = new JPanel(new GridLayout(5, 1, 10, 30));
         gameStatsPanel = new JPanel(new GridLayout(4, 1, 0, 15));
         displayGameStatsPanel(gameStatsPanel);
 
@@ -193,8 +189,6 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveUp(game.getPlayer()));
-
-
             }
         });
 
@@ -204,8 +198,6 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveDown(game.getPlayer()));
-
-
             }
         });
 
@@ -215,7 +207,6 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveLeft(game.getPlayer()));
-
             }
         });
 
@@ -225,7 +216,6 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 movePlayer(new moveRight(game.getPlayer()));
-
             }
         });
 
@@ -413,7 +403,6 @@ public class GUI {
             controlPanel.add(new JLabel(""));
 
         return controlPanel;
-
     }
 
     /**
@@ -423,8 +412,6 @@ public class GUI {
      * The replay speed is displayed as a JComboBox so users can select a speed within the specified range.
      */
     public void displayReplayFrame() {
-//        timer.stop();
-
         // get replay file
         File file = getFile();
         if (file == null) return;
@@ -468,7 +455,7 @@ public class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 System.out.println("clicking next");
-                recordReader.playNextFrame(); //todo give player an object not null
+                recordReader.playNextFrame();
             }
         });
 
@@ -589,7 +576,7 @@ public class GUI {
 
     /**
      * Displays a "GAME WON" frame and exits the game.
-      */
+     */
     public void displayGameWon() {
         String message = "Woohoo!! You won the game!\nSee you next time :D";
         JOptionPane.showMessageDialog(frame, message, "GAME WON", JOptionPane.INFORMATION_MESSAGE);
@@ -686,15 +673,16 @@ public class GUI {
                     board.moveBug();
                 }
 
-                if (pauseGame || currentTime == 0) {
+                // pauses game
+                if (pauseGame || currentTime == 0)
                     return;
-                }   // remove when code is added to reset level
+
                 currentTime--;
                 redisplayTimer();
 
                 // game over
                 if (gameOver()) {
-                    String message = "You didn't pass the level in time... GAME OVER!\nClick 'OK' to reset the game and restart the level.";
+                    String message = "You didn't pass the level in time... GAME OVER!\nClick 'OK' to restart the level.";
                     JOptionPane.showMessageDialog(frame, message, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
                     resetLevel(1);
                 }
@@ -710,9 +698,25 @@ public class GUI {
      * @return true if user has lost. Otherwise, false.
      */
     public boolean gameOver() {
-//        return currentTime <= 0 && (game.getPlayer().getNumberTreasures() != game.getTreasure() || game.getPlayer().getKeys().size() != game.getParser().getNumberOfKeys());
         return currentTime <= 0 && !(game.getPlayer().getCurrentTile() instanceof winTile);
     }
+
+    /**
+     * Abstract method that saves the movements.
+     */
+    public void saveMovements() {
+        new RecordSaver(moveSequence, currentTime, false);
+    }
+
+    /**
+     * Sets the state of the game between pause and live game.
+     *
+     * @param pause -- true if game is paused. Otherwise, false.
+     */
+    public void pauseGame(boolean pause) {
+        pauseGame = pause;
+    }
+
 
     /**
      * Updates and re-displays the timer on the screen.
@@ -732,7 +736,7 @@ public class GUI {
 
             // game won
             if (game.getLevel() == 2) {
-//                board.getWinSound();
+                board.playWinSound();
                 displayGameWon();
                 System.exit(0);
             }
@@ -776,32 +780,6 @@ public class GUI {
     }
 
     /**
-     * Returns the current player.
-     *
-     * @return the current player.
-     */
-    public Player getPlayer() {
-        return game.getPlayer();
-    }
-
-
-    /**
-     * Abstract method that saves the movements.
-     */
-    public void saveMovements() {
-        new RecordSaver(moveSequence, currentTime);
-    }
-
-    /**
-     * Sets the state of the game between pause and live game.
-     *
-     * @param pause -- true if game is paused. Otherwise, false.
-     */
-    public void pauseGame(boolean pause) {
-        pauseGame = pause;
-    }
-
-    /**
      * Resets the level once replay mode is executed. Replay mode
      * assumes that the replay starts at level 1 as it will move
      * to level 2 when level 1 is passed with the same moves.
@@ -833,6 +811,22 @@ public class GUI {
     }
 
     /**
+     * Returns the current player.
+     *
+     * @return the current player.
+     */
+    public Player getPlayer() {
+        return game.getPlayer();
+    }
+
+    /**
+     * Returns the current game.
+     */
+    public Game getGame() {
+        return game;
+    }
+
+    /**
      * Gets a file from user via a {@link JFileChooser}4
      *
      * @return the selected file.
@@ -845,6 +839,27 @@ public class GUI {
     }
 
     /**
+     * //todo cancel null
+     * @param message
+     * @return
+     */
+    public static String getFileName(String message){
+        String fileName = "";
+        while (fileName.isEmpty() || fileName.isBlank()){
+            try {
+                fileName = JOptionPane.showInputDialog(message); //todo error checking
+            } catch (NullPointerException ignored){
+                JOptionPane.showMessageDialog(null, "File save cancelled.");
+                return null;
+            }
+
+            message = "Filename is empty. Please enter a valid filename.";
+        }
+
+        return fileName;
+    }
+
+    /**
      * Used by RecordReader class to display error messages.
      *
      * @param message -- the error message to be displayed.
@@ -854,9 +869,16 @@ public class GUI {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    public static void showMessage(String message){
+        JOptionPane.showMessageDialog(null, message);
+    }
+
+    public static int inputDialogue(String message){
+        return JOptionPane.showConfirmDialog(null, message);
+    }
 
     public static void main(String[] args) {
-        GUI gui = new GUI();
+        new GUI();
     }
 
 }

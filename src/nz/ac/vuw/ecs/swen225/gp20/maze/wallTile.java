@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import com.google.gson.internal.$Gson$Preconditions;
+
 /**
  * wallTile represent a blocked tile that the player cannot walk pass.
  */
@@ -12,6 +14,7 @@ public class wallTile implements Tile {
      * @param col -- the tile column position.
      */
     public wallTile(int row, int col){
+        $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
         this.row = row;
         this.col = col;
     }
@@ -27,6 +30,7 @@ public class wallTile implements Tile {
 
     @Override
     public boolean checkValidMove(Player player) {
+        $Gson$Preconditions.checkNotNull(player);
         //players can never move on to walls
         return false;
     }

@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import com.google.gson.internal.$Gson$Preconditions;
+
 public class rechargeTile implements Tile {
     private int row,col;
 
@@ -9,12 +11,14 @@ public class rechargeTile implements Tile {
      * @param col -- the tile column position.
      */
     public rechargeTile(int row, int col){
+        $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
         this.row = row;
         this.col = col;
     }
 
     @Override
     public boolean checkValidMove(Player player) {
+        $Gson$Preconditions.checkNotNull(player);
         //player will only be recharge once
         if(!player.playerIsRecharge()){
             player.rechargePlayer();

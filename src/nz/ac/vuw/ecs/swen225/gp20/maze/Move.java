@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import com.google.gson.internal.$Gson$Preconditions;
+
 /**
  * This interface represent the movement being done in the game.
  */
@@ -8,6 +10,7 @@ public abstract class Move {
     protected int dir;
 
     public Move(Actor actor){
+        $Gson$Preconditions.checkNotNull(actor);
         mover = actor;
     }
 
@@ -36,6 +39,7 @@ public abstract class Move {
     //todo object does not have fields to check hence the weird equals and hashcode
     @Override
     public boolean equals(Object obj) {
+        $Gson$Preconditions.checkNotNull(obj);
         return obj.getClass() == getClass() && mover.getClass() == ((Move)obj).getMover().getClass();
     }
 }
