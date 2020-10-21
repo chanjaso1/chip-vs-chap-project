@@ -150,8 +150,6 @@ public class RendererPanel extends JComponent {
         RenderTile tile = null;
         RenderItem item = null;
 
-        printMap();
-
         if (game.getLevel() == 2) {
             // Enemy/ Swarm/ Bug is different as it is a gif
             swarm = game.getParser().loadImage("swarm.gif");
@@ -313,26 +311,7 @@ public class RendererPanel extends JComponent {
         xPos = game.getPlayer().getCol();
         yPos = game.getPlayer().getRow();
 
-        if(dir == 1) {
-            System.out.println("Right");
-            System.out.println(xPos + " " + yPos);
-            direction = 1;
-        }
-        else if(dir == 3) {
-            System.out.println("Left");
-            System.out.println(xPos + " " + yPos);
-            direction = 3;
-        }
-        else if(dir == 2) {
-            System.out.println("Down");
-            System.out.println(xPos + " " + yPos);
-            direction = 2;
-        }
-        else if(dir == 0) {
-            System.out.println("Up");
-            System.out.println(xPos + " " + yPos);
-            direction = 0;
-        }
+        direction = dir;
 
         // Open chip doors once player has moved to pick up last treasure/ chip
         if (game.getPlayer().getNumberTreasures() == 0) {
@@ -394,7 +373,6 @@ public class RendererPanel extends JComponent {
         try {
             xBug = (int) game.getParser().aClass.getMethod("getCol").invoke(game.getBug());
             yBug = (int) game.getParser().aClass.getMethod("getRow").invoke(game.getBug());
-            System.out.println("Bug Pos " + xBug + " " + yBug);
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }

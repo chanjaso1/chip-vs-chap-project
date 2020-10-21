@@ -2,8 +2,10 @@ package nz.ac.vuw.ecs.swen225.gp20.persistence;
 
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
- * This class will test every method in the parseJSON class
+ * This class will test every method in the parseJSON class and indirectly, the bug class.
  */
 public class parseJSONTesting {
 
@@ -69,7 +71,7 @@ public class parseJSONTesting {
     public void checkBug() {
         parseJSON test = new parseJSON("tests/test2.json");
         assert test.getBug() != null;
-         test = new parseJSON("tests/test1.json");
+        test = new parseJSON("tests/test1.json");
         assert test.getBug() == null;
     }
 
@@ -77,22 +79,45 @@ public class parseJSONTesting {
      * Check that the parser failed
      */
     @Test
-    public void checkFailedParser(){
-        parseJSON test = new parseJSON("levels/level-1.json");
-        assert test.getPlayer() == null && test.getBug() ==  null && test.getMap() == null;
+    public void checkFailedParser() {
+        parseJSON test = new parseJSON("tests/test-1.json");
+        assert test.getPlayer() == null && test.getBug() == null && test.getMap() == null;
     }
 
     /**
      * Check that the image is not null when there is an image.
      */
     @Test
-    public void testLoadImage(){
-        parseJSON test = new parseJSON("levels/level2.json");
+    public void testLoadImage() {
+        parseJSON test = new parseJSON("tests/test2.json");
         assert test.loadImage("swarm.gif") != null;
     }
 
+    /**
+     *
+     */
+    @Test
+    public void checkBugMovement() {
+        parseJSON test = new parseJSON("tests/test2.json");
+        try {
+            assert test.aClass.getField("moveDownFirst").equals(false);
+        }catch(Exception ignored){
 
+        }
+    }
 
+    /**
+     *
+     */
+    @Test
+    public void checkBugToString(){
+        parseJSON test = new parseJSON("tests/test2.json");
+        try {
+            assert test.aClass.getMethod("toString").invoke(test.getBug()) == "B";
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            System.out.println("Calling toString() on the bug");
+        }
+    }
 
 
 }
