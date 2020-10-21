@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import com.google.gson.internal.$Gson$Preconditions;
+
 /**
  * This interface represent the characters in the game.
  *  Each characters will have t
@@ -15,6 +17,7 @@ public class Actor {
      * @param col -- the column in the map this actor is on.
      */
     public Actor(int row, int col){
+        $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
         this.row = row;
         this.col = col;
     }
@@ -25,6 +28,7 @@ public class Actor {
      * @param col -- new column that the player is
      */
     public void setPosition(int row , int col){
+        $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
         this.row = row;
         this.col = col;
         this.currentTile = game.getMap()[row][col];
@@ -51,6 +55,7 @@ public class Actor {
      * @param move move class applies according to the players choices in directions
      */
     public void move(Move move) {
+        $Gson$Preconditions.checkNotNull(move);
         move.apply();
     }
 
@@ -75,6 +80,7 @@ public class Actor {
      * @param game -- the current game that the player's in.
      */
     public void setGame(Game game) {
+        $Gson$Preconditions.checkNotNull(game);
         this.game = game;
     }
 

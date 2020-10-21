@@ -1,4 +1,5 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
+import com.google.gson.internal.$Gson$Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
 
 import java.lang.reflect.InvocationTargetException;
@@ -19,6 +20,7 @@ public class Game {
      * @param level -- level of the game.
      */
     public Game(int level) {
+        $Gson$Preconditions.checkArgument(level > 0 && level < 3);
         this.level = level;
         loadLevel();
     }
@@ -29,6 +31,8 @@ public class Game {
      */
     public void loadLevel()  {
         parser = new parseJSON("levels/level" + level + ".json");
+        $Gson$Preconditions.checkNotNull(parser);
+
         map = parser.getMap();
         player = parser.getPlayer();
         player.setGame(this);
@@ -95,6 +99,7 @@ public class Game {
     }
 
     public void moveActor(Move move){
+        $Gson$Preconditions.checkNotNull(move);
         move.apply();
     }
 
@@ -116,6 +121,7 @@ public class Game {
     }
 
     public void setLevel(int level) {
+        $Gson$Preconditions.checkArgument(level > 0 && level < 3);
         this.level = level;
     }
 
