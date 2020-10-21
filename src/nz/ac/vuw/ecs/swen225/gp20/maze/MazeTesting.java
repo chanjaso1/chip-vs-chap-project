@@ -208,8 +208,6 @@ public class MazeTesting {
         startRow = player.getRow();
         startCol = player.getCol();
 
-        System.out.println("START   " + startRow + "    " + startCol);
-
         ArrayList<Move> playersMovement = new ArrayList<>();
         //moving towards the enemies
         for (int i = 0; i < 7; i++) {

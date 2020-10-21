@@ -94,19 +94,23 @@ public class Game {
         return parser;
     }
 
+    /**
+     * Return the current player in the game.
+     * @return -- current player in the game.
+     */
     public Player getPlayer() {
         return this.player;
     }
 
+    /**
+     * Apply the given move to the actor.
+     * @param move -- move object depends on the direction the actor is moving.
+     */
     public void moveActor(Move move){
         $Gson$Preconditions.checkNotNull(move);
         move.apply();
     }
 
-    public void saveGame(){
-        //TODO @Tian to save the game
-        //parser.saveGame(map,player);
-    }
 
     /**
      * Return the current bug object in the game.
@@ -116,10 +120,18 @@ public class Game {
         return bug;
     }
 
+    /**
+     * Return the current level of the game.
+     * @return -- current level of the game.
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     * Set the given level to the level field.
+     * @param level -- given level should be more than 0.
+     */
     public void setLevel(int level) {
         $Gson$Preconditions.checkArgument(level > 0 && level < 3);
         this.level = level;

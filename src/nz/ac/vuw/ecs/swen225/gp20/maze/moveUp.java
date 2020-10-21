@@ -5,6 +5,10 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 public class moveUp extends Move {
 
+    /**
+     * Move up constructor.
+     * @param actor -- actor that perform the action.
+     */
     public moveUp(Actor actor) {
         super(actor);
 

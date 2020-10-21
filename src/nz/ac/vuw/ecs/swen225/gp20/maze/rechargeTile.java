@@ -2,6 +2,9 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 import com.google.gson.internal.$Gson$Preconditions;
 
+/**
+ * Recharge tile on the map will indicate GUI to increased the timer by 10 seconds.
+ */
 public class rechargeTile implements Tile {
     private int row,col;
     boolean recharge = false;

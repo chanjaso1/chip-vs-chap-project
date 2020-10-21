@@ -5,6 +5,10 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
  */
 public class moveLeft extends Move {
 
+    /**
+     * Move Left constructor.
+     * @param actor -- actor that perform this action.
+     */
     public moveLeft(Actor actor) {
         super(actor);
         dir = 3;

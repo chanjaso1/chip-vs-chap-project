@@ -63,6 +63,10 @@ public class floorTile implements Tile{
         return bugPath;
     }
 
+    /**
+     * Return the item that is on the tile.
+     * @return -- item that's on the tile.
+     */
     public Item getItem() {
         return item;
     }
