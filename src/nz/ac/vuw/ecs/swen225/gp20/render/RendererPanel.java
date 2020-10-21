@@ -32,7 +32,7 @@ public class RendererPanel extends JComponent {
 
     // ALL SOUND EFFECTS GENERATED/ EDITED/ PRODUCED USING THE WEBSITE:
     // https://jfxr.frozenfractal.com/
-    SoundEffect moveSound, blockedSound, pickupSound, doorSound, winSound;
+    SoundEffect moveSound, blockedSound, pickupSound, doorSound, winSound, hitSound, bugSound;
 
     // 0 - North
     // 1 - East
@@ -102,6 +102,10 @@ public class RendererPanel extends JComponent {
         doorSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/openDoor.wav");
         winSound = new SoundEffect();
         winSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/endTeleport.wav");
+        hitSound = new SoundEffect();
+        hitSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/ouch.wav");
+        bugSound = new SoundEffect();
+        bugSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/bugs.wav");
     }
 
     public void printMap() {
@@ -327,6 +331,11 @@ public class RendererPanel extends JComponent {
             itemMap[yPos][xPos] = null;
             pickupSound.playSound();
         } else if (itemMap[yPos][xPos] != null && (itemMap[yPos][xPos] instanceof Enemy)) {
+            if (!hit) {
+                // Prevents sound from spamming
+                hitSound.playSound();
+                bugSound.playSound();
+            }
             hit = true;
         } else if ((tileMap[yPos][xPos] instanceof GreenDoorRender || tileMap[yPos][xPos] instanceof RedDoorRender) && !tileMap[yPos][xPos].open) {
             // Unlocked door
@@ -382,6 +391,11 @@ public class RendererPanel extends JComponent {
         xBugLast = xBug;
 
         if (yBug == yPos && xBug == xPos) {
+            if (!hit) {
+                // Prevents sound from spamming
+                hitSound.playSound();
+                bugSound.playSound();
+            }
             hit = true;
         }
         this.repaint();
