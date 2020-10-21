@@ -28,12 +28,13 @@ public class RendererPanel extends JComponent {
     public BufferedImage chip = null, redKey = null, greenKey = null;
     public BufferedImage wall = null, gDoor = null, rDoor = null, floor = null, unlocked = null, iTile = null;
     public BufferedImage hitScreen = null;
-    Image win, cDoor, cOpen, swarm;
+    Image win, cDoor, cOpen, swarm, time, noTime;
     int cDoorX = -1, cDoorY = -1;
 
     // ALL SOUND EFFECTS GENERATED/ EDITED/ PRODUCED USING THE WEBSITE:
     // https://jfxr.frozenfractal.com/
-    SoundEffect moveSound, blockedSound, pickupSound, doorSound, winSound, hitSound, bugSound;
+    SoundEffect moveSound, blockedSound, pickupSound, doorSound;
+    SoundEffect winSound, hitSound, bugSound, rechargeSound, noPowerSound;
 
     // 0 - North
     // 1 - East
@@ -54,8 +55,6 @@ public class RendererPanel extends JComponent {
             chip = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/chip.png"));
             greenKey = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/greenKey.png"));
             redKey = ImageIO.read(new File("src/nz/ac/vuw/ecs/swen225/gp20/render/data/redKey.png"));
-            // Enemy/ Swarm/ Bug is different as it is a gif
-            swarm = new ImageIcon(getClass().getResource("data/swarm.gif")).getImage();
         } catch (IOException e) {
             System.out.println("Item image not found!");
         }
@@ -72,6 +71,8 @@ public class RendererPanel extends JComponent {
             win = new ImageIcon(getClass().getResource("data/winTile.gif")).getImage();
             cDoor = new ImageIcon(getClass().getResource("data/chipDoor.gif")).getImage();
             cOpen = new ImageIcon(getClass().getResource("data/chipOpen.gif")).getImage();
+            time = new ImageIcon(getClass().getResource("data/timeTile.gif")).getImage();
+            noTime = new ImageIcon(getClass().getResource("data/noTimeTile.gif")).getImage();
             // As well as the hit screen img
             hitScreen = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/hitScreen.png"));
         } catch (IOException e) {
@@ -107,6 +108,10 @@ public class RendererPanel extends JComponent {
         hitSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/ouch.wav");
         bugSound = new SoundEffect();
         bugSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/bugs.wav");
+        rechargeSound = new SoundEffect();
+        rechargeSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/recharge.wav");
+        noPowerSound = new SoundEffect();
+        noPowerSound.setFile("src/nz/ac/vuw/ecs/swen225/gp20/render/sounds/noPower.wav");
     }
 
     public void printMap() {
@@ -144,6 +149,11 @@ public class RendererPanel extends JComponent {
 
         printMap();
 
+        if (game.getLevel() == 2) {
+            // Enemy/ Swarm/ Bug is different as it is a gif
+            swarm = game.getParser().loadImage("swarm.gif");
+        }
+
         xPos = game.getPlayer().getCol();
         yPos = game.getPlayer().getRow();
 
@@ -180,6 +190,8 @@ public class RendererPanel extends JComponent {
                     cDoorX = j;
                 } else if (levelTiles[i][j] instanceof infoTile) {
                     tile = new InfoRender(i, j, iTile);
+                } else if (levelTiles[i][j] instanceof rechargeTile) {
+                    tile = new TimeRender(i, j, time, noTime, this);
                 }
 
                 tileMap[i][j] = tile;
@@ -192,11 +204,7 @@ public class RendererPanel extends JComponent {
                     try {
                         colB = (int) game.getParser().aClass.getMethod("getCol").invoke(game.getBug());
                         rowB = (int) game.getParser().aClass.getMethod("getRow").invoke(game.getBug());
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchMethodException e) {
+                    } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                         e.printStackTrace();
                     }
 
@@ -299,31 +307,26 @@ public class RendererPanel extends JComponent {
         int yTemp = yPos;
         hit = false;
 
+        xPos = game.getPlayer().getCol();
+        yPos = game.getPlayer().getRow();
+
         if(dir == 1) {
             System.out.println("Right");
-            xPos = game.getPlayer().getCol();
-            yPos = game.getPlayer().getRow();
             System.out.println(xPos + " " + yPos);
             direction = 1;
         }
         else if(dir == 3) {
             System.out.println("Left");
-            xPos = game.getPlayer().getCol();
-            yPos = game.getPlayer().getRow();
             System.out.println(xPos + " " + yPos);
             direction = 3;
         }
         else if(dir == 2) {
             System.out.println("Down");
-            xPos = game.getPlayer().getCol();
-            yPos = game.getPlayer().getRow();
             System.out.println(xPos + " " + yPos);
             direction = 2;
         }
         else if(dir == 0) {
             System.out.println("Up");
-            xPos = game.getPlayer().getCol();
-            yPos = game.getPlayer().getRow();
             System.out.println(xPos + " " + yPos);
             direction = 0;
         }
@@ -339,6 +342,9 @@ public class RendererPanel extends JComponent {
             // Picked up item
             itemMap[yPos][xPos] = null;
             pickupSound.playSound();
+        } else if (yTemp == yPos && xTemp == xPos) {
+            // Player did not move due to invalid movement
+            blockedSound.playSound();
         } else if (itemMap[yPos][xPos] != null && (itemMap[yPos][xPos] instanceof Enemy)) {
             if (!hit) {
                 // Prevents sound from spamming
@@ -346,13 +352,16 @@ public class RendererPanel extends JComponent {
                 bugSound.playSound();
             }
             hit = true;
-        } else if ((tileMap[yPos][xPos] instanceof GreenDoorRender || tileMap[yPos][xPos] instanceof RedDoorRender) && !tileMap[yPos][xPos].open) {
+        } else if ((tileMap[yPos][xPos] instanceof GreenDoorRender || tileMap[yPos][xPos] instanceof RedDoorRender ||
+                tileMap[yPos][xPos] instanceof TimeRender)
+                && !tileMap[yPos][xPos].open) {
             // Unlocked door
             tileMap[yPos][xPos].setOpen();
-            doorSound.playSound();
-        } else if (yTemp == yPos && xTemp == xPos) {
-            // Player did not move due to invalid movement
-            blockedSound.playSound();
+            if (tileMap[yPos][xPos] instanceof TimeRender) {
+                rechargeSound.playSound();
+            } else doorSound.playSound();
+        } else if (tileMap[yPos][xPos] instanceof TimeRender && tileMap[yPos][xPos].open) {
+            noPowerSound.playSound();
         } else {
             // No event (Normal movement)
             moveSound.playSound();
@@ -383,11 +392,7 @@ public class RendererPanel extends JComponent {
             xBug = (int) game.getParser().aClass.getMethod("getCol").invoke(game.getBug());
             yBug = (int) game.getParser().aClass.getMethod("getRow").invoke(game.getBug());
             System.out.println("Bug Pos " + xBug + " " + yBug);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
 
