@@ -27,6 +27,7 @@ public class RendererPanel extends JComponent {
 
     public BufferedImage chip = null, redKey = null, greenKey = null;
     public BufferedImage wall = null, gDoor = null, rDoor = null, floor = null, unlocked = null, iTile = null;
+    public BufferedImage hitScreen = null;
     Image win, cDoor, cOpen, swarm;
 
     // ALL SOUND EFFECTS GENERATED/ EDITED/ PRODUCED USING THE WEBSITE:
@@ -70,6 +71,8 @@ public class RendererPanel extends JComponent {
             win = new ImageIcon(getClass().getResource("data/winTile.gif")).getImage();
             cDoor = new ImageIcon(getClass().getResource("data/chipDoor.gif")).getImage();
             cOpen = new ImageIcon(getClass().getResource("data/chipOpen.gif")).getImage();
+            // As well as the hit screen img
+            hitScreen = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/hitScreen.png"));
         } catch (IOException e) {
             System.out.println("Tile image not found!");
         }
@@ -191,11 +194,8 @@ public class RendererPanel extends JComponent {
                     }
 
                     if (i == rowB && j == colB) {
-                        System.out.println("Bug found");
-                        System.out.println(i + " " + j);
                         yBugLast = i;
                         xBugLast = j;
-                        System.out.println("Lasts: " + yBugLast + " "+ xBugLast);
                         item = new Enemy(i, j, swarm, this);
                         itemMap[i][j] = item;
                     }
@@ -206,15 +206,13 @@ public class RendererPanel extends JComponent {
 
     @Override
     public void paintComponent(Graphics g) {
-        System.out.println("WidthHeight: " + this.getWidth() + " " + this.getHeight());
         Graphics2D g2d = (Graphics2D) g;
         g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
         renderTiles(g2d);
         drawItems(g2d);
         drawPlayer(g2d, this);
         if (hit) {
-            g2d.setColor(Color.red);
-            g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+            g2d.drawImage(hitScreen, null, 0, 0);
         }
     }
 
