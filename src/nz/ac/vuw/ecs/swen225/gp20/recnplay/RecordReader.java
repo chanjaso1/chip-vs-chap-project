@@ -1,9 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
@@ -16,10 +13,10 @@ import java.util.ArrayList;
 
 public class RecordReader {
     private final ArrayList<Move> moves = new ArrayList<>();
-    private int lastMovePos;
-    private double time;
+    private int lastMovePos; //move counter that ends at last move
+    private double time; //time that replay ends at
     private final GUI gui;
-    private Timer timer = null;
+    private Timer timer = null; //timer for auto replay
     private final File replayFile;
 
     /**
@@ -33,8 +30,6 @@ public class RecordReader {
      * @param bugObj - bug in Object format as it's not possible to use it fully in Bug format
      */
     public RecordReader(GUI gui, File file, Player player, Object bugObj) {
-        System.out.println("RecordReader");
-        Actor bug = (Actor)bugObj;
         this.gui = gui;
         //based on https://stackoverflow.com/questions/15571496/how-to-check-if-a-folder-exists
         replayFile = file;
@@ -79,18 +74,19 @@ public class RecordReader {
                 //is a Bug move
                 else {
                     typeMove = jsonMove.getAsJsonObject().get("B").getAsString();
+                    Bug dummyBug = new Bug(0, 0); //moves don't allow null actors
                     switch (typeMove.toLowerCase()){
                         case "left":
-                            move = new moveLeft(new Bug(0, 0));
+                            move = new moveLeft(dummyBug);
                             break;
                         case "right":
-                            move = new moveRight(new Bug(0, 0));
+                            move = new moveRight(dummyBug);
                             break;
                         case "up":
-                            move = new moveUp(new Bug(0, 0));
+                            move = new moveUp(dummyBug);
                             break;
                         case "down":
-                            move = new moveDown(new Bug(0, 0));
+                            move = new moveDown(dummyBug);
                             break;
                         default:
                             //not recognised
@@ -102,7 +98,6 @@ public class RecordReader {
                 moves.add(move);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             GUI.notifyError("Unsupported file format.");
             return;
         }
@@ -111,7 +106,7 @@ public class RecordReader {
         if (moves.isEmpty() && !replayFile.getName().equals("lastgame.json"))
             //let user know file is empty
             //based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
-            JOptionPane.showMessageDialog(null, "Please try again and select a different file. ", "Your file was empty", JOptionPane.ERROR_MESSAGE);
+            GUI.notifyError("Your file was empty. Please try again and select a different file.");
 
         //start on move 0
         lastMovePos = 0;
@@ -120,7 +115,7 @@ public class RecordReader {
     /**
      * Makes a move for player every amount of seconds specified in param.
      *
-     * @param secsToWait amount of time to wait per move
+     * @param secsToWait - amount of time to wait per move
      */
     public void playAtSpeed(double secsToWait){
         //execute playNextFrame every secsToWait
@@ -138,7 +133,7 @@ public class RecordReader {
         if (moves.size() == lastMovePos){
             //don't notify if playing starting game replay
             if (!replayFile.getName().equals("lastgame.json"))
-                JOptionPane.showMessageDialog(null, "That was the last move!");
+                GUI.showMessage("That was the last move!");
 
             //step-by-step dont stop timer that doesnt exist
             if (timer != null)
@@ -149,11 +144,11 @@ public class RecordReader {
             return;
         }
 
-        //do move
+        //do Player move
         if (moves.get(lastMovePos).getMover().getClass() == Player.class){
             gui.movePlayer(moves.get(lastMovePos));
         }
-        //update bug
+        //do Bug move
         else{
             //play using reflection
             try {
@@ -165,44 +160,34 @@ public class RecordReader {
             gui.getBoard().moveBug();
         }
 
+        //move on to next move
         lastMovePos++;
     }
 
     /**
-     * New levels have new Bugs and Players- update moves with new Player/Bug.
+     * New levels have new Bugs and Players - update moves with new Player/Bug.
      */
     public void updateMovesForActors(){
         //update all the moves
         for (Move move: moves){
             //update the player
-            if (move.getMover().getClass() == Player.class){
-                System.out.println("setting player:" + gui.getPlayer());
+            if (move.getMover().getClass() == Player.class)
                 move.setMover(gui.getPlayer());
-            }
             //update bug
-            else{
+            else
                 move.setMover((Actor) gui.getGame().getBug());
-                System.out.println("setting bug:"+((Actor) gui.getGame().getBug()));
-            }
         }
     }
 
-    public StringBuilder getMovesAsString(){
-        StringBuilder movesString = new StringBuilder();
-        for (Move m: moves)
-            movesString.append(m).append(",");
-        return movesString;
-    }
-
     /**
-     * @return the moves read from the file initialised with
+     * @return the moves that this RecordReader has read.
      */
     public ArrayList<Move> getMoves() {
         return moves;
     }
 
     /**
-     * @return the time the moves end at
+     * @return the time the moves end at.
      */
     public double getTime() {
         return time;

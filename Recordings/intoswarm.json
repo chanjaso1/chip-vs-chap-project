@@ -1,10 +1,22 @@
 {
 	"Header": {
-		"time": 53.0
+		"time": 49.0
 	},
 	"Actions": [
 		{
+			"P": "up"
+		},
+		{
 			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "up"
 		},
 		{
 			"P": "left"
@@ -25,15 +37,51 @@
 			"P": "right"
 		},
 		{
-			"P": "right"
-		},
-		{
 			"P": "up"
 		},
 		{
 			"P": "right"
 		},
 		{
+			"P": "right"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "down"
+		},
+		{
 			"P": "left"
 		},
 		{
@@ -43,10 +91,28 @@
 			"P": "down"
 		},
 		{
+			"P": "down"
+		},
+		{
 			"P": "left"
 		},
 		{
 			"P": "left"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "down"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "right"
+		},
+		{
+			"P": "down"
 		},
 		{
 			"P": "up"
@@ -58,43 +124,16 @@
 			"P": "left"
 		},
 		{
-			"P": "left"
+			"P": "down"
 		},
 		{
-			"P": "left"
+			"P": "down"
 		},
 		{
-			"P": "left"
-		},
-		{
-			"P": "left"
+			"B": "down"
 		},
 		{
 			"P": "left"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "down"
-		},
-		{
-			"P": "down"
-		},
-		{
-			"P": "down"
-		},
-		{
-			"P": "down"
-		},
-		{
-			"P": "down"
-		},
-		{
-			"P": "down"
-		},
-		{
-			"P": "down"
 		},
 		{
 			"P": "up"
@@ -103,25 +142,7 @@
 			"P": "left"
 		},
 		{
-			"P": "left"
-		},
-		{
-			"P": "down"
-		},
-		{
-			"P": "down"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "up"
-		},
-		{
-			"P": "up"
-		},
-		{
-			"P": "left"
+			"B": "down"
 		},
 		{
 			"P": "left"
@@ -136,13 +157,28 @@
 			"P": "up"
 		},
 		{
-			"P": "up"
+			"B": "down"
 		},
 		{
 			"P": "up"
 		},
 		{
-			"P": "up"
+			"B": "down"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"B": "down"
+		},
+		{
+			"B": "down"
+		},
+		{
+			"B": "down"
+		},
+		{
+			"B": "down"
 		},
 		{
 			"P": "left"
@@ -154,10 +190,25 @@
 			"P": "left"
 		},
 		{
-			"P": "left"
+			"B": "up"
 		},
 		{
-			"P": "left"
+			"B": "up"
+		},
+		{
+			"B": "up"
+		},
+		{
+			"B": "up"
+		},
+		{
+			"B": "up"
+		},
+		{
+			"B": "up"
+		},
+		{
+			"B": "up"
 		}
 	]
 }

@@ -916,7 +916,10 @@ public class GUI {
         String fileName = "";
         while (fileName.isEmpty() || fileName.isBlank()) {
             try {
-                fileName = JOptionPane.showInputDialog(message); //todo error checking
+                fileName = JOptionPane.showInputDialog(message);
+                //if cancel
+                if (fileName == null)
+                    throw new NullPointerException();
             } catch (NullPointerException ignored) {
                 JOptionPane.showMessageDialog(null, "File save cancelled.");
                 return null;

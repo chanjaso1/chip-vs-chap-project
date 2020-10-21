@@ -14,25 +14,26 @@ public class RecordSaver {
             "\t},\n" +
             "\t\"Actions\": [\n" +
             "\t]\n" +
-            "}";
+            "}"; //for an empty recording - used in GUI
     private final ArrayList<Move> moves;
     private final double time;
-    private boolean notForUser;
+    private final boolean notForUser; //if file is not directly used by user
 
     /**
      * RecordSaver saves the moves in "Action" in JSON file and the time in "Header".
      * The boolean constructor is used for the programmers to decide if the saved file
      * is for back end or for the user.
      *
-     * @param moves - to be saved
-     * @param time - time ended on after moves were made
-     * @param notForUser - true for secret file
+     * @param moves - to be saved.
+     * @param time - time ended on after moves were made.
+     * @param notForUser - true for secret file.
      */
     public RecordSaver(ArrayList<Move> moves, double time, boolean notForUser) {
         this.notForUser = notForUser;
         this.moves = moves;
         this.time = time;
 
+        //if file save does not concern user
         if (notForUser)
             save("lastgame");
         else
@@ -42,7 +43,7 @@ public class RecordSaver {
     /**
      * Save to Recording or Recording/UserData file using fileName.
      *
-     * @param fileName - name of file to be saved
+     * @param fileName - name of file to be saved.
      */
     public void save(String fileName){
         //get name of new file if not provided
@@ -58,10 +59,8 @@ public class RecordSaver {
         jsonRecording.append("\n\t\"Actions\": [\n");
         for (int i = 0; i < moves.size(); i++) {
             jsonRecording.append("\t\t{\n");
-
             //player or bug
             jsonRecording.append("\t\t\t\"").append(moves.get(i).getMover()).append("\": \"").append(moves.get(i)).append("\"\n");
-
             jsonRecording.append(i < moves.size()-1 ? "\t\t},\n":"\t\t}\n");
         }
         jsonRecording.append("\t]\n}");
@@ -72,9 +71,7 @@ public class RecordSaver {
             //check if file exists and ask user if they want
             //to override existing file based on https://stackoverflow.com/questions/1816673/how-do-i-check-if-a-file-exists-in-java
             int wantTo = GUI.inputDialogue("Are you sure you want to override "+fileName+"?");
-            if (wantTo != JOptionPane.YES_OPTION){
-                return;
-            }
+            if (wantTo != JOptionPane.YES_OPTION) return;
         }
         try {
             //write contents to file or make new file
