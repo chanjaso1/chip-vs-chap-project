@@ -1,5 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
+import com.google.gson.internal.$Gson$Preconditions;
+
 /**
  * floorTile is a normal tile that the user in able to move on to it.
  */
@@ -15,6 +17,7 @@ public class floorTile implements Tile{
      * @param item -- some tiles hold an item such as "Key" or "Treasure"
      */
     public floorTile(int row, int col, Item item){
+        $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
         this.row = row;
         this.col = col;
         this.item = item;
@@ -32,6 +35,7 @@ public class floorTile implements Tile{
 
     @Override
     public boolean checkValidMove(Player player) {
+        $Gson$Preconditions.checkNotNull(player);
         if(item != null){
             player.pickUp(item);
 

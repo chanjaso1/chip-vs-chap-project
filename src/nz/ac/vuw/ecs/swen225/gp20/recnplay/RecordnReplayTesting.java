@@ -71,7 +71,7 @@ public class RecordnReplayTesting {
 //        answerMoves.add(new moveRight(bug));
 
         //save
-        RecordSaver rs = new RecordSaver(answerMoves, 0.0); //save to playerMoveswithBugsReading.json - yes, override every time
+        RecordSaver rs = new RecordSaver(answerMoves, 0.0,false); //save to playerMoveswithBugsReading.json - yes, override every time
         rs.save("testRecordingMovementsOutput");
 
         //compare moves from RecordReader with output file

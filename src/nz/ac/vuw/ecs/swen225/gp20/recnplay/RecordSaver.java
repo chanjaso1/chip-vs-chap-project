@@ -1,5 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 
+import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.maze.Move;
 
 import javax.swing.*;
@@ -11,6 +12,15 @@ public class RecordSaver {
     private final double time;
     private boolean notForUser = false;
 
+    /**
+     * RecordSaver saves the moves in "Action" in JSON file and the time in "Header".
+     * The boolean constructor is used for the programmers to decide if the saved file
+     * is for back end or for the user.
+     *
+     * @param moves - to be saved
+     * @param time - time ended on after moves were made
+     * @param notForUser - true for secret file
+     */
     public RecordSaver(ArrayList<Move> moves, double time, boolean notForUser) {
         this.notForUser = notForUser;
         this.moves = moves;
@@ -18,16 +28,14 @@ public class RecordSaver {
         save("lastgame");
     }
 
-    public RecordSaver(ArrayList<Move> moves, double time) {
-        this.moves = moves;
-        this.time = time;
-        save(null);
-    }
-
+    /**
+     * todo here
+     * @param fileName
+     */
     public void save(String fileName){
         //get name of new file if not provided
         if (fileName == null || fileName.isBlank() || fileName.isEmpty()){
-            fileName = getFileName("Please enter a name for the recording file (without extension):");
+            fileName = GUI.getFileName("Please enter a name for the recording file (without extension):");
             if (fileName == null) return; //cancel
         }
         fileName += ".json";
@@ -47,12 +55,11 @@ public class RecordSaver {
         jsonRecording.append("\t]\n}");
 
         //save to file
-
         File savingFile = new File("Recordings/"+(notForUser ? "UserData/":"")+fileName);
         if (savingFile.exists() && !notForUser){
             //check if file exists and ask user if they want
             //to override existing file based on https://stackoverflow.com/questions/1816673/how-do-i-check-if-a-file-exists-in-java
-            int wantTo = JOptionPane.showConfirmDialog(null, "Are you sure you want to override "+fileName+"?");
+            int wantTo = GUI.inputDialogue("Are you sure you want to override "+fileName+"?");
             if (wantTo != JOptionPane.YES_OPTION){
                 return;
             }
@@ -68,28 +75,19 @@ public class RecordSaver {
             e.printStackTrace();
         }
 
+        //say it's saved in the according fashion
         if (notForUser)
-            JOptionPane.showMessageDialog(null, "Your progress has been saved. Next time you open the game, you will start from this point.");
+            //user did not select the name
+            GUI.showMessage( "Your progress has been saved. Next time you open the game, you will start from this point.");
         else
-            JOptionPane.showMessageDialog(null, "File saved to Recordings folder.");
+            //user selected name in recordings folder
+            GUI.showMessage("File saved to Recordings folder.");
     }
 
-    public static String getFileName(String message){
-        String fileName = "";
-        while (fileName.isEmpty() || fileName.isBlank()){
-            try {
-                fileName = JOptionPane.showInputDialog(message); //todo error checking
-            } catch (NullPointerException ignored){
-                JOptionPane.showMessageDialog(null, "File save cancelled.");
-                return null;
-            }
-
-            message = "Filename is empty. Please enter a valid filename.";
-        }
-
-        return fileName;
-    }
-
+    /**
+     * 
+     * @return
+     */
     public double getTime() {
         return time;
     }
