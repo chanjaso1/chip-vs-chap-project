@@ -40,7 +40,7 @@ public class GUI {
 
     private Game game;
     private double replaySpeed, currentTime = MAX_TIME, prevTime;
-    private boolean pauseGame;
+    private boolean pauseGame, displayInfoTile;
 
 
     public GUI() {
@@ -58,11 +58,12 @@ public class GUI {
         initialise();
 
         // starts game from
+        setDisplayInfoTile(false);
         resetLevel(1);
         recordReader = new RecordReader(this, new File("Recordings/UserData/lastgame.json"), game.getPlayer(), game.getBug());
         currentTime = recordReader.getTime();
-//        resetTime();4
         recordReader.playAtSpeed(0);
+//        displayInfoTile = true;
     }
 
     /**
@@ -239,11 +240,12 @@ public class GUI {
         });
 
         // CTRL-S (save)
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_DOWN_MASK), "SAVE");
-//        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "SAVE");
+//        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_DOWN_MASK), "SAVE");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "SAVE");
         actionMap.put("SAVE", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                timer.stop();
                 new RecordSaver(moveSequence, currentTime, true);
                 System.exit(0);
             }
@@ -509,9 +511,6 @@ public class GUI {
                     replayFrame.setVisible(false);
                     pauseGame = false;
                     currentTime = recordReader.getTime();
-//                    redisplayTimer();
-//                    timer.start();
-//                    currentTime = prevTime;
                     redisplayTimer();
                 } else {
                     displayReplayFrame();
@@ -586,6 +585,14 @@ public class GUI {
                 "";
         JOptionPane.showMessageDialog(frame, message, "HELP", JOptionPane.PLAIN_MESSAGE);
 
+    }
+
+    /**
+     * Displays a "GAME WON" frame and exits the game.
+      */
+    public void displayGameWon() {
+        String message = "Woohoo!! You won the game!\nSee you next time :D";
+        JOptionPane.showMessageDialog(frame, message, "GAME WON", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -673,8 +680,6 @@ public class GUI {
                     try {
                         game.getParser().aClass.getMethod("moveBugSequence").invoke(game.getBug());
                         game.updatePlayerBugStatus();
-//                        board.repaint();
-//                        board.revalidate();
                     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
                         ex.printStackTrace();
                     }
@@ -693,15 +698,6 @@ public class GUI {
                     JOptionPane.showMessageDialog(frame, message, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
                     resetLevel(1);
                 }
-
-                // end of round (user lost)
-//                if (currentTime <= 0 && keysCollected != 0) { // TODO: add condition to check if user has won/lost round
-//                    String message = "You didn't collect the keys in time... GAME OVER!\nClick 'OK' to reset the game and restart the level";
-//                    JOptionPane.showMessageDialog(frame, message, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
-//                    // TODO: add code which restarts level
-//                    currentTime = 0;
-//
-//                }
             }
         });
         timer.start();
@@ -733,11 +729,20 @@ public class GUI {
      */
     public void checkWinTile() {
         if (game.getMap()[game.getPlayer().getRow()][game.getPlayer().getCol()] instanceof winTile) {
+
+            // game won
+            if (game.getLevel() == 2) {
+//                board.getWinSound();
+                displayGameWon();
+                System.exit(0);
+            }
+
             game.getPlayer().moveToNextLevel();
             game.loadLevel();
             board.winLevel();
             resetTime();
 
+            // updates actor's move between levels
             if (recordReader != null)
                 recordReader.updateMovesForActors();
         }
@@ -762,7 +767,7 @@ public class GUI {
         }
 
         // checks if player is on info tile
-        if (game.getPlayer().getCurrentTile() instanceof infoTile) {
+        if (displayInfoTile && game.getPlayer().getCurrentTile() instanceof infoTile) {
             pauseGame(true);
             displayHelpFrame();
             pauseGame(false);
@@ -817,6 +822,14 @@ public class GUI {
     public void resetTime() {
         currentTime = MAX_TIME;
         redisplayTimer();
+    }
+
+    /**
+     * Determines whether the info tile is shown or not.
+     * During replays, the info tile should not be shown.
+     */
+    public void setDisplayInfoTile(boolean showTile) {
+        displayInfoTile = showTile;
     }
 
     /**
