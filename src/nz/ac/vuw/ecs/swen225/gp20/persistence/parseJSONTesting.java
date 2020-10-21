@@ -72,13 +72,24 @@ public class parseJSONTesting {
     }
 
     /**
-     *
+     * Check that the parser failed
      */
     @Test
     public void checkFailedParser(){
         parseJSON test = new parseJSON("levels/level-1.json");
         assert test.getPlayer() == null && test.getBug() ==  null && test.getMap() == null;
     }
+
+    /**
+     * Check that the image is not null when there is an image.
+     */
+    @Test
+    public void testLoadImage(){
+        parseJSON test = new parseJSON("levels/level2.json");
+        assert test.loadImage("swarm.gif") != null;
+    }
+
+
 
 
 
