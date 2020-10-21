@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.internal.$Gson$Preconditions;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
+import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -28,14 +29,16 @@ public class parseJSON{
     private Object bug;
     private Tile[][] map;
     private int treasures = 0, keys = 0;
-    public int totalSize = 30;
+    private int totalSize = 30;
     public Class<Object> aClass = null;
+    public String directory;
     
     /**
      * This constructor reads a JSON file from a given directory. This object is able to return the map, player and the number of treasures the map has.
      * @param directory - The file directory.
      */
     public parseJSON(String directory){
+        this.directory = directory;
         try {
             JsonObject jContents;
             if(directory.contains("2")) {
@@ -62,12 +65,9 @@ public class parseJSON{
 
         }catch(FileNotFoundException e){
             System.out.println("This file doesn't exist!");
-            e.printStackTrace();
         } catch (IOException e) {
             System.out.println("IO Exception!");
-            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
             System.out.println("Class not found!");
         } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
@@ -113,7 +113,6 @@ public class parseJSON{
      * @throws IOException
      */
     private static JsonObject loadMap(String directory) throws IOException, IndexOutOfBoundsException {
-        JsonObject jobject;
         String pathToJAR = directory.substring(0, directory.length() - ".json".length()) +".jar";
 
         JarFile jarFile = new JarFile(pathToJAR);
@@ -137,10 +136,10 @@ public class parseJSON{
             outputStream.close();
             inputStream.close();
 
-            jobject = new Gson().fromJson(new FileReader(file), JsonObject.class); //convert the file to be read into a JsonObject
+            JsonObject map = new Gson().fromJson(new FileReader(file), JsonObject.class); //convert the file to be read into a JsonObject
             file.deleteOnExit();
 
-            return jobject;
+            return map;
 
 
         }
@@ -182,7 +181,9 @@ public class parseJSON{
             case "I":
                 map[row][col] = new infoTile(row, col);
                 break;
-
+            case "R":
+                map[row][col] = new rechargeTile(row, col);
+                break;
         }
 
         if(type.substring(0,1).equals("D") && !type.equals("DC")){
@@ -193,47 +194,39 @@ public class parseJSON{
         }
     }
 
-
-//    /**
-//     * Save the current state of the game to a JSON file
-//     * @param board - The current state of the board.
-//     */
-//        public void saveGame(Tile[][] board, Player player){
-//        String fileName = "save" + currentGameSave++ + ".json";
-//        StringBuilder stringFile = new StringBuilder();
+//    public ImageIcon loadImage(String imgName) {
+//        JsonObject jobject;
+//        String pathToJAR = directory.substring(0, directory.length() - ".json".length()) + ".jar";
+//        try{
+//        JarFile jarFile = new JarFile(pathToJAR);
+//        Enumeration<JarEntry> e = jarFile.entries();
 //
-//        //Read the current state of the board into a string.
-//        stringFile.append("{\n" +
-//                "  \"map\" : [\n");
-//        for(int row = 0; row < totalSize; row++){
-//            stringFile.append("   ");
-//            for (int col = 0; col < totalSize; col++) {
-//                    if(row == player.getRow() && col == player.getCol())    stringFile.append("\""+player.toString()+"\",");
-//                    else if(row == totalSize - 1 && col == totalSize - 1)   {
-//                        stringFile.append("\""+board[row][col].toString()+"\"");
-//                        break;
-//                    } else
-//                        stringFile.append("\""+board[row][col].toString()+"\",");
-//                }
-//            stringFile.append("  \n");
+//
+//        //Based on http://www.devx.com/tips/Tip/22124
+//        while (e.hasMoreElements()) {
+//            JarEntry entry = e.nextElement();
+//            if (!entry.getName().endsWith(".json")) continue;   //Find the .json map.
+//
+//            File file = new File(entry.getName());
+//
+//            InputStream inputStream = jarFile.getInputStream(entry);
+//            FileOutputStream outputStream = new FileOutputStream(file);
+//
+//            while (inputStream.available() > 0) { //write the file
+//                outputStream.write(inputStream.read());
 //            }
 //
+//            outputStream.close();
+//            inputStream.close();
+//
+//            jobject = new Gson().fromJson(new FileReader(file), JsonObject.class); //convert the file to be read into a JsonObject
+//            file.deleteOnExit();
+//
+//            return jobject;
 //
 //
-//
-//        stringFile.append("  ]\n" +
-//                "}");
-//
-//        //Create a new save
-//        File file = new File("saves/" + fileName);
-//
-//        try {
-//            BufferedWriter newFile = new BufferedWriter(new FileWriter(file));
-//            newFile.write(stringFile.toString());
-//            newFile.close();
-//        } catch (IOException e) {
-//            System.out.println("File cannot be saved!");
 //        }
+//        throw new IndexOutOfBoundsException("No map in the JAR file!");
 //    }
 
     public Player getPlayer(){
