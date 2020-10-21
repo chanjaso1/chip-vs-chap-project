@@ -11,6 +11,15 @@ public class RecordSaver {
     private final double time;
     private boolean notForUser = false;
 
+    /**
+     * RecordSaver saves the moves in "Action" in JSON file and the time in "Header".
+     * The boolean constructor is used for the programmers to decide if the saved file
+     * is for back end or for the user.
+     *
+     * @param moves - to be saved
+     * @param time - time ended on after moves were made
+     * @param notForUser - true for secret file
+     */
     public RecordSaver(ArrayList<Move> moves, double time, boolean notForUser) {
         this.notForUser = notForUser;
         this.moves = moves;
@@ -18,12 +27,10 @@ public class RecordSaver {
         save("lastgame");
     }
 
-    public RecordSaver(ArrayList<Move> moves, double time) {
-        this.moves = moves;
-        this.time = time;
-        save(null);
-    }
-
+    /**
+     * todo here
+     * @param fileName
+     */
     public void save(String fileName){
         //get name of new file if not provided
         if (fileName == null || fileName.isBlank() || fileName.isEmpty()){
@@ -47,7 +54,6 @@ public class RecordSaver {
         jsonRecording.append("\t]\n}");
 
         //save to file
-
         File savingFile = new File("Recordings/"+(notForUser ? "UserData/":"")+fileName);
         if (savingFile.exists() && !notForUser){
             //check if file exists and ask user if they want
@@ -68,12 +74,20 @@ public class RecordSaver {
             e.printStackTrace();
         }
 
+        //say it's saved in the according fashion
         if (notForUser)
+            //user did not select the name
             JOptionPane.showMessageDialog(null, "Your progress has been saved. Next time you open the game, you will start from this point.");
         else
+            //user selected name in recordings folder
             JOptionPane.showMessageDialog(null, "File saved to Recordings folder.");
     }
 
+    /**
+     *
+     * @param message
+     * @return
+     */
     public static String getFileName(String message){
         String fileName = "";
         while (fileName.isEmpty() || fileName.isBlank()){
@@ -90,6 +104,10 @@ public class RecordSaver {
         return fileName;
     }
 
+    /**
+     * 
+     * @return
+     */
     public double getTime() {
         return time;
     }

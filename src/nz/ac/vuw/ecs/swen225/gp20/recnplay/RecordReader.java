@@ -24,6 +24,11 @@ public class RecordReader {
      * This class reads a JSON file from file's path and stores the moves
      * that are read.
      * They are read as Actions > movement > *a move*
+     *
+     * @param gui - the only gui being used that gives access to game
+     * @param file - the file that is being read
+     * @param player - the current player of the current game
+     * @param bugObj - bug in Object format as it's not possible to use it fully in Bug format
      */
     public RecordReader(GUI gui, File file, Player player, Object bugObj) {
         Actor bug = (Actor)bugObj;
@@ -39,20 +44,15 @@ public class RecordReader {
 
             JsonArray jsonMoves = jo.getAsJsonArray("Actions");
 
-//            System.out.println(jsonMoves);
-//            System.out.println(jsonMoves.get(0));
-//            System.out.println(jsonMoves.get(0).getAsJsonObject().get("movement"));
-
-//            System.out.println(jsonMoves.get(1));
-
+            //for every move in actions
             for (JsonElement jsonMove: jsonMoves){
-                boolean isPlayerMove;
-                isPlayerMove = jsonMove.getAsJsonObject().has("P");
+                boolean isPlayerMove = jsonMove.getAsJsonObject().has("P"); //is player or bug
+                Move move; //move to be added
 
-                Move move;
                 //switch to move type
                 String typeMove;
 
+                //is a Player move
                 if (isPlayerMove){
                     typeMove = jsonMove.getAsJsonObject().get("P").getAsString();
                     switch (typeMove.toLowerCase()){
@@ -69,11 +69,11 @@ public class RecordReader {
                             move = new moveDown(player);
                             break;
                         default:
-                            //should never happen
-                            //todo error
+                            //not recognised
                             throw new NullPointerException("Move is not recognised");
                     }
                 }
+                //is a Bug move
                 else {
                     typeMove = jsonMove.getAsJsonObject().get("B").getAsString();
                     switch (typeMove.toLowerCase()){
@@ -90,8 +90,7 @@ public class RecordReader {
                             move = new moveDown(bug);
                             break;
                         default:
-                            //should never happen
-                            //todo error
+                            //not recognised
                             throw new NullPointerException("Move is not recognised");
                     }
                 }
@@ -101,15 +100,16 @@ public class RecordReader {
             }
         } catch (Exception e) {
             GUI.notifyError("Unsupported file format.");
-            System.out.println(e.toString()); //todo remove?
             return;
         }
 
+        //if there aren't any moves in a regular replay
         if (moves.isEmpty() && !replayFile.getName().equals("lastgame.json"))
             //let user know file is empty
             //based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
             JOptionPane.showMessageDialog(null, "Please try again and select a different file. ", "Your file was empty", JOptionPane.ERROR_MESSAGE);
 
+        //start on move 0
         lastMovePos = 0;
     }
 
@@ -150,11 +150,19 @@ public class RecordReader {
     }
 
     /**
-     * New level, new Player - update moves with new Player.
+     * New levels have new Bugs and Players- update moves with new Player/Bug.
      */
     public void updateMovesForActors(){
-        for (Move move: moves)
-            move.setMover(gui.getPlayer());
+        //update all the moves
+        for (Move move: moves){
+            //update the player
+            if (move.getMover().getClass() == Player.class)
+                move.setMover(gui.getPlayer());
+            //update bug
+            else
+                move.setMover((Actor) gui.getGame().getBug());
+
+        }
     }
 
     /*
@@ -173,6 +181,9 @@ public class RecordReader {
         return moves;
     }
 
+    /**
+     * @return the time the moves end at
+     */
     public double getTime() {
         return time;
     }
