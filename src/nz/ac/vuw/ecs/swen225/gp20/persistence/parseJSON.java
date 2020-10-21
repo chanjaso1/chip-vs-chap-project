@@ -169,6 +169,7 @@ public class parseJSON{
                 break;
             case "B":
                 map[row][col]   = new floorTile(row, col, null);
+                ((floorTile) map[row][col]).setBugTile();              //Set this tile to be part of the bug's movement
                 assert aClass != null : "This level does not have a valid class to load the bug!";
                 this.bug = aClass.getDeclaredConstructor(int.class, int.class).newInstance(row, col);
                 break;
