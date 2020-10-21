@@ -58,7 +58,7 @@ public class GUI {
         initialise();
 
         // starts game from recent saved recording
-        setDisplayInfoTile(false);
+        setDisplayInfoTile(true);
         resetLevel(1);
         recordReader = new RecordReader(this, new File("Recordings/UserData/lastgame.json"), game.getPlayer(), game.getBug());
         currentTime = recordReader.getTime();
@@ -230,8 +230,8 @@ public class GUI {
         });
 
         // CTRL-S (save)
-//        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_DOWN_MASK), "SAVE");
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "SAVE");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_DOWN_MASK), "SAVE");
+//        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "SAVE");
         actionMap.put("SAVE", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
