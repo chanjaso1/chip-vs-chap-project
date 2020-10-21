@@ -8,7 +8,6 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 import java.awt.*;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
@@ -23,14 +22,10 @@ import java.util.jar.JarFile;
  */
 public class parseJSON{
 
-    private static int currentGameSave = 1;
-
     private Player player;
     private Object bug;
     private Tile[][] map;
     private int treasures = 0, keys = 0;
-    private int totalSize = 30;
-    private ClassLoader classLoader;
     public Class<Object> aClass = null;
     public String directory;
     
@@ -52,6 +47,7 @@ public class parseJSON{
 
             JsonArray jmap = jContents.getAsJsonArray("map");
 
+            int totalSize = 30;
             this.map = new Tile[totalSize][totalSize];
 
             //initialize the level
@@ -70,8 +66,6 @@ public class parseJSON{
             System.out.println("IO Exception!");
         } catch (ClassNotFoundException e) {
             System.out.println("Class not found!");
-        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-            e.printStackTrace();
         }
     }
 
@@ -92,7 +86,7 @@ public class parseJSON{
         var e = jarFile.entries();
 
         URL[] urls = {new URL("jar:file:" + pathToJAR + "!/")};
-        this.classLoader = URLClassLoader.newInstance(urls);
+        ClassLoader classLoader = URLClassLoader.newInstance(urls);
 
         while (e.hasMoreElements()) {
             JarEntry je = e.nextElement();
@@ -112,13 +106,13 @@ public class parseJSON{
      * @param directory - The level number
      * @return the JSON map.
      * @throws IOException
+     * @throws IndexOutOfBoundsException
      */
     private static JsonObject loadMap(String directory) throws IOException, IndexOutOfBoundsException {
         String pathToJAR = directory.substring(0, directory.length() - ".json".length()) +".jar";
 
         JarFile jarFile = new JarFile(pathToJAR);
         Enumeration<JarEntry> e = jarFile.entries();
-
 
         //Based on http://www.devx.com/tips/Tip/22124
         while (e.hasMoreElements()) {
@@ -141,14 +135,18 @@ public class parseJSON{
             file.deleteOnExit();
 
             return map;
-
-
         }
         throw new IndexOutOfBoundsException("No map in the JAR file!");
-
     }
 
-    private void defineType(String type, Tile[][] map, int row, int col) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    /**
+     * This method parses a string into a tile, which is then stored inside the map field.
+     * @param type - The type of tile.
+     * @param map - The map from a .json file.
+     * @param row - The current row.
+     * @param col - The current column.
+     */
+    private void defineType(String type, Tile[][] map, int row, int col) {
         switch (type){
             case "_":
                 map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
@@ -158,7 +156,7 @@ public class parseJSON{
                 this.player = new Player(row, col);
                 break;
             case "▊":
-                map[row][col] = new wallTile(row, col);
+                map[row][col] = new wallTile(row, col);                //Define a wall tile.
                 break;
             case "T":
                 map[row][col] = new floorTile(row, col, new Treasure(map[row][col]));   //Define a floor tile with a treasure in it
@@ -171,20 +169,24 @@ public class parseJSON{
                 map[row][col]   = new floorTile(row, col, null);
                 ((floorTile) map[row][col]).setBugTile();              //Set this tile to be part of the bug's movement
                 assert aClass != null : "This level does not have a valid class to load the bug!";
-                this.bug = aClass.getDeclaredConstructor(int.class, int.class).newInstance(row, col);
+                try {
+                    this.bug = aClass.getDeclaredConstructor(int.class, int.class).newInstance(row, col);
+                }catch(Exception e){
+                    System.out.println("The bug could not be created during parsing");
+                }
                 break;
             case "X":
                 map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
                 ((floorTile) map[row][col]).setBugTile();              //Set this tile to be part of the bug's movement
                 break;
-            case "DC":
+            case "DC":                                                  //Define a chip tile, which opens if all treasure chips are collected.
                 map[row][col] = new treasureDoor(row, col);
                 break;
             case "I":
-                map[row][col] = new infoTile(row, col);
+                map[row][col] = new infoTile(row, col);                  //Define an info tile.
                 break;
             case "R":
-                map[row][col] = new rechargeTile(row, col);
+                map[row][col] = new rechargeTile(row, col);              //Define a recharge tile.
                 break;
         }
 
@@ -223,22 +225,42 @@ public class parseJSON{
         throw new IndexOutOfBoundsException(imgName + " was not found");
     }
 
+    /**
+     * Get the player.
+     * @return the player.
+     */
     public Player getPlayer(){
         return this.player;
     }
 
+    /**
+     * Get the map.
+     * @return the map.
+     */
     public Tile[][] getMap(){
         return this.map;
     }
 
+    /**
+     * Get the treasure.
+     * @return the treasure.
+     */
     public int getTreasures(){
         return this.treasures;
     }
 
+    /**
+     * Get the bug.
+     * @return the bug.
+     */
     public Object getBug(){
         return this.bug;
     }
 
+    /**
+     * Get the number of keys that are in the current level.
+     * @return the number of keys.
+     */
     public int getNumberOfKeys(){
         return this.keys;
     }
