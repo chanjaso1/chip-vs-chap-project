@@ -655,11 +655,10 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                // power-up that adds time //TODO: check this works!
+                // power-up that adds time
                 if (game.getPlayer().playerIsRecharge()) {
                     currentTime += 10;
-                    System.out.println("recharge power-up");
-                    return;
+                    game.getPlayer().setPlayerRecharge(false);
                 }
 
                 // retrieves and moves bug
