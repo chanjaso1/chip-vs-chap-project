@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class RecordSaver {
     private final ArrayList<Move> moves;
     private final double time;
-    private boolean notForUser = false;
+    private boolean notForUser;
 
     /**
      * RecordSaver saves the moves in "Action" in JSON file and the time in "Header".
@@ -25,12 +25,17 @@ public class RecordSaver {
         this.notForUser = notForUser;
         this.moves = moves;
         this.time = time;
-        save("lastgame");
+
+        if (notForUser)
+            save("lastgame");
+        else
+            save(null);
     }
 
     /**
-     * todo here
-     * @param fileName
+     * Save to Recording or Recording/UserData file using fileName.
+     *
+     * @param fileName - name of file to be saved
      */
     public void save(String fileName){
         //get name of new file if not provided
@@ -85,8 +90,7 @@ public class RecordSaver {
     }
 
     /**
-     * 
-     * @return
+     * @return the time that the moves ended up at.
      */
     public double getTime() {
         return time;

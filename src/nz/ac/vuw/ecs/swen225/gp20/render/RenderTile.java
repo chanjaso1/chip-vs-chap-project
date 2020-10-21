@@ -135,3 +135,22 @@ class InfoRender extends RenderTile {
         super(x, y, i);
     }
 }
+
+class TimeRender extends RenderTile {
+    Image gif = null;
+    Image broken = null;
+    JComponent display = null;
+
+    public TimeRender(int x, int y, Image g, Image b,JComponent display) {
+        super(x, y, null);
+        this.display = display;
+        this.gif = g;
+        this.broken = b;
+    }
+
+    @Override
+    public void drawTile(Graphics2D g, int x, int y) {
+        if (!open) g.drawImage(gif, x, y, display);
+        else g.drawImage(broken, x, y, display);
+    }
+}

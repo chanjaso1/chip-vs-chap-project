@@ -128,7 +128,8 @@ public class RecordReader {
      * Runs one move per click. Button to be clicked is on GUI.
      */
     public void playNextFrame(){
-        gui.setDisplayInfoTile(false);
+        gui.setDisplayInfoTile(false); //don't display the popups during replay
+
         //don't play past last replay
         if (moves.size() == lastMovePos){
             //don't notify if playing starting game replay
@@ -161,7 +162,6 @@ public class RecordReader {
             //update bug
             else
                 move.setMover((Actor) gui.getGame().getBug());
-
         }
     }
 
