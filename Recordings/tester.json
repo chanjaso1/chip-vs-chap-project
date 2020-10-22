@@ -1,27 +1,15 @@
 {
 	"Header": {
-		"time": 46.0
+		"time": 50.0
 	},
 	"Level1": [
 	],
 	"Level2": [
 		{
-			"B": "down"
-		},
-		{
-			"B": "down"
-		},
-		{
-			"B": "down"
-		},
-		{
-			"B": "down"
-		},
-		{
-			"B": "down"
-		},
-		{
 			"P": "left"
+		},
+		{
+			"B": "down"
 		},
 		{
 			"P": "up"
@@ -39,55 +27,46 @@
 			"P": "up"
 		},
 		{
+			"B": "down"
+		},
+		{
 			"P": "left"
 		},
 		{
 			"P": "up"
 		},
 		{
-			"B": "up"
+			"B": "down"
+		},
+		{
+			"B": "down"
 		},
 		{
 			"P": "left"
 		},
 		{
-			"P": "left"
+			"B": "down"
 		},
 		{
 			"P": "left"
 		},
 		{
-			"P": "left"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"B": "up"
+			"B": "down"
 		},
 		{
 			"P": "right"
 		},
 		{
+			"B": "down"
+		},
+		{
 			"P": "left"
 		},
 		{
-			"B": "up"
+			"P": "right"
 		},
 		{
-			"B": "up"
-		},
-		{
-			"B": "up"
-		},
-		{
-			"P": "up"
+			"B": "down"
 		},
 		{
 			"B": "up"

@@ -12,10 +12,10 @@ public class RecordSaver {
             "\t\"Header\": {\n" +
             "\t\t\"time\": 60.0\n" +
             "\t},\n" +
-            "\t\"Actions\": [\n" +
+            "\t\"Level1\": [\n" +
             "\t]\n" +
-            "}"; //for an empty recording - used in GUI
-    private final ArrayList<Move> moves;
+            "}"; //for an empty recording - used in GUI todo update
+    private final ArrayList[] moves;
     private final double time;
     private final boolean notForUser; //if file is not directly used by user
 
@@ -28,7 +28,7 @@ public class RecordSaver {
      * @param time - time ended on after moves were made.
      * @param notForUser - true for secret file.
      */
-    public RecordSaver(ArrayList<Move> moves, double time, boolean notForUser) {
+    public RecordSaver(ArrayList[] moves, double time, boolean notForUser) {
         this.notForUser = notForUser;
         this.moves = moves;
         this.time = time;
@@ -56,12 +56,19 @@ public class RecordSaver {
 
         //make text to store in json format
         jsonRecording.append("{\n\t\"Header\": {\n\t\t\"time\": ").append(time).append("\n\t},");
-        jsonRecording.append("\n\t\"Actions\": [\n");
-        for (int i = 0; i < moves.size(); i++) {
-            jsonRecording.append("\t\t{\n");
-            //player or bug
-            jsonRecording.append("\t\t\t\"").append(moves.get(i).getMover()).append("\": \"").append(moves.get(i)).append("\"\n");
-            jsonRecording.append(i < moves.size()-1 ? "\t\t},\n":"\t\t}\n");
+
+        //store each level
+        for (int i = 1; i < moves.length; i++) {
+            //start level array
+            jsonRecording.append("\n\t\"Level").append(i).append("\": [\n");
+            for (int j = 0; j < moves[i].size(); j++) {
+                //print moves in level
+                jsonRecording.append("\t\t{\n");
+                //player or bug
+                jsonRecording.append("\t\t\t\"").append(((Move)moves[i].get(j)).getMover()).append("\": \"").append(moves[i].get(j)).append("\"\n");
+                jsonRecording.append(j < moves[i].size()-1 ? "\t\t},\n":"\t\t}\n");
+            }
+            jsonRecording.append(i < moves.length-1 ?"\t],":"");
         }
         jsonRecording.append("\t]\n}");
 
@@ -79,10 +86,11 @@ public class RecordSaver {
             BufferedWriter newFile = new BufferedWriter(new FileWriter(savingFile));
             newFile.write(jsonRecording.toString());
             newFile.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+        } catch (Exception e) {
+            GUI.notifyError("Could not save file due to an error.");
+            return;
         }
+
 
         //say it's saved in the according fashion
         if (notForUser)

@@ -35,7 +35,7 @@ public class GUI {
     private RendererPanel board;
     private RecordReader recordReader;
     private BufferedImage redKey, greenKey;
-    private ArrayList<Move> moveSequence = new ArrayList<>();
+    private ArrayList[] moveSequence = new ArrayList[3]; //empty, level1moves, level2moves
     private Timer timer;
 
     private Game game;
@@ -46,6 +46,8 @@ public class GUI {
     public GUI() {
         game = new Game(2);
         board = new RendererPanel(game);
+        moveSequence[1] = new ArrayList<Move>();
+        moveSequence[2] = new ArrayList<Move>();
 
         // creates red and green keys
         try {
@@ -72,13 +74,19 @@ public class GUI {
         // starts game from recently saved file
         if (lastGameToken.equalsIgnoreCase("L")) {
             //start with last game sequence
-            resetLevel(startScan.nextInt());
-            recordReader = new RecordReader(this, new File("Recordings/UserData/lastgame.json"), game.getPlayer(), game.getBug());
+            displayInfoTile = false;
+            int level = startScan.nextInt();
+            resetLevel(level);
+            recordReader = new RecordReader(this, new File("Recordings/UserData/lastgame.json"), game.getPlayer());
+            moveSequence[1] = new ArrayList<Move>();
+            moveSequence[2] = new ArrayList<Move>();
+            recordReader.updateMovesForActors(level);
             currentTime = recordReader.getTime();
             recordReader.playAtSpeed(0);
+            displayInfoTile = true;
 
             //clear lastgame
-            writeToFile("Recordings/UserData/lastgame.json", RecordSaver.EMPTY_RECORDING);
+//            writeToFile("Recordings/UserData/lastgame.json", RecordSaver.EMPTY_RECORDING);
         } else {
             //start from last unfinished level
             int lastLevel = Integer.parseInt(lastGameToken);
@@ -109,6 +117,7 @@ public class GUI {
         saveButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                displayInfoTile = false;
                 saveMovements();
             }
         });
@@ -439,12 +448,16 @@ public class GUI {
      * The replay speed is displayed as a JComboBox so users can select a speed within the specified range.
      */
     public void displayReplayFrame() {
+        displayInfoTile = false;
+
         // get replay file
         File file = getFile();
         if (file == null) return;
 
-        resetLevel(1);
-        recordReader = new RecordReader(this, file, game.getPlayer(), game.getBug());
+        recordReader = new RecordReader(this, file, game.getPlayer());
+        System.out.println(recordReader.getCurrentLevel());
+        resetLevel(recordReader.getCurrentLevel());
+        recordReader.updateMovesForActors(recordReader.getCurrentLevel());
         resetTime();
 
         // formats frame
@@ -695,7 +708,7 @@ public class GUI {
                         game.updatePlayerBugStatus();
 
                         if (bugMove != null)
-                            moveSequence.add(bugMove);
+                            moveSequence[game.getLevel()].add(bugMove);
                     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
                         ex.printStackTrace();
                     }
@@ -726,6 +739,7 @@ public class GUI {
      */
     public void saveMovements() {
         new RecordSaver(moveSequence, currentTime, false);
+        displayInfoTile = true;
     }
 
     /**
@@ -768,7 +782,7 @@ public class GUI {
 
             // updates actor's move between levels
             if (recordReader != null)
-                recordReader.updateMovesForActors();
+                recordReader.updateMovesForActors(game.getLevel());
         }
     }
 
@@ -779,7 +793,7 @@ public class GUI {
      * @param move -- the player's most recent move.
      */
     public void movePlayer(Move move) {
-        moveSequence.add(move);
+        moveSequence[game.getLevel()].add(move);
         game.moveActor(move);
         board.renderMove(move.getDir());
         checkWinTile();
