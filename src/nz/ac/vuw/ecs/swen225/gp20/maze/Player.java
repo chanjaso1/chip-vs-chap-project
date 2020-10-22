@@ -46,7 +46,6 @@ public class Player extends Actor {
             keys.put(((Key) item).getColor(), ((Key) item));
         } else {
             treasures--;
-            System.out.println("treasures: " + treasures);
         }
     }
 
