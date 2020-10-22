@@ -142,7 +142,6 @@ public class RecordReader {
      * Runs one move per click. Button to be clicked is on GUI.
      */
     public void playNextFrame(){
-        System.out.println("lm"+lastMovePos);
         gui.setDisplayInfoTile(false); //don't display the popups during replay
 
         //play

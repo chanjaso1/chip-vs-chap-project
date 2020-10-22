@@ -117,6 +117,7 @@ public class GUI {
         saveButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                displayInfoTile = false;
                 saveMovements();
             }
         });
@@ -738,6 +739,7 @@ public class GUI {
      */
     public void saveMovements() {
         new RecordSaver(moveSequence, currentTime, false);
+        displayInfoTile = true;
     }
 
     /**
