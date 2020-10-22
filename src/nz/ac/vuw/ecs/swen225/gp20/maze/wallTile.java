@@ -6,7 +6,6 @@ import com.google.gson.internal.$Gson$Preconditions;
  * wallTile represent a blocked tile that the player cannot walk pass.
  */
 public class wallTile implements Tile {
-    private int row,col;
 
     /**
      * wallTile constructor.
@@ -15,8 +14,6 @@ public class wallTile implements Tile {
      */
     public wallTile(int row, int col){
         $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
-        this.row = row;
-        this.col = col;
     }
 
     /**

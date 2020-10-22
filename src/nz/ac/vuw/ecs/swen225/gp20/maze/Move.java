@@ -60,7 +60,6 @@ public abstract class Move {
 
     @Override
     public boolean equals(Object obj) {
-        $Gson$Preconditions.checkNotNull(obj);
         //@note object does not have fields to check hence the weird equals and hashcode
         return obj.getClass() == getClass() && mover.getClass() == ((Move)obj).getMover().getClass();
     }

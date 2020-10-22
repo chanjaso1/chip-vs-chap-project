@@ -7,7 +7,6 @@ import com.google.gson.internal.$Gson$Preconditions;
  * For example, same color keys.
  */
 public class doorTile implements Tile{
-    private int row,col;
     private String color;
     private boolean open;
 
@@ -20,8 +19,6 @@ public class doorTile implements Tile{
     public doorTile(int row, int col, String color){
         $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
         $Gson$Preconditions.checkNotNull(color);
-        this.row = row;
-        this.col = col;
         this.color = color;
         open = false;
     }

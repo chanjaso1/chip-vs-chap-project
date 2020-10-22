@@ -6,7 +6,6 @@ import com.google.gson.internal.$Gson$Preconditions;
  * Recharge tile on the map will indicate GUI to increased the timer by 10 seconds.
  */
 public class rechargeTile implements Tile {
-    private int row,col;
     boolean recharge = false;
 
     /**
@@ -16,8 +15,6 @@ public class rechargeTile implements Tile {
      */
     public rechargeTile(int row, int col){
         $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
-        this.row = row;
-        this.col = col;
     }
 
     @Override

@@ -245,7 +245,7 @@ public class MazeTesting {
      * When the player is on the recharge tile the state will change to recharge.
      */
     @Test
-    public void TestRechargeTile(){
+    public void testRechargeTile(){
         Game game = new Game(2);
         Player player = game.getPlayer();
 

@@ -7,7 +7,6 @@ import com.google.gson.internal.$Gson$Preconditions;
  * and they will move to the next player if there's one.
  */
 public class winTile implements Tile{
-    private int row,col;
 
     /**
      * wallTile constructor.
@@ -16,8 +15,6 @@ public class winTile implements Tile{
      */
     public winTile(int row, int col){
         $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
-        this.row = row;
-        this.col = col;
     }
 
     /**

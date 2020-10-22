@@ -7,7 +7,7 @@ import java.awt.*;
  /**
  * Key object used to open the door that has the same color as the key.
  */
-public class Key extends Item{
+public class Key implements Item {
     private String color;
 
     /**
@@ -16,8 +16,6 @@ public class Key extends Item{
      * @param color -- color of the key.
      */
     public Key(Tile tile, String color){
-        super(tile);
-
         $Gson$Preconditions.checkNotNull(color);
         this.color = color;
     }

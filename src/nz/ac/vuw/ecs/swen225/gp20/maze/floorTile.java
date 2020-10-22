@@ -6,7 +6,6 @@ import com.google.gson.internal.$Gson$Preconditions;
  * floorTile is a normal tile that the user in able to move on to it.
  */
 public class floorTile implements Tile{
-    private int row,col;
     private Item item;
     private boolean bugPath = false;
 
@@ -18,8 +17,6 @@ public class floorTile implements Tile{
      */
     public floorTile(int row, int col, Item item){
         $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
-        this.row = row;
-        this.col = col;
         this.item = item;
 
     }

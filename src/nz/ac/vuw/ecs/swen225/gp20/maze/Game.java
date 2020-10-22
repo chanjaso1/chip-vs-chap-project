@@ -75,7 +75,7 @@ public class Game {
      * @return current map in the game.
      */
     public Tile[][] getMap() {
-        return map;
+        return map.clone();
     }
 
     /**
