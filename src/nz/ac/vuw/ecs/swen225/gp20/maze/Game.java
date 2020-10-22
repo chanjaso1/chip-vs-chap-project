@@ -1,6 +1,6 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 import com.google.gson.internal.$Gson$Preconditions;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.parseJSON;
+import nz.ac.vuw.ecs.swen225.gp20.persistence.ParseJSON;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -11,7 +11,7 @@ public class Game {
     private int num;
     private Player player;
     private Tile[][] map;
-    private parseJSON parser;
+    private ParseJSON parser;
     private Object bug = null;
     private int level = 0;
 
@@ -30,7 +30,7 @@ public class Game {
      * This function will be called every time the level is reload.
      */
     public void loadLevel()  {
-        parser = new parseJSON("levels/level" + level + ".json");
+        parser = new ParseJSON("levels/level" + level + ".json");
         $Gson$Preconditions.checkNotNull(parser);
 
         map = parser.getMap();
@@ -90,7 +90,7 @@ public class Game {
      * Return the parser.
      * @return -- current parser that define.
      */
-    public parseJSON getParser() {
+    public ParseJSON getParser() {
         return parser;
     }
 

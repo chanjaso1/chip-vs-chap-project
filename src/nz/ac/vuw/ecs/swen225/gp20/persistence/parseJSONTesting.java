@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * This class will test every method in the parseJSON class and indirectly, the bug class.
  */
-public class parseJSONTesting {
+public class ParseJSONTesting {
 
     /**
      * test1 will be defining if all the tiles and checking if they are an instance of that class.
@@ -15,7 +15,7 @@ public class parseJSONTesting {
      */
     @Test
     public void checkLevel1Tiles() {
-        parseJSON test = new parseJSON("tests/test1.json");
+        new ParseJSON("tests/test1.json");
 
     }
 
@@ -24,7 +24,7 @@ public class parseJSONTesting {
      */
     @Test
     public void checkLevel2Tiles() {
-        parseJSON test = new parseJSON("tests/test2.json");
+        new ParseJSON("tests/test2.json");
     }
 
     /**
@@ -32,8 +32,7 @@ public class parseJSONTesting {
      */
     @Test
     public void checkPlayerGetter() {
-
-        parseJSON test = new parseJSON("tests/test1.json");
+        ParseJSON test = new ParseJSON("tests/test1.json");
         assert test.getPlayer() != null;
     }
 
@@ -42,7 +41,7 @@ public class parseJSONTesting {
      */
     @Test
     public void checkTreasureGetter() {
-        parseJSON test = new parseJSON("tests/test1.json");
+        ParseJSON test = new ParseJSON("tests/test1.json");
         assert test.getTreasures() != 0;
     }
 
@@ -51,7 +50,7 @@ public class parseJSONTesting {
      */
     @Test
     public void checkMapGetter() {
-        parseJSON test = new parseJSON("tests/test1.json");
+        ParseJSON test = new ParseJSON("tests/test1.json");
         assert test.getMap() != null;
     }
 
@@ -60,7 +59,7 @@ public class parseJSONTesting {
      */
     @Test
     public void checkNumberOfKeys() {
-        parseJSON test = new parseJSON("tests/test1.json");
+        ParseJSON test = new ParseJSON("tests/test1.json");
         assert test.getNumberOfKeys() != 0;
     }
 
@@ -69,9 +68,9 @@ public class parseJSONTesting {
      */
     @Test
     public void checkBug() {
-        parseJSON test = new parseJSON("tests/test2.json");
+        ParseJSON test = new ParseJSON("tests/test2.json");
         assert test.getBug() != null;
-        test = new parseJSON("tests/test1.json");
+        test = new ParseJSON("tests/test1.json");
         assert test.getBug() == null;
     }
 
@@ -80,7 +79,7 @@ public class parseJSONTesting {
      */
     @Test
     public void checkFailedParser() {
-        parseJSON test = new parseJSON("tests/test-1.json");
+        ParseJSON test = new ParseJSON("tests/test-1.json");
         assert test.getPlayer() == null && test.getBug() == null && test.getMap() == null;
     }
 
@@ -89,7 +88,7 @@ public class parseJSONTesting {
      */
     @Test
     public void testLoadImage() {
-        parseJSON test = new parseJSON("tests/test2.json");
+        ParseJSON test = new ParseJSON("tests/test2.json");
         assert test.loadImage("swarm.gif") != null;
     }
 
@@ -97,12 +96,11 @@ public class parseJSONTesting {
      *
      */
     @Test
-    public void checkBugMovement() {
-        parseJSON test = new parseJSON("tests/test2.json");
+    public void checkBugBoolean() {
         try {
+            ParseJSON test = new ParseJSON("tests/test2.json");
             assert test.aClass.getField("moveDownFirst").equals(false);
-        }catch(Exception ignored){
-
+        }catch(NoSuchFieldException e){
         }
     }
 
@@ -111,7 +109,7 @@ public class parseJSONTesting {
      */
     @Test
     public void checkBugToString(){
-        parseJSON test = new parseJSON("tests/test2.json");
+        ParseJSON test = new ParseJSON("tests/test2.json");
         try {
             assert test.aClass.getMethod("toString").invoke(test.getBug()) == "B";
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
