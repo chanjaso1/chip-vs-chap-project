@@ -110,21 +110,21 @@ public class RecordReader {
             return;
         }
 
+        //start on move 0
+        lastMovePos = 0;
+
         //if there aren't any moves in a regular replay
-        if (moves[1].isEmpty() && moves[2].isEmpty() && !replayFile.getName().equals("lastgame.json"))
+        if (moves[1].isEmpty() && moves[2].isEmpty() && !replayFile.getName().equals("lastgame.json")){
             //let user know file is empty
             //based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
             GUI.notifyError("Your file was empty. Please try again and select a different file.");
+            return;
+        }
 
-        //start on move 0
-        lastMovePos = 0;
-        System.out.println("level " + 1 + " had " + moves[1].size() + " moves");
-        System.out.println("level " + 2 + " had " + moves[2].size() + " moves");
 
-        //todo
+        //do level 1 moves if there are any, otherwise, level 2
         if (moves[1].isEmpty())
             currentLevel = 2;
-
     }
 
     /**

@@ -59,9 +59,10 @@ public class RecordSaver {
 
         //store each level
         for (int i = 1; i < moves.length; i++) {
-            System.out.println("level " + i + " had " + moves[i].size() + " moves");
+            //start level array
             jsonRecording.append("\n\t\"Level").append(i).append("\": [\n");
             for (int j = 0; j < moves[i].size(); j++) {
+                //print moves in level
                 jsonRecording.append("\t\t{\n");
                 //player or bug
                 jsonRecording.append("\t\t\t\"").append(((Move)moves[i].get(j)).getMover()).append("\": \"").append(moves[i].get(j)).append("\"\n");
@@ -72,7 +73,6 @@ public class RecordSaver {
         jsonRecording.append("\t]\n}");
 
         //save to file
-        boolean saved = true;
         File savingFile = new File("Recordings/"+(notForUser ? "UserData/":"")+fileName);
         if (savingFile.exists() && !notForUser){
             //check if file exists and ask user if they want
@@ -87,19 +87,18 @@ public class RecordSaver {
             newFile.write(jsonRecording.toString());
             newFile.close();
         } catch (Exception e) {
-            saved = false;
             GUI.notifyError("Could not save file due to an error.");
+            return;
         }
 
+
         //say it's saved in the according fashion
-        if (saved){
-            if (notForUser)
-                //user did not select the name
-                GUI.showMessage( "Your progress has been saved. Next time you open the game, you will start from this point.");
-            else
-                //user selected name in recordings folder
-                GUI.showMessage("File saved to Recordings folder.");
-        }
+        if (notForUser)
+            //user did not select the name
+            GUI.showMessage( "Your progress has been saved. Next time you open the game, you will start from this point.");
+        else
+            //user selected name in recordings folder
+            GUI.showMessage("File saved to Recordings folder.");
     }
 
     /**
