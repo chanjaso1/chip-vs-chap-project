@@ -3,16 +3,16 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 import com.google.gson.internal.$Gson$Preconditions;
 
 /**
- * wallTile represent a blocked tile that the player cannot walk pass.
+ * WallTile represent a blocked tile that the player cannot walk pass.
  */
-public class wallTile implements Tile {
+public class WallTile implements Tile {
 
     /**
-     * wallTile constructor.
+     * WallTile constructor.
      * @param row -- the tile row position.
      * @param col -- the tile column position.
      */
-    public wallTile(int row, int col){
+    public WallTile(int row, int col){
         $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
     }
 

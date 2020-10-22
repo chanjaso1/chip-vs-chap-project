@@ -3,13 +3,13 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 /**
  * This class is created to move the player in the left direction.
  */
-public class moveLeft extends Move {
+public class MoveLeft extends Move {
 
     /**
      * Move Left constructor.
      * @param actor -- actor that perform this action.
      */
-    public moveLeft(Actor actor) {
+    public MoveLeft(Actor actor) {
         super(actor);
         dir = 3;
     }

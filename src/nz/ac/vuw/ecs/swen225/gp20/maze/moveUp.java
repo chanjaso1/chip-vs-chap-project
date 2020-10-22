@@ -3,13 +3,13 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 /**
  * This class is created to move the player up.
  */
-public class moveUp extends Move {
+public class MoveUp extends Move {
 
     /**
      * Move up constructor.
      * @param actor -- actor that perform the action.
      */
-    public moveUp(Actor actor) {
+    public MoveUp(Actor actor) {
         super(actor);
 
         dir = 0;

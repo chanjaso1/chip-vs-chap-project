@@ -62,16 +62,16 @@ public class RecordReader {
                         typeMove = jsonMove.getAsJsonObject().get("P").getAsString();
                         switch (typeMove.toLowerCase()){
                             case "left":
-                                move = new moveLeft(player);
+                                move = new MoveLeft(player);
                                 break;
                             case "right":
-                                move = new moveRight(player);
+                                move = new MoveRight(player);
                                 break;
                             case "up":
-                                move = new moveUp(player);
+                                move = new MoveUp(player);
                                 break;
                             case "down":
-                                move = new moveDown(player);
+                                move = new MoveDown(player);
                                 break;
                             default:
                                 //not recognised
@@ -84,16 +84,16 @@ public class RecordReader {
                         Bug dummyBug = new Bug(0, 0); //moves don't allow null actors
                         switch (typeMove.toLowerCase()){
                             case "left":
-                                move = new moveLeft(dummyBug);
+                                move = new MoveLeft(dummyBug);
                                 break;
                             case "right":
-                                move = new moveRight(dummyBug);
+                                move = new MoveRight(dummyBug);
                                 break;
                             case "up":
-                                move = new moveUp(dummyBug);
+                                move = new MoveUp(dummyBug);
                                 break;
                             case "down":
-                                move = new moveDown(dummyBug);
+                                move = new MoveDown(dummyBug);
                                 break;
                             default:
                                 //not recognised
