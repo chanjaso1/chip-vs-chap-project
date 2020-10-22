@@ -25,10 +25,10 @@ import javax.swing.border.Border;
  */
 public class GUI {
 
+    private static final double MAX_TIME = 60;
     private final Font TITLE_FONT = new Font("", Font.BOLD, 30);
     private final GridLayout GAME_STATS_LAYOUT = new GridLayout(2, 1);
     private final Border GAME_STATS_BORDER = BorderFactory.createEmptyBorder(10, 10, 10, 10);
-    private final double MAX_TIME = 60;
 
     private JFrame frame, replayFrame = new JFrame();
     private JPanel gameStatsPanel;
@@ -444,8 +444,17 @@ public class GUI {
         // get replay file
         File file = getFile();
         if (file == null) return;
-
         recordReader = new RecordReader(this, file, game.getPlayer());
+        
+        // handles empty files
+        if (recordReader.getMoves()[1].isEmpty() && recordReader.getMoves()[2].isEmpty()) {
+            displayReplayFrame();
+            displayInfoTile = true;
+            pauseGame(false);
+            redisplayTimer();
+            return;
+        }
+
         resetLevel(recordReader.getCurrentLevel());
         recordReader.updateMovesForActors(recordReader.getCurrentLevel());
         resetTime();
