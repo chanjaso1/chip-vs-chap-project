@@ -3,14 +3,14 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 import com.google.gson.internal.$Gson$Preconditions;
 
 /**
- * floorTile is a normal tile that the user in able to move on to it.
+ * FloorTile is a normal tile that the user in able to move on to it.
  */
 public class floorTile implements Tile{
     private Item item;
     private boolean bugPath = false;
 
     /**
-     * wallTile constructor.
+     * WallTile constructor.
      * @param row -- the tile row position.
      * @param col -- the tile column position.
      * @param item -- some tiles hold an item such as "Key" or "Treasure"
@@ -53,8 +53,8 @@ public class floorTile implements Tile{
 
     /**
      * Return true if this tile is the bug path.
-     * @return true -- this tile is the bug path
-     *          false -- this tile is not the bug path
+     * @return true -- this tile is the bug path.
+     *          false -- this tile is not the bug path.
      */
     public boolean isBugPath() {
         return bugPath;

@@ -35,7 +35,7 @@ public class doorTile implements Tile{
     @Override
     public boolean checkValidMove(Player player) {
         $Gson$Preconditions.checkNotNull(player);
-        if(open) return true;
+        if(open){ return true;}
 
         //player can only move on to this tile if they have the correct color key
         for(Key key : player.getKeys().values()){

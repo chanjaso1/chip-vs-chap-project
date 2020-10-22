@@ -4,7 +4,7 @@ import com.google.gson.internal.$Gson$Preconditions;
 
 /**
  * This interface represent the characters in the game.
- *  Each characters will have t
+ *  Each characters will have to perform a movement.
  */
 public class Actor {
     private Game game;
@@ -24,8 +24,8 @@ public class Actor {
 
     /**
      * Set the player position to the given row and column.
-     * @param row -- new row that the player is
-     * @param col -- new column that the player is
+     * @param row -- new row that the player is.
+     * @param col -- new column that the player is.
      */
     public void setPosition(int row , int col){
         $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
@@ -36,7 +36,7 @@ public class Actor {
 
     /**
      * Return the player's current column.
-     * @return player's current column
+     * @return player's current column.
      */
     public int getCol() {
         return col;
@@ -52,7 +52,7 @@ public class Actor {
     /**
      * Move the player in the chosen direction.
      *
-     * @param move move class applies according to the players choices in directions
+     * @param move move class applies according to the players choices in directions.
      */
     public void move(Move move) {
         $Gson$Preconditions.checkNotNull(move);
@@ -61,7 +61,7 @@ public class Actor {
 
     /**
      * Return the current game that player's in.
-     * @return player's current Game object
+     * @return player's current Game object.
      */
     public Game getGame() {
         return game;

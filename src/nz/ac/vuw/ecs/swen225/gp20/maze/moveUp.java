@@ -1,7 +1,7 @@
 package nz.ac.vuw.ecs.swen225.gp20.maze;
 
 /**
- * This class is created to move the player up
+ * This class is created to move the player up.
  */
 public class moveUp extends Move {
 

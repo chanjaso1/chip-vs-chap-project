@@ -79,8 +79,8 @@ public class Game {
     }
 
     /**
-     * Return the game object
-     * @return -- current game object
+     * Return the game object.
+     * @return -- current game object.
      */
     public  Game getGame(){
         return this;
@@ -88,7 +88,7 @@ public class Game {
 
     /**
      * Return the parser.
-     * @return -- current parser that defin
+     * @return -- current parser that define.
      */
     public parseJSON getParser() {
         return parser;
