@@ -5,6 +5,7 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.Move;
 
 import javax.swing.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class RecordSaver {
@@ -30,14 +31,18 @@ public class RecordSaver {
      */
     public RecordSaver(ArrayList[] moves, double time, boolean notForUser) {
         this.notForUser = notForUser;
-        this.moves = moves;
+        this.moves = moves.clone();
         this.time = time;
 
-        //if file save does not concern user
-        if (notForUser)
-            save("lastgame");
-        else
-            save(null);
+        try {
+            //if file save does not concern user
+            if (notForUser)
+                save("lastgame");
+            else
+                save(null);
+        } catch (IOException e) {
+            GUI.notifyError(e.getMessage());
+        }
     }
 
     /**
@@ -45,7 +50,7 @@ public class RecordSaver {
      *
      * @param fileName - name of file to be saved.
      */
-    public void save(String fileName){
+    public void save(String fileName) throws IOException {
         //get name of new file if not provided
         if (fileName == null || fileName.isBlank() || fileName.isEmpty()){
             fileName = GUI.getFileName("Please enter a name for the recording file (without extension):");
@@ -82,11 +87,11 @@ public class RecordSaver {
         }
         try {
             //write contents to file or make new file
-            // - based on https://stackoverflow.com/questions/52581404/java-create-a-new-file-or-override-the-existing-file
-            BufferedWriter newFile = new BufferedWriter(new FileWriter(savingFile));
+            // - structure based on https://stackoverflow.com/questions/52581404/java-create-a-new-file-or-override-the-existing-file
+            BufferedWriter newFile = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(savingFile), StandardCharsets.UTF_8)); //utf approach based on https://stackoverflow.com/questions/6998905/java-bufferedwriter-object-with-utf-8
             newFile.write(jsonRecording.toString());
             newFile.close();
-        } catch (Exception e) {
+        } catch (FileNotFoundException | RuntimeException e) {
             GUI.notifyError("Could not save file due to an error.");
             return;
         }

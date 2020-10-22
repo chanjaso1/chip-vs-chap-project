@@ -6,9 +6,9 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class RecordReader {
@@ -40,7 +40,8 @@ public class RecordReader {
         //read path
         try {
             assert replayFile != null;
-            JsonObject jo = new Gson().fromJson(new FileReader(replayFile), JsonObject.class);
+            JsonObject jo = new Gson().fromJson(new InputStreamReader(new FileInputStream(replayFile),
+                    StandardCharsets.UTF_8), JsonObject.class); // based on https://stackoverflow.com/questions/49733223/encoding-issue-with-org-json-simple-jsonobject-turning-to-%C3%A2%CB%9C
             time = jo.get("Header").getAsJsonObject().get("time").getAsDouble();
 
             for (int level = 1; level < 3; level++) {
@@ -105,7 +106,7 @@ public class RecordReader {
                     moves[level].add(move);
                 }
             }
-        } catch (Exception e) {
+        } catch (NullPointerException | FileNotFoundException e) {
             GUI.notifyError("Unsupported file format.");
             return;
         }
@@ -114,7 +115,7 @@ public class RecordReader {
         lastMovePos = 0;
 
         //if there aren't any moves in a regular replay
-        if (moves[1].isEmpty() && moves[2].isEmpty() && !replayFile.getName().equals("lastgame.json")){
+        if (!hasMoves() && !replayFile.getName().equals("lastgame.json")){
             //let user know file is empty
             //based on https://stackoverflow.com/questions/7993000/need-to-use-joptionpane-error-message-type-of-jdialog-in-a-jframe
             GUI.notifyError("Your file was empty. Please try again and select a different file.");
@@ -203,8 +204,8 @@ public class RecordReader {
     /**
      * @return the moves that this RecordReader has read.
      */
-    public ArrayList[] getMoves() {
-        return moves;
+    public boolean hasMoves() {
+        return !(moves[1].isEmpty() && moves[2].isEmpty());
     }
 
     /**

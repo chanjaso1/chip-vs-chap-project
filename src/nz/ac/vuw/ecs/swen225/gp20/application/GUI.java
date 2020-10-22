@@ -447,7 +447,7 @@ public class GUI {
         recordReader = new RecordReader(this, file, game.getPlayer());
         
         // handles empty files
-        if (recordReader.getMoves()[1].isEmpty() && recordReader.getMoves()[2].isEmpty()) {
+        if (!recordReader.hasMoves()) {
             displayReplayFrame();
             displayInfoTile = true;
             pauseGame(false);
