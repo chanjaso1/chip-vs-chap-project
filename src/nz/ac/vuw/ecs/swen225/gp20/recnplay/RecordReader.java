@@ -118,6 +118,13 @@ public class RecordReader {
 
         //start on move 0
         lastMovePos = 0;
+        System.out.println("level " + 1 + " had " + moves[1].size() + " moves");
+        System.out.println("level " + 2 + " had " + moves[2].size() + " moves");
+
+        //todo
+        if (moves[1].isEmpty())
+            currentLevel = 2;
+
     }
 
     /**
@@ -245,5 +252,14 @@ public class RecordReader {
      */
     public double getTime() {
         return time;
+    }
+
+    /**
+     * Initialised as 1, then if level 1 has no moves, is changed to two
+     *
+     * @return the level that the record is playing
+     */
+    public int getCurrentLevel() {
+        return currentLevel;
     }
 }

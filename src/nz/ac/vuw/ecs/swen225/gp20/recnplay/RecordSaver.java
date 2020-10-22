@@ -59,6 +59,7 @@ public class RecordSaver {
 
         //store each level
         for (int i = 1; i < moves.length; i++) {
+            System.out.println("level " + i + " had " + moves[i].size() + " moves");
             jsonRecording.append("\n\t\"Level").append(i).append("\": [\n");
             for (int j = 0; j < moves[i].size(); j++) {
                 jsonRecording.append("\t\t{\n");

@@ -77,6 +77,8 @@ public class GUI {
             int level = startScan.nextInt();
             resetLevel(level);
             recordReader = new RecordReader(this, new File("Recordings/UserData/lastgame.json"), game.getPlayer());
+            moveSequence[1] = new ArrayList<Move>();
+            moveSequence[2] = new ArrayList<Move>();
             recordReader.updateMovesForActors(level);
             currentTime = recordReader.getTime();
             recordReader.playAtSpeed(0);
@@ -447,8 +449,10 @@ public class GUI {
         File file = getFile();
         if (file == null) return;
 
-        resetLevel(1);
         recordReader = new RecordReader(this, file, game.getPlayer());
+        System.out.println(recordReader.getCurrentLevel());
+        resetLevel(recordReader.getCurrentLevel());
+        recordReader.updateMovesForActors(recordReader.getCurrentLevel());
         resetTime();
 
         // formats frame
