@@ -179,45 +179,6 @@ public class RecordReader {
             //gui display the "help" popup on InfoTile after starting game done
             gui.setDisplayInfoTile(true);
         }
-
-
-        /*//don't play past last replay
-        if (moves[gui.getGame().getLevel()].size() >= lastMovePos){
-            //don't notify if playing starting game replay
-            if (!replayFile.getName().equals("lastgame.json"))
-                GUI.showMessage("That was the last move!");
-
-            //step-by-step dont stop timer that doesnt exist
-            if (timer != null)
-                timer.stop();
-
-            //gui display the "help" popup on InfoTile after starting game done
-            gui.setDisplayInfoTile(true);
-            lastMovePos = 0;
-            return;
-        }
-
-        //if not last move
-        if (lastMovePos < moves[gui.getGame().getLevel()].size()){
-            //do Player move
-            if (((Move)moves[gui.getGame().getLevel()].get(lastMovePos)).getMover().getClass() == Player.class){
-                gui.movePlayer((Move)moves[gui.getGame().getLevel()].get(lastMovePos));
-            }
-            //do Bug move
-            else{
-                //play using reflection
-                try {
-                    gui.getGame().getParser().aClass.getMethod("moveBugSequence").invoke(gui.getGame().getBug());
-                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-                gui.getGame().updatePlayerBugStatus();
-                gui.getBoard().moveBug();
-            }
-        }
-
-        //move on to next move
-        lastMovePos++;*/
     }
 
     /**
