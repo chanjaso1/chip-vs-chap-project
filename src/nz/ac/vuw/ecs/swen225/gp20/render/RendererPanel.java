@@ -128,7 +128,7 @@ public class RendererPanel extends JComponent {
                 else if (levelTiles[i][j] instanceof wallTile) System.out.print("0");
                 else if (levelTiles[i][j] instanceof DoorTile) System.out.print("K");
                 else if (levelTiles[i][j] instanceof winTile) System.out.print("W");
-                else if (levelTiles[i][j] instanceof TreasureDoor) System.out.print("T");
+                else if (levelTiles[i][j] instanceof treasureDoor) System.out.print("T");
             }
         }
     }
@@ -185,7 +185,7 @@ public class RendererPanel extends JComponent {
                     else if (d.getColor().equals("G")) tile = new GreenDoorRender(gDoor, unlocked);
                 } else if (levelTiles[i][j] instanceof winTile) {
                     tile = new ExitTileRender(win, this);
-                } else if (levelTiles[i][j] instanceof TreasureDoor) {
+                } else if (levelTiles[i][j] instanceof treasureDoor) {
                     tile = new ChipDoorRender(cDoor, cOpen, this);
                     cDoorY = i;
                     cDoorX = j;

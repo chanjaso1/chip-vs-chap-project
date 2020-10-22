@@ -180,7 +180,7 @@ public class parseJSON{
                 ((floorTile) map[row][col]).setBugTile();              //Set this tile to be part of the bug's movement
                 break;
             case "DC":                                                  //Define a chip tile, which opens if all treasure chips are collected.
-                map[row][col] = new TreasureDoor(row, col);
+                map[row][col] = new treasureDoor(row, col);
                 break;
             case "I":
                 map[row][col] = new infoTile(row, col);                  //Define an info tile.
