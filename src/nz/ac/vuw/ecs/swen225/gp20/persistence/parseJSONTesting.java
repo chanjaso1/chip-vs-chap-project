@@ -100,7 +100,7 @@ public class ParseJSONTesting {
         try {
             ParseJSON test = new ParseJSON("tests/test2.json");
             assert test.aClass.getField("moveDownFirst").equals(false);
-        }catch(NoSuchFieldException e){
+        } catch (NoSuchFieldException e) {
         }
     }
 
@@ -108,7 +108,7 @@ public class ParseJSONTesting {
      *
      */
     @Test
-    public void checkBugToString(){
+    public void checkBugToString() {
         ParseJSON test = new ParseJSON("tests/test2.json");
         try {
             assert test.aClass.getMethod("toString").invoke(test.getBug()) == "B";

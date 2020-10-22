@@ -18,6 +18,7 @@ public class Bug extends Actor {
 
     /**
      * This method moves the bug to the next valid tile
+     *
      * @return the movement of the bug.
      */
     public Move moveBugSequence() {
@@ -27,11 +28,11 @@ public class Bug extends Actor {
             down.apply();
             return down;
 
-        }else if(!moveDownFirst && ((floorTile) this.getGame().getMap()[getRow()-1][getCol()]).isBugPath()){
+        } else if (!moveDownFirst && ((floorTile) this.getGame().getMap()[getRow() - 1][getCol()]).isBugPath()) {
             moveUp up = new moveUp(this);
             up.apply();
             return up;
-        }else {
+        } else {
             moveDownFirst = !moveDownFirst;
         }
         return null;
