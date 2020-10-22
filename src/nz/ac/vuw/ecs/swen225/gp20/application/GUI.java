@@ -39,7 +39,7 @@ public class GUI {
     private Timer timer;
 
     private Game game;
-    private double replaySpeed, currentTime = MAX_TIME, prevTime;
+    private double replaySpeed, currentTime = MAX_TIME;
     private boolean pauseGame, displayInfoTile;
 
 
@@ -199,7 +199,7 @@ public class GUI {
 
     /**
      * Helper method which adds all the keystroke functionality to the GUI.
-     * Keystrokes are CTRL-X (exit), CTRL-S (save), CTRL-R (resume), CTRL-P (new game),
+     * Keystrokes are CTRL-X (exit), CTRL-S (save), CTRL-R (resume), CTRL-P (restart level),
      * CTRL-1 (new game at level 1), SPACE (pause), ESC (escape pause and resume game)
      * as well as the four arrow keys which move Chap around the board.
      *
@@ -329,8 +329,8 @@ public class GUI {
 
 
     /**
-     * Displays the game statistics panel on the RHS.
-     * This includes displaying the current level, time, chips left and inventory.
+     * Displays the game statistics panel on the RHS of the GUI.
+     * This includes displaying the current level, time, treasures left and keys collected.
      */
     public void displayGameStatsPanel(JPanel gameStats) {
         gameStats.setBorder(BorderFactory.createEmptyBorder(50, 90, 50, 90));
@@ -539,6 +539,8 @@ public class GUI {
         replayFrame.setVisible(true);
     }
 
+
+
     /**
      * Displays the pause frame which indicates to user the game is paused.
      */
@@ -557,7 +559,7 @@ public class GUI {
 
 
     /**
-     * Displays the exit frame which checks if user wants to exit game.
+     * Displays the exit frame which checks if user wants to exit the game.
      * If yes, the game exits without saving user's progress.
      */
     public void displayExitFrame() {
@@ -797,9 +799,7 @@ public class GUI {
     }
 
     /**
-     * Resets the level once replay mode is executed. Replay mode
-     * assumes that the replay starts at level 1 as it will move
-     * to level 2 when level 1 is passed with the same moves.
+     * Resets the current level.
      *
      * @param level -- the current level.
      */
@@ -822,6 +822,8 @@ public class GUI {
     /**
      * Determines whether the info tile is shown or not.
      * During replays, the info tile should not be shown.
+     *
+     * @param showTile -- If true, the tile should be displayed. Otherwise, false.
      */
     public void setDisplayInfoTile(boolean showTile) {
         displayInfoTile = showTile;
@@ -855,6 +857,7 @@ public class GUI {
 
     /**
      * Returns the current board.
+     *
      * @return the current board.
      */
     public RendererPanel getBoard() {
@@ -882,17 +885,17 @@ public class GUI {
     }
 
     /**
-     * Creates a pop-up which checks if user wants to overwrite a file.
+     * Creates a pop-up which checks if the user wants to overwrite a file.
      *
      * @param message -- the specified message.
-     * @return int value which determines whether or not user wawnts to overwrite the file.
+     * @return int value which determines whether or not user wants to overwrite the file.
      */
     public static int inputDialogue(String message) {
         return JOptionPane.showConfirmDialog(null, message);
     }
 
     /**
-     * Gets a file from user via a {@link JFileChooser}
+     * Gets a file from the user via a {@link JFileChooser}
      *
      * @return the selected file.
      */
@@ -933,7 +936,7 @@ public class GUI {
      * Used when ctrl-x and ctrl-s are invoked.
      *
      * @param filePath -- the file path the file will be saved to.
-     * @param content -- the content to be saved.
+     * @param content  -- the content to be saved.
      */
     public static void writeToFile(String filePath, String content) {
         try {
