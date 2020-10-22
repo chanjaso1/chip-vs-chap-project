@@ -164,35 +164,35 @@ public class RendererPanel extends JComponent {
         for (int i = 0; i < levelTiles.length; i++) {
             for (int j = 0; j < levelTiles[0].length; j++) {
                 if (levelTiles[i][j] instanceof floorTile) {
-                    tile = new FloorRender(i, j, floor);
+                    tile = new FloorRender(floor);
                     floorTile f = (floorTile)levelTiles[i][j];
                     if (f.getItem() instanceof Key) {
                         if (((Key) f.getItem()).getColor().equals("R")) {
-                            item = new RedKey(i, j, redKey);
+                            item = new RedKey(redKey);
                         } else if (((Key) f.getItem()).getColor().equals("G")) {
-                            item = new GreenKey(i, j, greenKey);
+                            item = new GreenKey(greenKey);
                         }
                         itemMap[i][j] = item;
                     } else if (f.getItem() instanceof Treasure) {
-                        item = new Chip(i, j, chip);
+                        item = new Chip(chip);
                         itemMap[i][j] = item;
                     }
                 } else if (levelTiles[i][j] instanceof wallTile) {
-                    tile = new WallRender(i, j, wall);
+                    tile = new WallRender(wall);
                 } else if (levelTiles[i][j] instanceof doorTile) {
                     doorTile d = (doorTile)levelTiles[i][j];
-                    if (d.getColor().equals("R")) tile = new RedDoorRender(i, j, rDoor, unlocked);
-                    else if (d.getColor().equals("G")) tile = new GreenDoorRender(i, j, gDoor, unlocked);
+                    if (d.getColor().equals("R")) tile = new RedDoorRender(rDoor, unlocked);
+                    else if (d.getColor().equals("G")) tile = new GreenDoorRender(gDoor, unlocked);
                 } else if (levelTiles[i][j] instanceof winTile) {
-                    tile = new ExitTileRender(i, j, win, this);
+                    tile = new ExitTileRender(win, this);
                 } else if (levelTiles[i][j] instanceof treasureDoor) {
-                    tile = new ChipDoorRender(i, j, cDoor, cOpen, this);
+                    tile = new ChipDoorRender(cDoor, cOpen, this);
                     cDoorY = i;
                     cDoorX = j;
                 } else if (levelTiles[i][j] instanceof infoTile) {
-                    tile = new InfoRender(i, j, iTile);
+                    tile = new InfoRender(iTile);
                 } else if (levelTiles[i][j] instanceof rechargeTile) {
-                    tile = new TimeRender(i, j, time, noTime, this);
+                    tile = new TimeRender(time, noTime, this);
                 }
 
                 tileMap[i][j] = tile;
@@ -212,7 +212,7 @@ public class RendererPanel extends JComponent {
                     if (i == rowB && j == colB) {
                         yBugLast = i;
                         xBugLast = j;
-                        item = new Enemy(i, j, swarm, this);
+                        item = new Enemy(swarm, this);
                         itemMap[i][j] = item;
                     }
                 }
@@ -281,9 +281,7 @@ public class RendererPanel extends JComponent {
      */
     public void drawPlayer(Graphics2D g, JComponent display) {
         switch (direction) {
-            case 0: // North
-                g.drawImage(north, frameWidth, frameHeight, display);
-                break;
+            // North
             case 1: //East
                 g.drawImage(east, frameWidth, frameHeight, display);
                 break;
@@ -292,6 +290,9 @@ public class RendererPanel extends JComponent {
                 break;
             case 3: // West
                 g.drawImage(west, frameWidth, frameHeight, display);
+                break;
+            default: // North Default
+                g.drawImage(north, frameWidth, frameHeight, display);
                 break;
         }
     }

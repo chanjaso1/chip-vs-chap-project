@@ -1,9 +1,8 @@
 package nz.ac.vuw.ecs.swen225.gp20.render;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+import javax.sound.sampled.*;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * This class is for the handling of sound effects. Sound effects usually occur after certain events.
@@ -18,13 +17,14 @@ public class SoundEffect {
      * @param filename the name of the sound effect .wav file to play
      */
     public void setFile(String filename) {
+        File file = new File(filename);
+        AudioInputStream sound = null;
         try {
-            File file = new File(filename);
-            AudioInputStream sound = AudioSystem.getAudioInputStream(file);
+            sound = AudioSystem.getAudioInputStream(file);
             clip = AudioSystem.getClip();
             clip.open(sound);
-        } catch (Exception e) {
-            System.out.println("Error in setting up sound file.");
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
         }
     }
 

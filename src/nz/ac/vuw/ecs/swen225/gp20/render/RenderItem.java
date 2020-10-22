@@ -10,11 +10,8 @@ import java.awt.image.BufferedImage;
  */
 public class RenderItem {
     BufferedImage img = null;
-    private int x, y;
 
-    public RenderItem(int x, int y, BufferedImage i) {
-        this.x = x;
-        this.y = y;
+    public RenderItem(BufferedImage i) {
         this.img = i;
     }
 
@@ -34,8 +31,8 @@ public class RenderItem {
  */
 class RedKey extends RenderItem {
 
-    public RedKey(int x, int y, BufferedImage i) {
-        super(x, y, i);
+    public RedKey(BufferedImage i) {
+        super(i);
     }
 }
 
@@ -44,8 +41,8 @@ class RedKey extends RenderItem {
  */
 class GreenKey extends RenderItem {
 
-    public GreenKey(int x, int y, BufferedImage i) {
-        super(x, y, i);
+    public GreenKey(BufferedImage i) {
+        super(i);
     }
 }
 
@@ -54,8 +51,8 @@ class GreenKey extends RenderItem {
  */
 class Chip extends RenderItem {
 
-    public Chip(int x, int y, BufferedImage i) {
-        super(x, y, i);
+    public Chip(BufferedImage i) {
+        super(i);
     }
 }
 
@@ -66,8 +63,8 @@ class Enemy extends RenderItem {
     Image gif = null;
     JComponent display = null;
 
-    public Enemy(int x, int y, Image i,JComponent d) {
-        super(x, y, null);
+    public Enemy(Image i, JComponent d) {
+        super(null);
         this.gif = i;
         this.display = d;
     }

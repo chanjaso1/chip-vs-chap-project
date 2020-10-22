@@ -10,12 +10,9 @@ import java.awt.image.BufferedImage;
  */
 public class RenderTile {
     BufferedImage img = null;
-    private int x, y;
     boolean open = false;
 
-    public RenderTile(int x, int y, BufferedImage i) {
-        this.x = x;
-        this.y = y;
+    public RenderTile(BufferedImage i) {
         this.img = i;
     }
 
@@ -39,8 +36,8 @@ public class RenderTile {
  */
 class WallRender extends RenderTile {
 
-    public WallRender(int x, int y, BufferedImage i) {
-        super(x, y, i);
+    public WallRender(BufferedImage i) {
+        super(i);
     }
 }
 
@@ -49,8 +46,8 @@ class WallRender extends RenderTile {
  */
 class FloorRender extends RenderTile {
 
-    public FloorRender(int x, int y, BufferedImage i) {
-        super(x, y, i);
+    public FloorRender(BufferedImage i) {
+        super(i);
     }
 }
 
@@ -60,8 +57,8 @@ class FloorRender extends RenderTile {
 class RedDoorRender extends RenderTile {
     BufferedImage unlocked;
 
-    public RedDoorRender(int x, int y, BufferedImage i, BufferedImage u) {
-        super(x, y, i);
+    public RedDoorRender(BufferedImage i, BufferedImage u) {
+        super(i);
         this.unlocked = u;
     }
 
@@ -78,8 +75,8 @@ class RedDoorRender extends RenderTile {
 class GreenDoorRender extends RenderTile {
     BufferedImage unlocked;
 
-    public GreenDoorRender(int x, int y, BufferedImage i, BufferedImage u) {
-        super(x, y, i);
+    public GreenDoorRender(BufferedImage i, BufferedImage u) {
+        super(i);
         this.unlocked = u;
     }
 
@@ -97,8 +94,8 @@ class ExitTileRender extends RenderTile {
     Image gif = null;
     JComponent display = null;
 
-    public ExitTileRender(int x, int y, Image g, JComponent display) {
-        super(x, y, null);
+    public ExitTileRender(Image g, JComponent display) {
+        super(null);
         this.display = display;
         this.gif = g;
     }
@@ -114,8 +111,8 @@ class ChipDoorRender extends RenderTile {
     Image unlocked = null;
     JComponent display = null;
 
-    public ChipDoorRender(int x, int y, Image g, Image o, JComponent display) {
-        super(x, y, null);
+    public ChipDoorRender(Image g, Image o, JComponent display) {
+        super(null);
         this.display = display;
         this.gif = g;
         this.unlocked = o;
@@ -131,8 +128,8 @@ class ChipDoorRender extends RenderTile {
 
 class InfoRender extends RenderTile {
 
-    public InfoRender(int x, int y, BufferedImage i) {
-        super(x, y, i);
+    public InfoRender(BufferedImage i) {
+        super(i);
     }
 }
 
@@ -141,8 +138,8 @@ class TimeRender extends RenderTile {
     Image broken = null;
     JComponent display = null;
 
-    public TimeRender(int x, int y, Image g, Image b,JComponent display) {
-        super(x, y, null);
+    public TimeRender(Image g, Image b, JComponent display) {
+        super(null);
         this.display = display;
         this.gif = g;
         this.broken = b;
