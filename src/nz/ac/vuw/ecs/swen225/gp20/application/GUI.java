@@ -28,7 +28,7 @@ public class GUI {
     private final Font TITLE_FONT = new Font("", Font.BOLD, 30);
     private final GridLayout GAME_STATS_LAYOUT = new GridLayout(2, 1);
     private final Border GAME_STATS_BORDER = BorderFactory.createEmptyBorder(10, 10, 10, 10);
-    private final double MAX_TIME = 60; // TODO: replace values with actual values from Jason's file
+    private final double MAX_TIME = 60;
 
     private JFrame frame, replayFrame = new JFrame();
     private JPanel gameStatsPanel;
@@ -84,9 +84,6 @@ public class GUI {
             currentTime = recordReader.getTime();
             recordReader.playAtSpeed(0);
             displayInfoTile = true;
-
-            //clear lastgame
-//            writeToFile("Recordings/UserData/lastgame.json", RecordSaver.EMPTY_RECORDING);
         } else {
             //start from last unfinished level
             int lastLevel = Integer.parseInt(lastGameToken);
@@ -198,7 +195,6 @@ public class GUI {
         frame.getContentPane().add(BorderLayout.EAST, gameStatsPanel);
         frame.getContentPane().add(BorderLayout.SOUTH, controlsPanel);
         frame.setVisible(true);
-
     }
 
     /**
@@ -251,12 +247,10 @@ public class GUI {
         });
 
         // CTRL-X (exit)
-//        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.META_DOWN_MASK), "EXIT");           // mac only
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "EXIT");
         actionMap.put("EXIT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                new RecordSaver(game.getLevel());
                 writeToFile("Recordings/UserData/exitinfo.txt", String.valueOf(game.getLevel()));
                 displayExitFrame();
 
@@ -264,7 +258,6 @@ public class GUI {
         });
 
         // CTRL-S (save)
-//        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.META_DOWN_MASK), "SAVE");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "SAVE");
         actionMap.put("SAVE", new AbstractAction() {
             @Override
@@ -272,13 +265,11 @@ public class GUI {
                 timer.stop();
                 new RecordSaver(moveSequence, currentTime, true);
                 writeToFile("Recordings/UserData/exitinfo.txt", "L " + game.getLevel());
-
                 System.exit(0);
             }
         });
 
         // CTRL-R (resume a saved game)
-//        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.META_DOWN_MASK), "RESUME");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK), "RESUME");
         actionMap.put("RESUME", new AbstractAction() {
             @Override
@@ -291,7 +282,6 @@ public class GUI {
         });
 
         // CTRL-P (start new game at last unfinished level)
-//        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.META_DOWN_MASK), "NEW_GAME");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK), "NEW_GAME");
         actionMap.put("NEW_GAME", new AbstractAction() {
             @Override
@@ -301,11 +291,12 @@ public class GUI {
         });
 
         // CTRL-1 (start new game at level 1)
-//        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, InputEvent.META_DOWN_MASK), "NEW_GAME_1");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_1, KeyEvent.CTRL_DOWN_MASK), "NEW_GAME_1");
         actionMap.put("NEW_GAME_1", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                moveSequence[1] = new ArrayList<Move>();
+                moveSequence[2] = new ArrayList<Move>();
                 resetLevel(1);
             }
         });
@@ -455,7 +446,6 @@ public class GUI {
         if (file == null) return;
 
         recordReader = new RecordReader(this, file, game.getPlayer());
-        System.out.println(recordReader.getCurrentLevel());
         resetLevel(recordReader.getCurrentLevel());
         recordReader.updateMovesForActors(recordReader.getCurrentLevel());
         resetTime();
@@ -494,7 +484,6 @@ public class GUI {
         nextButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("clicking next");
                 recordReader.playNextFrame();
             }
         });
@@ -513,7 +502,6 @@ public class GUI {
         autoButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //TODO: ADD AUTO-REPLAY CODE
                 JOptionPane.showMessageDialog(replayFrame, speed, "AUTO-REPLAY", JOptionPane.INFORMATION_MESSAGE);
                 replaySpeed = Double.parseDouble((String) combobox.getSelectedItem());
                 recordReader.playAtSpeed(replaySpeed);
@@ -530,11 +518,9 @@ public class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String message = "Exited Replay mode. Click 'OK' to return to game.";
-//                JOptionPane.showMessageDialog(frame, message, "BACK TO GAME", JOptionPane.INFORMATION_MESSAGE);
                 int input = JOptionPane.showOptionDialog(frame, message, "BACK TO GAME", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
                 if (input == JOptionPane.OK_OPTION) {
-//                    System.out.println("restart timer");
                     replayFrame.setVisible(false);
                     pauseGame = false;
                     currentTime = recordReader.getTime();
@@ -559,7 +545,6 @@ public class GUI {
     public void displayPauseFrame() {
         String message = "The game is paused.";
         JOptionPane.showMessageDialog(frame, message, "PAUSE", JOptionPane.INFORMATION_MESSAGE);
-
     }
 
     /**
@@ -706,7 +691,6 @@ public class GUI {
                     try {
                         Move bugMove = (Move) game.getParser().aClass.getMethod("moveBugSequence").invoke(game.getBug());
                         game.updatePlayerBugStatus();
-
                         if (bugMove != null)
                             moveSequence[game.getLevel()].add(bugMove);
                     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
@@ -810,7 +794,6 @@ public class GUI {
             displayHelpFrame();
             pauseGame(false);
         }
-
     }
 
     /**
@@ -872,7 +855,7 @@ public class GUI {
 
     /**
      * Returns the current board.
-     * @return
+     * @return the current board.
      */
     public RendererPanel getBoard() {
         return board;
@@ -909,7 +892,7 @@ public class GUI {
     }
 
     /**
-     * Gets a file from user via a {@link JFileChooser}4
+     * Gets a file from user via a {@link JFileChooser}
      *
      * @return the selected file.
      */
