@@ -191,7 +191,7 @@ public class parseJSON{
         }
 
         if(type.substring(0,1).equals("D") && !type.equals("DC")){
-            map[row][col] = new doorTile(row, col, type.substring(1,2));  //define a coloured door.
+            map[row][col] = new DoorTile(row, col, type.substring(1,2));  //define a coloured door.
         }else if(type.substring(0,1).equals("K")) {
             this.keys++;
             map[row][col] = new floorTile(row, col, new Key(map[row][col],  type.substring(1,2)));  //define a coloured key

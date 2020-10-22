@@ -49,11 +49,11 @@ public class MazeTesting {
         assertEquals(1,player.getKeys().size());
 
         //checked that the player is able to move pass the door
-        doorTile door = null;
+        DoorTile door = null;
         for(int i = 0; i < 7; i++) {
             new moveRight(player).apply();
-            if(game.getMap()[player.getRow()][player.getCol()] instanceof doorTile)
-                door = (doorTile) game.getMap()[player.getRow()][player.getCol()];
+            if(game.getMap()[player.getRow()][player.getCol()] instanceof DoorTile)
+                door = (DoorTile) game.getMap()[player.getRow()][player.getCol()];
         }
 
         assert door != null;
