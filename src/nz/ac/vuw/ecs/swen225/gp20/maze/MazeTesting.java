@@ -22,12 +22,12 @@ public class MazeTesting {
         Player player = game.getPlayer();
 
         //picking up the keys
-        new MoveDown(player).apply();
+        new moveDown(player).apply();
 
         //checked that the left tile has a key
-        assertNotNull(((FloorTile) game.getMap()[player.getRow()][player.getCol()-1]).getItem());
+        assertNotNull(((floorTile) game.getMap()[player.getRow()][player.getCol()-1]).getItem());
 
-        new MoveLeft(player).apply();
+        new moveLeft(player).apply();
 
         //checked that the key is picked up
         assertEquals(1,player.getKeys().size());
@@ -42,18 +42,18 @@ public class MazeTesting {
         Player player = game.getPlayer();
 
         //picking up the keys
-        new MoveDown(player).apply();
-        new MoveLeft(player).apply();
+        new moveDown(player).apply();
+        new moveLeft(player).apply();
 
         //checked that the key is picked up
         assertEquals(1,player.getKeys().size());
 
         //checked that the player is able to move pass the door
-        DoorTile door = null;
+        doorTile door = null;
         for(int i = 0; i < 7; i++) {
-            new MoveRight(player).apply();
-            if(game.getMap()[player.getRow()][player.getCol()] instanceof DoorTile)
-                door = (DoorTile) game.getMap()[player.getRow()][player.getCol()];
+            new moveRight(player).apply();
+            if(game.getMap()[player.getRow()][player.getCol()] instanceof doorTile)
+                door = (doorTile) game.getMap()[player.getRow()][player.getCol()];
         }
 
         assert door != null;
@@ -74,12 +74,12 @@ public class MazeTesting {
         Player player = game.getPlayer();
 
         for(int i = 0; i < 3; i++)
-            new MoveRight(player).apply();
+            new moveRight(player).apply();
 
         currentRow = player.getRow();
         currentCol = player.getCol();
 
-        new MoveRight(player).apply(); // player won't move through the door
+        new moveRight(player).apply(); // player won't move through the door
 
         //stayed at the same position
         assertEquals(player.getCol(),currentCol);
@@ -98,15 +98,15 @@ public class MazeTesting {
         Player player = game.getPlayer();
 
         //picking up the keys
-        new MoveDown(player).apply();
+        new moveDown(player).apply();
 
         for(int i = 0; i < 3; i++)
-            new MoveRight(player).apply();
+            new moveRight(player).apply();
 
         currentRow = player.getRow();
         currentCol = player.getCol();
 
-        new MoveRight(player).apply(); // player won't move through the door
+        new moveRight(player).apply(); // player won't move through the door
 
         //stayed at the same position
         assertEquals(player.getCol(),currentCol);
@@ -124,17 +124,17 @@ public class MazeTesting {
         Player player = game.getPlayer();
 
         //picking up the keys
-        new MoveDown(player).apply();
-        new MoveLeft(player).apply();
+        new moveDown(player).apply();
+        new moveLeft(player).apply();
 
         for(int i = 0; i < 7; i++) {
-            new MoveRight(player).apply();
+            new moveRight(player).apply();
         }
 
         int currentTreasure = player.getNumberTreasures();
 
         //pick up chip
-        new MoveUp(player).apply();
+        new moveUp(player).apply();
         assertEquals(currentTreasure - 1 ,player.getNumberTreasures());
     }
 
@@ -148,38 +148,38 @@ public class MazeTesting {
         Player player = game.getPlayer();
 
         //picking up the keys
-        new MoveDown(player).apply();
-        new MoveLeft(player).apply();
+        new moveDown(player).apply();
+        new moveLeft(player).apply();
 
         for(int i = 0; i < 7; i++) {
-            new MoveRight(player).apply();
+            new moveRight(player).apply();
         }
         //pick up chip
-        new MoveUp(player).apply();
+        new moveUp(player).apply();
 
-        new MoveLeft(player).apply();
-        new MoveDown(player).apply();
+        new moveLeft(player).apply();
+        new moveDown(player).apply();
 
         for(int i = 0; i < 10; i++)
-            new MoveLeft(player).apply();
+            new moveLeft(player).apply();
 
         for(int i = 0; i < 7; i++)
-            new MoveDown(player).apply();
+            new moveDown(player).apply();
 
-        new MoveUp(player).apply();
-        new MoveLeft(player).apply();
+        new moveUp(player).apply();
+        new moveLeft(player).apply();
 
         //all the treasure should be picked up
         assertEquals(player.getNumberTreasures(),0);
 
-        new MoveLeft(player).apply();
+        new moveLeft(player).apply();
 
         //the player should be able to access the treasure door
-        new MoveDown(player).apply();
+        new moveDown(player).apply();
         assertTrue(game.getMap()[player.getRow()][player.getCol()].checkValidMove(player));
 
         //move to win tile
-        new MoveDown(player).apply();
+        new moveDown(player).apply();
         assertTrue(game.getMap()[player.getRow()][player.getCol()].checkValidMove(player));
     }
 
@@ -221,7 +221,7 @@ public class MazeTesting {
         ArrayList<Move> playersMovement = new ArrayList<>();
         //moving towards the enemies
         for (int i = 0; i < 7; i++) {
-            playersMovement.add(new MoveLeft(player));
+            playersMovement.add(new moveLeft(player));
         }
 
         //move bug by it set path and user by the input path
@@ -249,14 +249,14 @@ public class MazeTesting {
         Game game = new Game(2);
         Player player = game.getPlayer();
 
-        new MoveDown(player).apply();
-        new MoveDown(player).apply();
+        new moveDown(player).apply();
+        new moveDown(player).apply();
 
         for(int i =0; i < 10; i++){
-            new MoveLeft(player).apply();
+            new moveLeft(player).apply();
         }
 
-        RechargeTile tile = (RechargeTile) game.getMap()[player.getRow()][player.getCol()];
+        rechargeTile tile = (rechargeTile) game.getMap()[player.getRow()][player.getCol()];
         tile.checkValidMove(player);
 
         assertTrue(player.playerIsRecharge());

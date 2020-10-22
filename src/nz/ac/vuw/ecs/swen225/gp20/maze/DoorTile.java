@@ -6,17 +6,17 @@ import com.google.gson.internal.$Gson$Preconditions;
  * Door Tile is a door that can only be unlocked with the right element to pass through the door.
  * For example, same color keys.
  */
-public class DoorTile implements Tile{
+public class doorTile implements Tile{
     private String color;
     private boolean open;
 
     /**
-     * WallTile constructor.
+     * wallTile constructor.
      * @param row -- The tile row position.
      * @param col -- The tile column position.
      * @param color -- Color of the door.
      */
-    public DoorTile(int row, int col, String color){
+    public doorTile(int row, int col, String color){
         $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
         $Gson$Preconditions.checkNotNull(color);
         this.color = color;

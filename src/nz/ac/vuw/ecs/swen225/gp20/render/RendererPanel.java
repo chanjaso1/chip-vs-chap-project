@@ -69,9 +69,9 @@ public class RendererPanel extends JComponent {
             rDoor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/redDoor.png"));
             floor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/floor.png"));
             unlocked = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/unlocked.png"));
-            iTile = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/InfoTile.png"));
+            iTile = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/infoTile.png"));
             // These are different because it's a gif
-            win = new ImageIcon(getClass().getResource("data/WinTile.gif")).getImage();
+            win = new ImageIcon(getClass().getResource("data/winTile.gif")).getImage();
             cDoor = new ImageIcon(getClass().getResource("data/chipDoor.gif")).getImage();
             cOpen = new ImageIcon(getClass().getResource("data/chipOpen.gif")).getImage();
             time = new ImageIcon(getClass().getResource("data/timeTile.gif")).getImage();
@@ -124,10 +124,10 @@ public class RendererPanel extends JComponent {
             for (int j = 0; j < levelTiles[0].length; j++) {
                 //System.out.print(" ");
                 //System.out.print(levelTiles[i][j]);
-                if (levelTiles[i][j] instanceof FloorTile) System.out.print("▊");
-                else if (levelTiles[i][j] instanceof WallTile) System.out.print("0");
-                else if (levelTiles[i][j] instanceof DoorTile) System.out.print("K");
-                else if (levelTiles[i][j] instanceof WinTile) System.out.print("W");
+                if (levelTiles[i][j] instanceof floorTile) System.out.print("▊");
+                else if (levelTiles[i][j] instanceof wallTile) System.out.print("0");
+                else if (levelTiles[i][j] instanceof doorTile) System.out.print("K");
+                else if (levelTiles[i][j] instanceof winTile) System.out.print("W");
                 else if (levelTiles[i][j] instanceof TreasureDoor) System.out.print("T");
             }
         }
@@ -163,9 +163,9 @@ public class RendererPanel extends JComponent {
 
         for (int i = 0; i < levelTiles.length; i++) {
             for (int j = 0; j < levelTiles[0].length; j++) {
-                if (levelTiles[i][j] instanceof FloorTile) {
+                if (levelTiles[i][j] instanceof floorTile) {
                     tile = new FloorRender(floor);
-                    FloorTile f = (FloorTile)levelTiles[i][j];
+                    floorTile f = (floorTile)levelTiles[i][j];
                     if (f.getItem() instanceof Key) {
                         if (((Key) f.getItem()).getColor().equals("R")) {
                             item = new RedKey(redKey);
@@ -177,21 +177,21 @@ public class RendererPanel extends JComponent {
                         item = new Chip(chip);
                         itemMap[i][j] = item;
                     }
-                } else if (levelTiles[i][j] instanceof WallTile) {
+                } else if (levelTiles[i][j] instanceof wallTile) {
                     tile = new WallRender(wall);
-                } else if (levelTiles[i][j] instanceof DoorTile) {
-                    DoorTile d = (DoorTile)levelTiles[i][j];
+                } else if (levelTiles[i][j] instanceof doorTile) {
+                    doorTile d = (doorTile)levelTiles[i][j];
                     if (d.getColor().equals("R")) tile = new RedDoorRender(rDoor, unlocked);
                     else if (d.getColor().equals("G")) tile = new GreenDoorRender(gDoor, unlocked);
-                } else if (levelTiles[i][j] instanceof WinTile) {
+                } else if (levelTiles[i][j] instanceof winTile) {
                     tile = new ExitTileRender(win, this);
                 } else if (levelTiles[i][j] instanceof TreasureDoor) {
                     tile = new ChipDoorRender(cDoor, cOpen, this);
                     cDoorY = i;
                     cDoorX = j;
-                } else if (levelTiles[i][j] instanceof InfoTile) {
+                } else if (levelTiles[i][j] instanceof infoTile) {
                     tile = new InfoRender(iTile);
-                } else if (levelTiles[i][j] instanceof RechargeTile) {
+                } else if (levelTiles[i][j] instanceof rechargeTile) {
                     tile = new TimeRender(time, noTime, this);
                 }
 
@@ -354,7 +354,7 @@ public class RendererPanel extends JComponent {
     }
 
     /**
-     * The process of when the player reaches the WinTile
+     * The process of when the player reaches the winTile
      * This method will set up and load in the next level
      */
     public void winLevel() {

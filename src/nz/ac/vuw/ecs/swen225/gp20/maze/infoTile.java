@@ -5,14 +5,14 @@ import com.google.gson.internal.$Gson$Preconditions;
 /**
  * Information Tile will display information when the player in on it.
  */
-public class InfoTile implements Tile{
+public class infoTile implements Tile{
 
     /**
-     * WallTile constructor.
+     * wallTile constructor.
      * @param row -- the tile row position.
      * @param col -- the tile column position.
      */
-    public InfoTile(int row, int col){
+    public infoTile(int row, int col){
         $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
     }
 

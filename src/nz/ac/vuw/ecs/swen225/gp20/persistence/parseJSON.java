@@ -149,25 +149,25 @@ public class parseJSON{
     private void defineType(String type, Tile[][] map, int row, int col) {
         switch (type){
             case "_":
-                map[row][col] = new FloorTile(row, col, null);   //Define a floor tile.
+                map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
                 break;
             case "P":
-                map[row][col] = new FloorTile(row, col, null);   //Define a floor tile.
+                map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
                 this.player = new Player(row, col);
                 break;
             case "▊":
-                map[row][col] = new WallTile(row, col);                //Define a wall tile.
+                map[row][col] = new wallTile(row, col);                //Define a wall tile.
                 break;
             case "T":
-                map[row][col] = new FloorTile(row, col, new Treasure(map[row][col]));   //Define a floor tile with a treasure in it
+                map[row][col] = new floorTile(row, col, new Treasure(map[row][col]));   //Define a floor tile with a treasure in it
                 this.treasures++;
                 break;
             case "W":
-                map[row][col] = new WinTile(row, col);                                  //Define the win tile
+                map[row][col] = new winTile(row, col);                                  //Define the win tile
                 break;
             case "B":
-                map[row][col]   = new FloorTile(row, col, null);
-                ((FloorTile) map[row][col]).setBugTile();              //Set this tile to be part of the bug's movement
+                map[row][col]   = new floorTile(row, col, null);
+                ((floorTile) map[row][col]).setBugTile();              //Set this tile to be part of the bug's movement
                 assert aClass != null : "This level does not have a valid class to load the bug!";
                 try {
                     this.bug = aClass.getDeclaredConstructor(int.class, int.class).newInstance(row, col);
@@ -176,25 +176,25 @@ public class parseJSON{
                 }
                 break;
             case "X":
-                map[row][col] = new FloorTile(row, col, null);   //Define a floor tile.
-                ((FloorTile) map[row][col]).setBugTile();              //Set this tile to be part of the bug's movement
+                map[row][col] = new floorTile(row, col, null);   //Define a floor tile.
+                ((floorTile) map[row][col]).setBugTile();              //Set this tile to be part of the bug's movement
                 break;
             case "DC":                                                  //Define a chip tile, which opens if all treasure chips are collected.
                 map[row][col] = new TreasureDoor(row, col);
                 break;
             case "I":
-                map[row][col] = new InfoTile(row, col);                  //Define an info tile.
+                map[row][col] = new infoTile(row, col);                  //Define an info tile.
                 break;
             case "R":
-                map[row][col] = new RechargeTile(row, col);              //Define a recharge tile.
+                map[row][col] = new rechargeTile(row, col);              //Define a recharge tile.
                 break;
         }
 
         if(type.substring(0,1).equals("D") && !type.equals("DC")){
-            map[row][col] = new DoorTile(row, col, type.substring(1,2));  //define a coloured door.
+            map[row][col] = new doorTile(row, col, type.substring(1,2));  //define a coloured door.
         }else if(type.substring(0,1).equals("K")) {
             this.keys++;
-            map[row][col] = new FloorTile(row, col, new Key(map[row][col],  type.substring(1,2)));  //define a coloured key
+            map[row][col] = new floorTile(row, col, new Key(map[row][col],  type.substring(1,2)));  //define a coloured key
         }
     }
 

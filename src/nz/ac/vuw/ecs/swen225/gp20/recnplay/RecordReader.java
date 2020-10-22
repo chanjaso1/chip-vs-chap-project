@@ -62,16 +62,16 @@ public class RecordReader {
                         typeMove = jsonMove.getAsJsonObject().get("P").getAsString();
                         switch (typeMove.toLowerCase()){
                             case "left":
-                                move = new MoveLeft(player);
+                                move = new moveLeft(player);
                                 break;
                             case "right":
-                                move = new MoveRight(player);
+                                move = new moveRight(player);
                                 break;
                             case "up":
-                                move = new MoveUp(player);
+                                move = new moveUp(player);
                                 break;
                             case "down":
-                                move = new MoveDown(player);
+                                move = new moveDown(player);
                                 break;
                             default:
                                 //not recognised
@@ -84,16 +84,16 @@ public class RecordReader {
                         Bug dummyBug = new Bug(0, 0); //moves don't allow null actors
                         switch (typeMove.toLowerCase()){
                             case "left":
-                                move = new MoveLeft(dummyBug);
+                                move = new moveLeft(dummyBug);
                                 break;
                             case "right":
-                                move = new MoveRight(dummyBug);
+                                move = new moveRight(dummyBug);
                                 break;
                             case "up":
-                                move = new MoveUp(dummyBug);
+                                move = new moveUp(dummyBug);
                                 break;
                             case "down":
-                                move = new MoveDown(dummyBug);
+                                move = new moveDown(dummyBug);
                                 break;
                             default:
                                 //not recognised
@@ -176,7 +176,7 @@ public class RecordReader {
             if (timer != null)
                 timer.stop();
 
-            //gui display the "help" popup on InfoTile after starting game done
+            //gui display the "help" popup on infoTile after starting game done
             gui.setDisplayInfoTile(true);
         }
     }

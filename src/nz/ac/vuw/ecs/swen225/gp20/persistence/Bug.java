@@ -22,13 +22,13 @@ public class Bug extends Actor {
      */
     public Move moveBugSequence() {
         //check if next move path of the bug, then either move it or change direction.
-        if (moveDownFirst && ((FloorTile) this.getGame().getMap()[getRow() + 1][getCol()]).isBugPath()) {
-            MoveDown down = new MoveDown(this);
+        if (moveDownFirst && ((floorTile) this.getGame().getMap()[getRow() + 1][getCol()]).isBugPath()) {
+            moveDown down = new moveDown(this);
             down.apply();
             return down;
 
-        }else if(!moveDownFirst && ((FloorTile) this.getGame().getMap()[getRow()-1][getCol()]).isBugPath()){
-            MoveUp up = new MoveUp(this);
+        }else if(!moveDownFirst && ((floorTile) this.getGame().getMap()[getRow()-1][getCol()]).isBugPath()){
+            moveUp up = new moveUp(this);
             up.apply();
             return up;
         }else {

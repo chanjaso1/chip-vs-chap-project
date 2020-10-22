@@ -215,7 +215,7 @@ public class GUI {
         actionMap.put("MOVE_UP", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new MoveUp(game.getPlayer()));
+                movePlayer(new moveUp(game.getPlayer()));
             }
         });
 
@@ -224,7 +224,7 @@ public class GUI {
         actionMap.put("MOVE_DOWN", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new MoveDown(game.getPlayer()));
+                movePlayer(new moveDown(game.getPlayer()));
             }
         });
 
@@ -233,7 +233,7 @@ public class GUI {
         actionMap.put("MOVE_LEFT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new MoveLeft(game.getPlayer()));
+                movePlayer(new moveLeft(game.getPlayer()));
             }
         });
 
@@ -242,7 +242,7 @@ public class GUI {
         actionMap.put("MOVE_RIGHT", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                movePlayer(new MoveRight(game.getPlayer()));
+                movePlayer(new moveRight(game.getPlayer()));
             }
         });
 
@@ -752,7 +752,7 @@ public class GUI {
      * Executed after a player moves and moves the player to the next level.
      */
     public void checkWinTile() {
-        if (game.getMap()[game.getPlayer().getRow()][game.getPlayer().getCol()] instanceof WinTile) {
+        if (game.getMap()[game.getPlayer().getRow()][game.getPlayer().getCol()] instanceof winTile) {
 
             // game won
             if (game.getLevel() == 2) {
@@ -774,7 +774,7 @@ public class GUI {
 
     /**
      * This method moves the player in the specified direction and updates the board.
-     * Also checks if the player has landed on a WinTile or InfoTile.
+     * Also checks if the player has landed on a winTile or infoTile.
      *
      * @param move -- the player's most recent move.
      */
@@ -791,7 +791,7 @@ public class GUI {
         }
 
         // checks if player is on info tile
-        if (displayInfoTile && game.getPlayer().getCurrentTile() instanceof InfoTile) {
+        if (displayInfoTile && game.getPlayer().getCurrentTile() instanceof infoTile) {
             pauseGame(true);
             displayHelpFrame();
             pauseGame(false);
@@ -836,7 +836,7 @@ public class GUI {
      * @return true if user has lost. Otherwise, false.
      */
     public boolean gameOver() {
-        return currentTime <= 0 && !(game.getPlayer().getCurrentTile() instanceof WinTile);
+        return currentTime <= 0 && !(game.getPlayer().getCurrentTile() instanceof winTile);
     }
 
     /**

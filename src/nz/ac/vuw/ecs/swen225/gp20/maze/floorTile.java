@@ -3,19 +3,19 @@ package nz.ac.vuw.ecs.swen225.gp20.maze;
 import com.google.gson.internal.$Gson$Preconditions;
 
 /**
- * FloorTile is a normal tile that the user in able to move on to it.
+ * floorTile is a normal tile that the user in able to move on to it.
  */
-public class FloorTile implements Tile{
+public class floorTile implements Tile{
     private Item item;
     private boolean bugPath = false;
 
     /**
-     * WallTile constructor.
+     * wallTile constructor.
      * @param row -- the tile row position.
      * @param col -- the tile column position.
      * @param item -- some tiles hold an item such as "Key" or "Treasure"
      */
-    public FloorTile(int row, int col, Item item){
+    public floorTile(int row, int col, Item item){
         $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
         this.item = item;
 
