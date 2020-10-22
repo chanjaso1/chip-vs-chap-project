@@ -74,6 +74,7 @@ public class GUI {
         // starts game from recently saved file
         if (lastGameToken.equalsIgnoreCase("L")) {
             //start with last game sequence
+            displayInfoTile = false;
             int level = startScan.nextInt();
             resetLevel(level);
             recordReader = new RecordReader(this, new File("Recordings/UserData/lastgame.json"), game.getPlayer());
@@ -82,6 +83,7 @@ public class GUI {
             recordReader.updateMovesForActors(level);
             currentTime = recordReader.getTime();
             recordReader.playAtSpeed(0);
+            displayInfoTile = true;
 
             //clear lastgame
 //            writeToFile("Recordings/UserData/lastgame.json", RecordSaver.EMPTY_RECORDING);
@@ -445,6 +447,8 @@ public class GUI {
      * The replay speed is displayed as a JComboBox so users can select a speed within the specified range.
      */
     public void displayReplayFrame() {
+        displayInfoTile = false;
+
         // get replay file
         File file = getFile();
         if (file == null) return;

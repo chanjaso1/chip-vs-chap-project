@@ -6,27 +6,6 @@
 	],
 	"Level2": [
 		{
-			"B": "down"
-		},
-		{
-			"P": "up"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"B": "down"
-		},
-		{
-			"P": "left"
-		},
-		{
-			"P": "left"
-		},
-		{
 			"P": "left"
 		},
 		{
@@ -34,6 +13,21 @@
 		},
 		{
 			"P": "up"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "left"
+		},
+		{
+			"P": "up"
+		},
+		{
+			"B": "down"
 		},
 		{
 			"P": "left"
@@ -48,16 +42,13 @@
 			"B": "down"
 		},
 		{
-			"B": "down"
+			"P": "left"
 		},
 		{
 			"B": "down"
 		},
 		{
-			"P": "right"
-		},
-		{
-			"P": "right"
+			"P": "left"
 		},
 		{
 			"B": "down"
@@ -66,10 +57,16 @@
 			"P": "right"
 		},
 		{
-			"P": "right"
+			"B": "down"
+		},
+		{
+			"P": "left"
 		},
 		{
 			"P": "right"
+		},
+		{
+			"B": "down"
 		},
 		{
 			"B": "up"
