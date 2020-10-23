@@ -4,6 +4,9 @@ import nz.ac.vuw.ecs.swen225.gp20.maze.*;
 
 /**
  * The bug acts as a second actor which patrols along path and takes out the character if there is a collision.
+ * NOTE: This class is not directly used. The jar files need this class in the directory to be from, and the JAR files
+ * are used to access this class through reflection. The game works fine if the bug class is deleted as long as the JAR file 
+ * is not built again. The project may be rebuilt which will not affect the game.
  */
 public class Bug extends Actor {
     boolean moveDownFirst = true;
