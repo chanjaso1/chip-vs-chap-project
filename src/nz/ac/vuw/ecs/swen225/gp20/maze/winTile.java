@@ -6,14 +6,14 @@ import com.google.gson.internal.$Gson$Preconditions;
  * If the player move on to the win Tile the current level will be complete,
  * and they will move to the next player if there's one.
  */
-public class winTile implements Tile{
+public class WinTile implements Tile{
 
     /**
-     * wallTile constructor.
+     * WallTile constructor.
      * @param row -- the tile row position.
      * @param col -- the tile column position.
      */
-    public winTile(int row, int col){
+    public WinTile(int row, int col){
         $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
     }
 

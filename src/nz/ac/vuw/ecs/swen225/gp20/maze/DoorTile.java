@@ -11,7 +11,7 @@ public class DoorTile implements Tile{
     private boolean open;
 
     /**
-     * wallTile constructor.
+     * WallTile constructor.
      * @param row -- The tile row position.
      * @param col -- The tile column position.
      * @param color -- Color of the door.

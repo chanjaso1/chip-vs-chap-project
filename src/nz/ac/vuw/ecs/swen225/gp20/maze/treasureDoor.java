@@ -5,14 +5,14 @@ import com.google.gson.internal.$Gson$Preconditions;
 /**
  * Exit locked door tile is a door that can only be unlocked when all the treasures are picked up, to pass through the door.
  */
-public class treasureDoor implements Tile {
+public class TreasureDoor implements Tile {
 
     /**
      * Exit Locked Tile constructor.
      * @param row -- The tile row position.
      * @param col -- The tile column position.
      */
-    public treasureDoor(int row, int col){
+    public TreasureDoor(int row, int col){
         $Gson$Preconditions.checkArgument(col >= 0 && col < 30 && row >=0 && row < 30);
     }
     
@@ -20,6 +20,7 @@ public class treasureDoor implements Tile {
     public boolean checkValidMove(Player player) {
         $Gson$Preconditions.checkNotNull(player);
         //this door can only open when there're no treasure left
+
         return player.getNumberTreasures() == 0;
     }
 }
