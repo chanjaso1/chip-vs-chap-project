@@ -64,7 +64,8 @@ public class ParseJSONTesting {
     }
 
     /**
-     * Check that the keys are correctly parsed. The test will fail if it is still 0.
+     * Check that the bug is not null if the parsers encounters a bug object,
+     * and that it is null when a new level does not have a bug object.
      */
     @Test
     public void checkBug() {
@@ -93,7 +94,7 @@ public class ParseJSONTesting {
     }
 
     /**
-     *
+     * Check that the initial moveDownFirst boolean is false.
      */
     @Test
     public void checkBugBoolean() {
@@ -105,7 +106,7 @@ public class ParseJSONTesting {
     }
 
     /**
-     *
+     * Check that the toString for the bug is always "B".
      */
     @Test
     public void checkBugToString() {
