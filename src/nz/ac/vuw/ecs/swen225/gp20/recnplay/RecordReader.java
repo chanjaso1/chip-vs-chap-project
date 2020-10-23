@@ -81,7 +81,11 @@ public class RecordReader {
                     //is a Bug move
                     else {
                         typeMove = jsonMove.getAsJsonObject().get("B").getAsString();
-                        Object dummyBug = gui.getGame().getParser().getBug(); //moves don't allow null actors
+                        //moves don't allow null actors
+                        Object dummyBug = gui.getGame().getParser().getBug();
+                        if(dummyBug == null)
+                            dummyBug = new Actor(0, 0);
+                        
                         switch (typeMove.toLowerCase()){
                             case "left":
                                 move = new MoveLeft((Actor)dummyBug);
