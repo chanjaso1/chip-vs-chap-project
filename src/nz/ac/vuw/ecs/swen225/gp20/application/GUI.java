@@ -527,6 +527,7 @@ public class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 String message = "Exited Replay mode. Click 'OK' to return to game.";
+                recordReader.stopTimer();
                 int input = JOptionPane.showOptionDialog(frame, message, "BACK TO GAME", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
                 if (input == JOptionPane.OK_OPTION) {
@@ -535,6 +536,7 @@ public class GUI {
                     currentTime = recordReader.getTime();
                     redisplayTimer();
                 } else {
+                    recordReader.startTimer();
                     displayReplayFrame();
                 }
             }

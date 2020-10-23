@@ -3,7 +3,6 @@ package nz.ac.vuw.ecs.swen225.gp20.recnplay;
 import com.google.gson.*;
 import nz.ac.vuw.ecs.swen225.gp20.application.GUI;
 import nz.ac.vuw.ecs.swen225.gp20.maze.*;
-import nz.ac.vuw.ecs.swen225.gp20.persistence.Bug;
 
 import javax.swing.*;
 import java.io.*;
@@ -82,19 +81,19 @@ public class RecordReader {
                     //is a Bug move
                     else {
                         typeMove = jsonMove.getAsJsonObject().get("B").getAsString();
-                        Bug dummyBug = new Bug(0, 0); //moves don't allow null actors
+                        Object dummyBug = gui.getGame().getParser().getBug(); //moves don't allow null actors
                         switch (typeMove.toLowerCase()){
                             case "left":
-                                move = new moveLeft(dummyBug);
+                                move = new moveLeft((Actor)dummyBug);
                                 break;
                             case "right":
-                                move = new moveRight(dummyBug);
+                                move = new moveRight((Actor)dummyBug);
                                 break;
                             case "up":
-                                move = new moveUp(dummyBug);
+                                move = new moveUp((Actor)dummyBug);
                                 break;
                             case "down":
-                                move = new moveDown(dummyBug);
+                                move = new moveDown((Actor)dummyBug);
                                 break;
                             default:
                                 //not recognised
@@ -197,7 +196,7 @@ public class RecordReader {
                 move.setMover(gui.getPlayer());
             //update bug
             else
-                move.setMover((Actor) gui.getGame().getBug());
+                move.setMover((Actor) gui.getGame().getParser().getBug());
         }
     }
 
@@ -206,6 +205,24 @@ public class RecordReader {
      */
     public boolean hasMoves() {
         return !(moves[1].isEmpty() && moves[2].isEmpty());
+    }
+
+    /**
+     * Stops timer - auto replay.
+     * Used when someone stops replay.
+     */
+    public void stopTimer(){
+        if (timer != null)
+            timer.stop();
+    }
+
+    /**
+     * Starts timer - auto replay.
+     * Used when someone resumes recording.
+     */
+    public void startTimer(){
+        if (timer != null)
+            timer.start();
     }
 
     /**
