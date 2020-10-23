@@ -44,7 +44,7 @@ public class GUI {
 
 
     public GUI() {
-        game = new Game(2);
+        game = new Game(1);
         board = new RendererPanel(game);
         moveSequence[1] = new ArrayList<Move>();
         moveSequence[2] = new ArrayList<Move>();
