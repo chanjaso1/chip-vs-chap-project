@@ -445,7 +445,7 @@ public class GUI {
         File file = getFile();
         if (file == null) return;
         recordReader = new RecordReader(this, file, game.getPlayer());
-        
+
         // handles empty files
         if (!recordReader.hasMoves()) {
             displayReplayFrame();
@@ -591,7 +591,10 @@ public class GUI {
                 "MOVEMENT\n" +
                 "- Use the arrow keys to move Chap around the maze.\n" +
                 "- Unlock doors by collecting their respective keys.\n" +
-                "- You cannot progress to the next level until you collect all the treasures!\n\n" +
+                "- You cannot progress to the next level until you collect all the treasures.\n\n" +
+                "GAME OVER\n" +
+                "If you fail to reach the winning tile in time, that's game over!\n" +
+                "The game will restart and you will have to start again from level 1.\n\n" +
                 "SPECIAL KEYS\n" +
                 "CTRL-X:\t Exit the game. The current game state will be lost, the next time the game is started, it will resume from the last unfinished level.\n" +
                 "CTRL-S:\t Exit the game, saves the game state, game will resume next time application is started.\n" +
@@ -599,13 +602,17 @@ public class GUI {
                 "CTRL-P:\t Start a new game a the last unfinished level (restart level).\n" +
                 "CTRL-1:\t Start a new game at level 1.\n" +
                 "SPACE:\t\t Pause the game and displays a 'game is paused' dialog.\n" +
-                "ESC:\t\t\tClose the 'game is paused' dialog and resume the game.\n" +
+                "ESC:\t\t\tClose the 'game is paused' dialog and resume the game.\n\n" +
                 "You can also use the menu options and buttons below to execute actions.\n\n" +
                 "SPECIAL TILES\n" +
                 "INFO tile: Step on this tile to show instructions\n" +
                 "TIME tile: Step on this tile to add 10 extra seconds to the timer.\n\n" +
                 "REPLAY MODE\n" +
-                "";
+                "There are two replay modes to choose from: \n\n" +
+                "STEP-BY-STEP mode: This mode allows you to control the replay. To use this mode, simply click the 'NEXT' button to walk-through the replay.\n" +
+                "AUTO-REPLAY mode: This mode automatically executes the replay. To use this mode, first select the replay speed then click 'OK' to watch the replay.\n\n" +
+                "Once your last move has been replayed, a pop-up will inform you of this. You will be able to resume playing from this point.\n\n" +
+                "Click 'OK' to resume the game... Good luck!";
         JOptionPane.showMessageDialog(frame, message, "HELP", JOptionPane.PLAIN_MESSAGE);
 
     }
@@ -721,7 +728,10 @@ public class GUI {
                 if (gameOver()) {
                     String message = "You didn't pass the level in time... GAME OVER!\nClick 'OK' to restart the level.";
                     JOptionPane.showMessageDialog(frame, message, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+                    moveSequence[1] = new ArrayList<Move>();
+                    moveSequence[2] = new ArrayList<Move>();
                     resetLevel(1);
+                    writeToFile("Recordings/UserData/exitinfo.txt", String.valueOf(game.getLevel()));
                 }
             }
         });
