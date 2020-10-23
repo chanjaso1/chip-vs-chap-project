@@ -69,9 +69,9 @@ public class RendererPanel extends JComponent {
             rDoor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/redDoor.png"));
             floor = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/floor.png"));
             unlocked = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/unlocked.png"));
-            iTile = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/InfoTile.png"));
+            iTile = ImageIO.read(new File( "src/nz/ac/vuw/ecs/swen225/gp20/render/data/infoTile.png"));
             // These are different because it's a gif
-            win = new ImageIcon(getClass().getResource("data/WinTile.gif")).getImage();
+            win = new ImageIcon(getClass().getResource("data/winTile.gif")).getImage();
             cDoor = new ImageIcon(getClass().getResource("data/chipDoor.gif")).getImage();
             cOpen = new ImageIcon(getClass().getResource("data/chipOpen.gif")).getImage();
             time = new ImageIcon(getClass().getResource("data/timeTile.gif")).getImage();
